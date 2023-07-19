@@ -1,0 +1,16 @@
+#REPLACE FILE1 utenti
+#REPLACE utenti.File_Number |CI1
+#REPLACE utenti.username |FS1,1
+#REPLACE utenti.comunita |FS1,2
+#REPLACE utenti.monetaacro |FS1,3
+#REPLACE utenti.monetanome |FS1,4
+#REPLACE utenti.datareg |FM1,5
+#REPLACE utenti.nome |FS1,6
+#REPLACE utenti.cognome |FS1,7
+#REPLACE utenti.citta |FS1,8
+#REPLACE utenti.provincia |FS1,9
+#REPLACE utenti.regione |FS1,10
+#REPLACE utenti.nazione |FS1,11
+#REPLACE utenti.recordid |FN1,12
+#REPLACE utenti.cap |FS1,13
+#REPLACE utenti.email |FS1,14

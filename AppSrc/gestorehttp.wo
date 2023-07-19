@@ -1,0 +1,444 @@
+﻿Use cWebHttpHandler.pkg
+Use cutentiDataDictionary.dd
+Use ccoinsDataDictionary.dd
+Use carticoliDataDictionary.dd
+
+//  With the cWebHttpHandler you handle complete HTTP requests.
+Object oGestorehttp is a cWebHttpHandler
+    Object oarticoli_DD is a carticoliDataDictionary
+    End_Object
+
+    Object ocoins_DD is a ccoinsDataDictionary
+    End_Object
+
+    Object oCustomer_DD is a cutentiDataDictionary
+    End_Object
+
+    Set Main_DD to oCustomer_DD
+    
+    //  The psPath property determines the path in the URL for which requests will be handled.
+    Set psPath to "Marketplace"
+    //  Use psVerbs to filter based on the HTTP Verbs. 
+    Set psVerbs to "*"
+    
+    Procedure OnHttpPost String sPath String sContentType String sAcceptType Integer iSize
+        String[] aParts
+        Handle hoJson hoResponse
+        UChar[] ucData
+        Boolean bSuccess
+
+    Get StrSplitToArray sPath "/" to aParts
+    If (SizeOfArray(aParts) < 2) Begin
+            Send SetResponseStatus 404 "Invalid resource" 
+            Procedure_Return
+        End
+    If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovocliente") Begin
+        Send SaveCustomer True ""
+        
+//        Get RequestDataUChar iSize to ucData
+//        Get Create (RefClass(cJsonObject)) to hoJson
+//        Get ParseUtf8 of hoJson ucData to bSuccess
+//        
+//        If (bSuccess) Begin
+//           Get SaveCustomer hoJson ucData to hoResponse
+//            
+//            Get StringifyUtf8 of hoResponse to ucData
+//            Send Destroy of hoResponse
+//            Send Destroy of hoJson
+//            
+//            Send AddHttpResponseHeader "Content-Type" "application/json"
+//            Send OutputUChar ucData
+//        End
+//        Else Begin
+//            Send SetResponseStatus 500 "Unable to parse JSON" 0
+//            Send OutputString (psParseError(hoJson))
+//        End
+     End
+   Else  If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovoarticolo") Begin
+      Send  SaveNewarticolo True ""
+     End
+     Else Begin
+        Send SetResponseStatus 404 "Entity not known" 0
+    End
+End_Procedure
+
+ Procedure OnHttpGet String sPath String sAcceptType
+        String sName
+        
+        Get UrlParameter "name" to sName
+        
+        Send AddHttpResponseHeader "Content-Type" "text/html"
+                
+        Send OutputString '<html>'
+        Send OutputString '<head><title>Hello world!</title></head>'
+        Send OutputString (SFormat('<body><h1>Hi %1!</h1></body>', sName))
+        Send OutputString '</html>'
+ End_Procedure
+
+  //  Helper function that generates a response based on a JSON object.
+    Procedure OutputJson Handle hoJson
+        UChar[] ucData
+        
+        Send AddHttpResponseHeader "Content-Type" "application/json"
+        Get StringifyUtf8 of hoJson to ucData
+        Send OutputUChar ucData
+    End_Procedure
+    
+    
+    //  Helper function that reads an entire request into a JSON object.
+    Function RequestDataJson Handle ByRef hoJson Returns Boolean
+        UChar[] ucData
+        Boolean bSuccess
+        String sErr
+        
+        Get Create (RefClass(cJsonObject)) to hoJson
+        
+        Get RequestDataUChar -1 to ucData
+        Get ParseUtf8 of hoJson ucData to bSuccess
+        
+        If (not(bSuccess)) Begin
+            Get psParseError of hoJson to sErr
+            Send SetResponseStatus 400 sErr
+        End
+        
+        Function_Return bSuccess
+    End_Function
+    
+   Procedure SaveCustomer Boolean bCreate String sKey
+    
+        Boolean bSuccess
+        String sVal
+        Boolean bVal bErr
+        Handle hoJson
+       
+        If (bCreate) Begin
+            Send Clear of oCustomer_DD
+        End
+        Else Begin 
+            // ricerca uno esistente
+        
+        //  Find the right record
+        
+//            Send Clear of oCustomer_DD
+//            Move sKey to utenti.username
+//            
+//            Send Find of oCustomer_DD EQ 1
+//            
+//            If (not(Found)) Begin
+//                Send SetResponseStatus 404 "Resource not found"
+//                Procedure_Return
+//            End
+        End
+  
+        //  Read the request data
+        Get RequestDataJson (&hoJson) to bSuccess
+        
+        If (bSuccess) Begin
+            Send ErrorQueueStart
+//            
+           //  Set the values
+            If (HasMember(hoJson, "Auth")) Begin
+                // validazione autorizzazione
+            End
+            Else Begin 
+                Send SetResponseStatus 404 "Validazione non accettata"
+            End
+              If (HasMember(hoJson, "Comunita")) Begin
+              Get MemberValue of hoJson "Comunita" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.comunita)) to sVal
+             End
+//    
+            If (HasMember(hoJson, "Username")) Begin
+              Get MemberValue of hoJson "Username" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.username)) to sVal
+             End        
+             If (HasMember(hoJson, "Moneta")) Begin
+                 Get MemberValue of hoJson "Moneta" to sVal
+                 Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.monetanome)) to sVal
+             End
+//            
+             If (HasMember(hoJson, "Citta")) Begin
+               Get MemberValue of hoJson "Citta" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.citta)) to sVal
+             End
+//            
+            If (HasMember(hoJson, "Nazione")) Begin
+                Get MemberValue of hoJson "Nazione" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.nazione)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Cap")) Begin
+                Get MemberValue of hoJson "Cap" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.cap)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Regione")) Begin
+                Get MemberValue of hoJson "Regione" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.regione)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Email")) Begin
+                Get MemberValue of hoJson "Email" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.email)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Cognome")) Begin
+                Get MemberValue of hoJson "Cognome" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.cognome)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Nome")) Begin
+                Get MemberValue of hoJson "Nome" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.nome)) to sVal
+            End
+            If (HasMember(hoJson, "email")) Begin
+                Get MemberValue of hoJson "email" to sVal
+                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.nome)) to sVal
+            End
+ 
+ //  Perform the save
+            If (ErrorCount(Self) = 0) Begin
+                Get Request_Validate of oCustomer_DD to bErr
+                If (not(bErr)) Begin
+                   Send Request_Save of oCustomer_DD     
+                   
+                   If (not(Err)) Begin
+                        Send Customer utenti.username utenti.comunita
+                   End
+                End
+            End            
+            
+            Send ErrorQueueEnd
+            Send ErrorReportJson
+        End
+        If (hoJson > 0) Begin
+            Send Destroy of hoJson
+        End
+    End_Procedure
+
+ Procedure Customer String sKey String skeycomune
+        Handle hoJson
+        
+        Send Clear of oCustomer_DD
+        Move sKey to utenti.username
+        Move skeycomune to utenti.comunita
+        Send Find of oCustomer_DD EQ 1
+        
+        If (Found) Begin
+            Get Create (RefClass(cJsonObject)) to hoJson
+            Send InitializeJsonType of hoJson jsonTypeObject
+            
+            Send SetMemberValue of hoJson "Username" jsonTypestring utenti.username
+            Send SetMemberValue of hoJson "Nome" jsonTypeString (Trim(utenti.nome))
+            Send SetMemberValue of hoJson "Cognome" jsonTypeString (Trim(utenti.cognome))
+            Send SetMemberValue of hoJson "Citta" jsonTypeString (Trim(utenti.citta))
+            Send SetMemberValue of hoJson "Nazione" jsonTypeString (Trim(utenti.nazione))
+            Send SetMemberValue of hoJson "Cap" jsonTypeString (Trim(utenti.cap))
+            Send SetMemberValue of hoJson "Comunita" jsonTypeString (Trim(utenti.comunita))
+            Send SetMemberValue of hoJson "Email" jsonTypeString (Trim(utenti.email))
+            Send SetMemberValue of hoJson "Moneta" jsonTypestring utenti.monetanome
+ 
+            
+            
+            Send OutputJson hoJson
+            Send Destroy of hoJson
+        End
+        Else Begin
+            Send SetResponseStatus 404 "Resource not found"
+        End
+ End_Procedure
+ 
+ Procedure Articolo String sKey String skeycomune
+        Handle hoJson
+        
+        Send Clear of oarticoli_DD
+        Move sKey to articoli.codarticolo
+        Move skeycomune to articoli.comunita
+        Send Find of oarticoli_DD EQ 1
+        
+        If (Found) Begin
+            Get Create (RefClass(cJsonObject)) to hoJson
+            Send InitializeJsonType of hoJson jsonTypeObject
+            
+            Send SetMemberValue of hoJson "codarticolo" jsonTypestring articoli.codarticolo
+            Send SetMemberValue of hoJson "descrizionesintetica" jsonTypeString (Trim(articoli.descrizionesintetica))
+            Send SetMemberValue of hoJson "moneta" jsonTypeString (Trim(articoli.moneta))
+            Send SetMemberValue of hoJson "valoreunitario" jsonTypeString (Trim(articoli.prezzoeuro))
+            Send SetMemberValue of hoJson "comunita" jsonTypeString (Trim(articoli.comunita))
+              
+            
+            Send OutputJson hoJson
+            Send Destroy of hoJson
+        End
+        Else Begin
+            Send SetResponseStatus 404 "Resource not found"
+        End
+    End_Procedure
+
+   Procedure SaveNewarticolo Boolean bCreate String sKey
+    
+        Boolean bSuccess
+        String sVal
+        Boolean bVal bErr
+        Handle hoJson
+       
+        If (bCreate) Begin
+            Send Clear of oarticoli_dd
+        End
+        Else Begin 
+            // ricerca uno esistente
+        
+        //  Find the right record
+        
+//            Send Clear of oarticoli_dd
+//            Move sKey to utenti.username
+//            
+//            Send Find of oCustomer_DD EQ 1
+//            
+//            If (not(Found)) Begin
+//                Send SetResponseStatus 404 "Resource not found"
+//                Procedure_Return
+//            End
+        End
+  
+        //  Read the request data
+        Get RequestDataJson (&hoJson) to bSuccess
+        
+        If (bSuccess) Begin
+            Send ErrorQueueStart
+//            
+           //  Set the values
+            If (HasMember(hoJson, "Auth")) Begin
+                // validazione autorizzazione
+            End
+            Else Begin 
+                Send SetResponseStatus 404 "Validazione non accettata"
+            End
+              If (HasMember(hoJson, "Comunita")) Begin
+              Get MemberValue of hoJson "Comunita" to sVal
+                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.comunita)) to sVal
+             End
+//    
+            If (HasMember(hoJson, "Codarticolo")) Begin
+              Get MemberValue of hoJson "Codarticolo" to sVal
+                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.codarticolo)) to sVal
+             End        
+             If (HasMember(hoJson, "Moneta")) Begin
+                 Get MemberValue of hoJson "Moneta" to sVal
+                 Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.moneta)) to sVal
+             End
+//            
+             If (HasMember(hoJson, "Descrizionesintetica")) Begin
+               Get MemberValue of hoJson "Descrizionesintetica" to sVal
+                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.descrizionesintetica)) to sVal
+             End
+//            
+            If (HasMember(hoJson, "Descrizionecompleta")) Begin
+                Get MemberValue of hoJson "Descrizionecompleta" to sVal
+                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.descrizionecompleta)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Immaginelink")) Begin
+                Get MemberValue of hoJson "Immaginelink" to sVal
+                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.immaginelink)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Prezzoeuro")) Begin
+                Get MemberValue of hoJson "Prezzoeuro" to sVal
+                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.prezzoeuro)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Prezzovaluta")) Begin
+                Get MemberValue of hoJson "Prezzovaluta" to sVal
+                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.prezzovaluta )) to sVal
+            End
+             If (HasMember(hoJson, "Linkarticolonegozio")) Begin
+                Get MemberValue of hoJson "Linkarticolonegozio" to sVal
+                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.prezzovaluta )) to sVal
+            End
+            
+ 
+ //  Perform the save
+            If (ErrorCount(Self) = 0) Begin
+                Get Request_Validate of oarticoli_dd to bErr
+                If (not(bErr)) Begin
+                   Send Request_Save of oarticoli_dd     
+                   
+                   If (not(Err)) Begin
+                        Send Articolo articoli.codarticolo articoli.comunita
+                   End
+                End
+            End            
+            
+            Send ErrorQueueEnd
+            Send ErrorReportJson
+        End
+        If (hoJson > 0) Begin
+            Send Destroy of hoJson
+        End
+    End_Procedure
+
+ Procedure Customer String sKey String skeycomune
+        Handle hoJson
+        
+        Send Clear of oCustomer_DD
+        Move sKey to utenti.username
+        Move skeycomune to utenti.comunita
+        Send Find of oCustomer_DD EQ 1
+        
+        If (Found) Begin
+            Get Create (RefClass(cJsonObject)) to hoJson
+            Send InitializeJsonType of hoJson jsonTypeObject
+            
+            Send SetMemberValue of hoJson "Username" jsonTypestring utenti.username
+            Send SetMemberValue of hoJson "Nome" jsonTypeString (Trim(utenti.nome))
+            Send SetMemberValue of hoJson "Cognome" jsonTypeString (Trim(utenti.cognome))
+            Send SetMemberValue of hoJson "Citta" jsonTypeString (Trim(utenti.citta))
+            Send SetMemberValue of hoJson "Nazione" jsonTypeString (Trim(utenti.nazione))
+            Send SetMemberValue of hoJson "Cap" jsonTypeString (Trim(utenti.cap))
+            Send SetMemberValue of hoJson "Comunita" jsonTypeString (Trim(utenti.comunita))
+            Send SetMemberValue of hoJson "Email" jsonTypeString (Trim(utenti.email))
+            Send SetMemberValue of hoJson "Moneta" jsonTypestring utenti.monetanome
+ 
+            
+            
+            Send OutputJson hoJson
+            Send Destroy of hoJson
+        End
+        Else Begin
+            Send SetResponseStatus 404 "Resource not found"
+        End
+    End_Procedure
+    
+    
+     //  Helper function that reports all errors on the error queue in JSON format.
+    Procedure ErrorReportJson
+        Integer iErr iErrC
+        Handle hoJson hoErrors   
+        String sMessage
+        
+        Get ErrorCount to iErrC
+        If (iErrC > 0) Begin
+            Send SetResponseStatus 400 "Errors occurred"
+            
+            Get Create (RefClass(cJsonObject)) to hoJson
+            Send InitializeJsonType of hoJson jsonTypeObject
+            
+            Get Create (RefClass(cJsonObject)) to hoErrors
+            Send InitializeJsonType of hoErrors jsonTypeArray
+            
+            For iErr from 0 to (iErrC - 1)
+                Get ErrorMessage iErr to sMessage
+                Send AddMemberValue of hoErrors jsonTypeString  sMessage
+            Loop
+            
+            Send SetMember of hoJson "aErrors" hoErrors
+            
+            Send OutputJson hoJson
+            
+            Send Destroy of hoErrors
+            Send Destroy of hoJson
+        End
+    End_Procedure
+
+End_Object

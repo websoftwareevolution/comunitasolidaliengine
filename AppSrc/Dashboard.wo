@@ -1,0 +1,278 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg
+Use cWebButton.pkg
+Use cWebGroup.pkg
+Use cWebSpacer.pkg
+Use cWebHtmlBox.pkg
+Use cWebMenuGroup.pkg
+Use cWebMenuItem.pkg
+Use cWebLabel.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+Use carticoliDataDictionary.dd
+
+ 
+ Struct stFoundProducts
+    String sid
+    String sdes
+    Number nrate
+    Integer icategoriaid
+    String scity
+ End_Struct
+
+Use sql.pkg
+ 
+Object oDashboard is a cWebView
+    Object OARTICOLISHOP_DD is a carticoliDataDictionary
+    End_Object
+
+    Object oSqlHandleManager is a cSQLHandleManager
+    End_Object
+    
+    Set Main_DD to OARTICOLISHOP_DD
+    Set Server to OARTICOLISHOP_DD
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
+    // Add a DDO Structure 
+    //
+    // There is no need to synchronize a DD structure on the client so we do
+    // not set the Server property or send ADDOStructure. We will simply use
+    // DDO's to mine data and generate HTML for our cWebHTMLBox objects.
+    // It is the HTML in these objects that is sent to the client each time 
+    // this page is shown.
+    //
+    // Also, it is important for the drill-down Navigation interface that we
+    // do not set the Server property to some DDO because this will affect 
+    // constraints in the next view that we navigate to.
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+    Set piMaxWidth to 1024
+    
+    Set psCaption to "Dashboard"
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set psCSSClass to "Dashboard"
+    
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 24
+        
+        // - - - - - - - - - - - - - - -
+        // Main Panel's Responsive Rules
+        // - - - - - - - - - - - - - - -
+        WebSetResponsive piColumnCount rmMobile to 1
+        WebSetResponsive piColumnCount rmTabletPortrait to 16
+    
+        Object oTiles_grp is a cWebGroup
+            Set piColumnSpan to 6
+            Set pbShowBorder to False
+            Set pbShowCaption to False
+            Set piColumnCount to 12
+            
+            Set psCSSClass to "TilesGroup"
+    
+            Object oWelcomeTile is a cWebHtmlBox
+                Set piColumnSpan to 7
+                Set psCSSClass to "Tile Light"
+                Set psHtml to '<div Class="WebCon_Sizer"><div class="Tile_Title">Welcome</div><div Class="Tile_Subtitle">--</div></div>'
+    
+                Procedure OnLoad
+                    Send UpdateHTML ('<div class="WebCon_Sizer">' + ;
+                                     '<div class="Tile_Title">Welcome</div>' +;
+                                     '<div class="Tile_Subtitle">' - htmlEncode(psUserName(ghoWebSessionManager)) - '</div>' +;
+                                     '</div>')
+                End_Procedure
+                
+            End_Object
+            
+        End_Object 
+          Object oLatestActivity_grp is a cWebGroup
+            Set piColumnSpan to 8
+            Set piColumnIndex to 8
+            Set pbShowBorder to False
+            Set pbShowCaption to False
+            Set piColumnCount to 12
+            Set psCSSClass to "LatestActivity"
+            
+            Object oLatestActivity_lbl is a cWebLabel
+                Set psCaption to "Ultimi articoli"
+                Set piColumnSpan to 0
+                Set psCSSClass to "LabelTitle"
+            End_Object
+        Object oLatestActivity_list is a cWebHtmlList
+                Set Server to OARTICOLISHOP_DD
+                Set psCSSClass to "LatestActivity"
+                Set psHtmlBefore to '<ul>'
+                Set psHtmlTemplate to '<li><div class="FirstLine MinorText">{{oarticoli_Date}}</div><div class="MainText">Articolo - {{oCodicearticolo}}</div><div class="MinorText">Desrizione {{odescrizione}}</div><div class="MainText">Comunità {{odescrizione}} </li>'
+                Set psHtmlAfter to '</ul>'
+                Set piLimitRows to 4
+                Set pbReverseOrdering to True
+                Set pbServerOnRowClick to True
+                
+                Object oarticoli_Date is a cWebColumn
+                    Entry_Item articoli.datareg
+                    Set psCaption to "data"
+                    Set piWidth to 50
+                End_Object
+            
+                Object oCodicearticolo is a cWebColumn
+                    Entry_Item articoli.codarticolo
+                    Set psCaption to "Codice articolo"
+                    Set piWidth to 50
+                End_Object
+            
+                Object odescrizione is a cWebColumn
+                    Entry_Item articoli.descrizionesintetica
+                    Set psCaption to "descrizione"
+                    Set piWidth to 50
+                End_Object
+         
+                  Object ocumunita is a cWebColumn
+                    Entry_Item articoli.comunita
+                    Set psCaption to "comunita"
+                    Set piWidth to 50
+                  End_Object 
+                  
+             //   WebRegisterPath ntNavigateForward oZoomOrder
+                
+                Procedure OnRowClick String sRowID
+                //    Send NavigatePath
+                End_Procedure
+                
+                Procedure OnGetNavigateForwardData tWebNavigateData  ByRef NavigateData Handle hoToView
+                    Move True to NavigateData.bReadOnly
+                End_Procedure
+            End_Object
+
+        End_Object
+
+        Object oDynamicshop is a cWebGroup
+            Set psCaption to "Ricerca articoli"
+            Set piColumnCount to 12   
+            
+//            
+//        Object oWebComboCategoria is a cWebCombo
+//            Set pbAddEmptyItem to True
+//            Set piColumnSpan to 4
+//             WebSetResponsive piColumnSpan rmMobile to 2
+//             Set pbShowLabel to False
+//             
+//            Set psEmptyItemDescription to (TranslateString("Tutte le categorie"))
+//
+//             Procedure OnFill
+//                  String slanguage
+//                  Forward Send OnFill
+//                  WebGet pslanguage of oWebApp to slanguage
+//                  Send AddComboItem -1  (TranslateString("Tutte le categorie"))
+//                  For_All categoriemarketPlace by Index.2
+//                    Do
+//                    If (slanguage="IT") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione
+//                     Else If (slanguage="DE") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_de
+//                     Else If (slanguage="EN") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_en
+//                     Else If (slanguage="ES") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_es
+//                    Else If (slanguage="FR") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_fr
+//                     Else If (slanguage="RU") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_ru
+//                     Else Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione
+//                      
+//                  End_For_All
+//             End_Procedure
+//        End_Object
+//        
+
+
+        Object oWebFormRicerca is a cWebForm 
+           
+            Set pbPromptButton to True
+            Set pbShowLabel to False
+            Set piColumnIndex to 4
+            WebSetResponsive piColumnSpan rmMobile to 4
+            WebSetResponsive piColumnIndex rmMobile to 2
+            
+            Set pbServerOnPrompt to True
+            Set piColumnSpan to 12
+            Procedure onprompt 
+                // ricerca sql
+                stFoundProducts[] mystFoundProducts
+                String sSearchstring squery scategoria
+                Boolean BFOUND
+                WebGet psValue to sSearchstring 
+              //  WebGet psValue of oWebComboCategoria to scategoria
+                If (scategoria = "") Move "-1" to scategoria
+//                SELECT recordid, descrizione, descrizionefull,  MATCH (descrizione, descrizionefull) AGAINST ('prva testa 1 ' IN NATURAL LANGUAGE MODE) as score
+//                 from  articolishop WHERE MATCH(descrizione,descrizionefull) AGAINST('prova testa '  IN NATURAL LANGUAGE MODE);
+
+                         Get SQLEscapedStr of OARTICOLISHOP_DD  sSearchstring to sSearchstring 
+
+                  Move ( "SELECT recordid, descrizionesintetica, descrizionecompleta, categoriaid, " + ;
+                         "  MATCH (descrizionesintetica, descrizionecompleta) AGAINST(" + ;
+                         (SFormat ("'%1 '",sSearchstring))    +;
+                         "IN NATURAL LANGUAGE MODE) as score "  + ;
+                         "FROM  articolishop WHERE MATCH(descrizionesintetica, descrizionecompleta) AGAINST(" + ;
+                          (SFormat ("'%1 '",sSearchstring))    + ;
+                          "IN NATURAL LANGUAGE MODE);" ) to squery 
+                    Handle    hoDoc  hostatm
+                    String sid sdes srate
+                    Get sqlFileConnect of osqlHandlemanager (refTable(articoli)) to hoDoc
+                    If (hoDoc <> 0 ) Begin 
+                        String[] avalues
+                        Integer icountrow iFetchResult
+                         Get SQLOpen of hoDoc to hostatm
+                         Send SqlExecDirect of hostatm squery
+                         Get SQLFetchRowValues of hostatm to avalues
+                        
+                         While ( piFetchResult(hostatm) =1)
+                               Move (SizeOfArray(avalues)) to iFetchResult
+                              If iFetchResult Begin
+                               
+                                If ( scategoria <> "-1" ) Move  (  avalues[3] = scategoria)  to bfound
+                                Else Move True to bfound
+                                If (pos("@",sSearchstring)) Begin 
+                                    Integer itagstartpos itagEndPos
+                                    String sSourceLine scity
+                                      Move (pos("@",sSearchstring)) to itagstartpos
+                                       Move (replace("@",sSearchstring,"|")) to sSourceLine
+                                       Move (pos("@",sSourceLine)) to itagEndPos
+                                       Move (mid(sSourceLine,(itagendPos-iTagStartpos-1),(itagStartPos+1)) ) to scity
+                                       // 
+                                End
+                                If (bfound) Begin 
+                                    
+                                    Move avalues[0] to mystFoundProducts[icountrow].sid
+                                    Move avalues[1] to mystFoundProducts[icountrow].sdes
+                                    Move avalues[3] to mystFoundProducts[icountrow].icategoriaid
+                                    
+                                    Move (replace(".",avalues[4],",")) to mystFoundProducts[icountrow].nrate
+                                       Increment icountrow
+                                End
+                              End
+                               Get SQLFetchRowValues of hostatm to avalues
+                              
+                        Loop
+                         Send SQLClose of hostatm
+                    End
+                     Send SQLDisconnect of hoDoc
+                     If (scity>"" ) Begin 
+                      // verifica se i prodotti trovati si trovano nella città richiesta
+                     // 1) cerca proprietario articolo e in che città si trova
+                     //
+                     End
+                     
+//                   WebSet pMyLocalstFoundProducts of oDynamicshop to mystFoundProducts
+//                   Send RenderFoundproducts of oWebDynamicObjectContainer3 mystFoundProducts
+//                   Boolean bret                   //toglie la pagina dei prodotti del negozio se c'
+//                   //        Procedure HideProducts String scatId
+//                   Get   IsRendered of  oWebDynamicObjectContainer4   ("shop_vcatdyngrp") to bret
+//                  If bret Send DestroyDynamicObject  of  oWebDynamicObjectContainer4 ("shop_vcatdyngrp")
+ 
+            End_Procedure 
+        End_Object
+
+        End_Object
+    
+    End_Object
+    
+    Procedure OnBeforeShow
+        // Each time this view is shown we will update the appropriate information.
+    End_Procedure
+
+End_Object

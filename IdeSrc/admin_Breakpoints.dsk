@@ -1,0 +1,17 @@
+[D:\dataflex projects\comunitasolidaliengine\AppSrc\gestorehttp.wo]
+Source199=If (ErrorCount(Self) = 0) Begin
+ConditionEnabled199=0
+Condition199= 
+199=1
+Source226=If (Found) Begin
+ConditionEnabled226=0
+Condition226= 
+226=1
+Source242=Send OutputJson hoJson
+ConditionEnabled242=0
+Condition242= 
+242=1
+Source361=If (ErrorCount(Self) = 0) Begin
+ConditionEnabled361=0
+Condition361= 
+361=1

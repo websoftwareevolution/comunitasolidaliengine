@@ -1,0 +1,16 @@
+#REPLACE FILE4 articoli
+#REPLACE articoli.File_Number |CI4
+#REPLACE articoli.codarticolo |FS4,1
+#REPLACE articoli.descrizionesintetica |FS4,2
+#REPLACE articoli.descrizionecompleta |FS4,3
+#REPLACE articoli.immaginelink |FS4,4
+#REPLACE articoli.moneta |FS4,5
+#REPLACE articoli.comunita |FS4,6
+#REPLACE articoli.prezzoeuro |FN4,7
+#REPLACE articoli.prezzovaluta |FN4,8
+#REPLACE articoli.datareg |FD4,9
+#REPLACE articoli.Linkarticolonegozio |FS4,10
+#REPLACE articoli.Linkiscrizionecomunita |FS4,11
+#REPLACE articoli.linkinfomoneta |FS4,12
+#REPLACE articoli.categoria |FS4,13
+#REPLACE articoli.disponibilita |FN4,14

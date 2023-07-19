@@ -1,0 +1,52 @@
+[Workspace]
+CurrentProject=WebApp.src
+Location=D:\DataFlex Projects\comunitasolidaliengine\IdeSrc\admin_Studio.dsk
+CreateNew=3
+[TabWindows]
+GroupCount=1
+HorizontalGroups=1
+[TabGroup0]
+GroupSize=40
+SelectedTab=3
+[Window0]
+Filename=Workspace Dashboard
+ViewType=101
+Top=21
+Left=0
+Bottom=401
+Right=1121
+TabIndex=0
+TabGroup=0
+[Window1]
+Filename=D:\DataFlex Projects\comunitasolidaliengine\AppSrc\WebApp.src
+ViewType=1
+Top=21
+Left=0
+Bottom=401
+Right=1121
+CursorLine=13
+CursorColumn=2
+TabIndex=1
+TabGroup=0
+[Window2]
+Filename=D:\dataflex projects\comunitasolidaliengine\AppSrc\gestorehttp.wo
+ViewType=1
+Top=21
+Left=0
+Bottom=401
+Right=1121
+CursorLine=267
+CursorColumn=2
+TabIndex=2
+TabGroup=0
+[Window3]
+Filename=D:\DataFlex Projects\comunitasolidaliengine\AppSrc\Dashboard.wo
+ViewType=1
+Top=21
+Left=0
+Bottom=401
+Right=1121
+CursorLine=20
+CursorColumn=16
+TabIndex=3
+TabGroup=0

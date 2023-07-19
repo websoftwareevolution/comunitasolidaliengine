@@ -1,0 +1,6 @@
+#REPLACE FILE3 coins
+#REPLACE coins.File_Number |CI3
+#REPLACE coins.nomemoneta |FS3,1
+#REPLACE coins.acronimo |FS3,2
+#REPLACE coins.comunita |FS3,3
+#REPLACE coins.datareg |FD3,4
