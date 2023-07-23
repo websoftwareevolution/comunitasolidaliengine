@@ -35,6 +35,17 @@
 			</DDClasses>
 		</Table>
 		<Table>
+			<tableNumber>5</tableNumber>
+			<tableName>negozi</tableName>
+			<DDClasses>
+				<DDClass>
+					<className>cnegoziDataDictionary</className>
+					<classFile>cnegoziDataDictionary.dd</classFile>
+					<preferred>true</preferred>
+				</DDClass>
+			</DDClasses>
+		</Table>
+		<Table>
 			<tableNumber>263</tableNumber>
 			<tableName>WebAppSession</tableName>
 			<DDClasses>

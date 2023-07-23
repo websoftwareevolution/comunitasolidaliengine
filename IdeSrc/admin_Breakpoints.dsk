@@ -1,17 +1,42 @@
 [D:\dataflex projects\comunitasolidaliengine\AppSrc\gestorehttp.wo]
-Source199=If (ErrorCount(Self) = 0) Begin
-ConditionEnabled199=0
-Condition199= 
-199=1
-Source226=If (Found) Begin
-ConditionEnabled226=0
-Condition226= 
-226=1
-Source242=Send OutputJson hoJson
-ConditionEnabled242=0
-Condition242= 
-242=1
-Source361=If (ErrorCount(Self) = 0) Begin
-ConditionEnabled361=0
-Condition361= 
-361=1
+Source60=Else  If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovoarticolo") Begin
+ConditionEnabled60=0
+Condition60= 
+60=1
+Source64=Send  SaveNewNegozio True ""
+ConditionEnabled64=0
+Condition64= 
+64=1
+Source206=If (ErrorCount(Self) = 0) Begin
+ConditionEnabled206=0
+Condition206= 
+206=1
+Source233=If (Found) Begin
+ConditionEnabled233=0
+Condition233= 
+233=1
+Source249=Send OutputJson hoJson
+ConditionEnabled249=0
+Condition249= 
+249=1
+Source399=If (ErrorCount(Self) = 0) Begin
+ConditionEnabled399=0
+Condition399= 
+399=1
+Source446=Get RequestDataJson (&hoJson) to bSuccess
+ConditionEnabled446=0
+Condition446= 
+446=1
+Source511=If (ErrorCount(Self) = 0) Begin
+ConditionEnabled511=0
+Condition511= 
+511=1
+Source517=Send negozio negozi.recordid negozi.comunita
+ConditionEnabled517=0
+Condition517= 
+517=1
+[D:\DataFlex Projects\comunitasolidaliengine\AppSrc\Dashboard.wo]
+Source252=Move ( "SELECT codarticolo, descrizionesintetica, descrizionecompleta, categoria, " + ;
+ConditionEnabled252=0
+Condition252= 
+252=1

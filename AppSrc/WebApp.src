@@ -7,6 +7,10 @@ Object oApplication is a cApplication
     End_Object
 End_Object
 
+Function translatestring Global String stext Returns String
+    Function_Return  stext
+End_Function
+
 Object oWebApp is a cWebApp
     Set psTheme to "Df_Material"
     Set peAlignView to alignCenter
@@ -49,6 +53,32 @@ Object oWebApp is a cWebApp
                         Send NavigatePath
                     End_Procedure
                 End_Object
+
+//              Object oNegoziList is a cWebMenuItem 
+//      
+//                   Set psCaption to  "Trova negozi"
+//                      
+//       
+//                     Register_Object oListanegozi
+//                     // WebRegisterPath ntNavigateForward oListanegozi
+//        
+//                            
+//                              Procedure OnGetNavigateForwardData tWebNavigateData ByRef NavigateData Handle hoToView
+//                                  Move nfFromMain to NavigateData.eNavigateType
+//                              End_Procedure
+//                      
+//                   
+//                    Procedure OnClick String sId String sParam
+//                           Boolean BOK
+//                          String sReason
+//                          Get CanPushView of ghoWebViewStack oListanegozi (&sReason) to bOK
+//                           If (not(bok)) Begin 
+//                                          Get Reset of ghoWebViewStack True True to bok
+//                           End
+//                          If (bok) Send NavigatePath
+//                    End_Procedure
+//                    
+//                 End_Object
 
                 Object oViewMenu is a cWebMenuItem
                     Set psCaption to C_$View

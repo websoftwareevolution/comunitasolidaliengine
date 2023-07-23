@@ -1,0 +1,809 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebButton.pkg
+Use cWebForm.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cWebImage.pkg
+ 
+Use carticoliDataDictionary.dd
+Use ccategoriemarketPlaceDataDictionary.dd
+ 
+Use cWebGroup.pkg
+Use cWebSuggestionForm.pkg
+Use cWebSpacer.pkg
+
+Enum_List
+     Define VIEWTYPEMARKETB2C for 0
+     Define VIEWTYPEMARKETC2C
+//    Define VIEWTYPEMARKETB2B
+//    Define VIEWTYPEMARKETPROMO
+//     
+End_Enum_List
+
+ #IFDEF #TESTPLATFORM#
+      Define #ESHOPCLUBLINK# for "https://development.dinastycoin.club/"
+#ELSE
+     Define #ESHOPCLUBLINK# for "https://dinastycoin.club/"
+#ENDIF   
+   
+Register_Object oSchedaarticoloMobile 
+Register_Object oSchedaarticoloDesktop
+Register_Object oValutazioneperarticoli
+Register_Object oHomeallshoppingproduct                       
+
+//  Classes for the different dynamic objects
+Class cDwProductGrp is a cWebGroup
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set psBackgroundColor to "white"
+        Set piColumnSpan to 4
+        Set piHeight to 400
+       
+        Set piColumnCount to 2
+        // WebSetResponsive  pbScroll rmMobile to True
+         WebSetResponsive  piHeight rmMobile to 450
+         WebSetResponsive  piColumnCount rmMobile to 6
+         WebSetResponsive piColumnSpan rmMobile to 0
+         WebSetResponsive piColumnindex rmMobile to 0
+         
+        Set pbShowBorder to False
+    End_Procedure
+End_Class
+
+Class cDwProductDesc is a cWebLabel
+    Procedure Construct_Object
+        Forward Send Construct_Object
+         Set psCSSClass to "smallfont"
+         Set piColumnSpan to 2
+        Set pbFillHeight to True
+           Set psBackgroundColor to "white"
+    End_Procedure
+End_Class
+
+Use cWebHtmlBoxMyUpdate.pkg
+Class cWebHtmlarticoloDes is a  cWebHtmlBoxMyUpdate
+    
+       Procedure Construct_Object
+          Forward Send Construct_Object
+              Set piColumnSpan to 3
+              Set pbScroll to False
+              WebSetResponsive piColumnSpan rmMobile to 0
+                 Set psBackgroundColor to "white"
+               { WebProperty=client }
+               Property stArticoliamazon asArticoliOnline 
+              
+               { WebProperty=client }
+               Property stShowArticoliBoxHtml asshowArticoliBoxHtml 
+               
+               { WebProperty=client }
+               Property Integer piarticoloselezionato 0
+
+              { WebProperty=client }
+               Property Boolean   pbNOTshowArtDes False
+                
+       End_Procedure
+
+         Function movestruct    stArticoliamazon   asArticoliOnline Returns stShowArticoliBoxHtml
+             
+             stShowArticoliBoxHtml syMyShowArticoliBoxHtml
+             Move asArticoliOnline.nprezzoeuro  to syMyShowArticoliBoxHtml.nprezzoeuro
+            Move  asArticoliOnline.nprezzodcy to syMyShowArticoliBoxHtml.nprezzoDcy
+          
+            Move  asArticoliOnline.sdescrizione to syMyShowArticoliBoxHtml.sDescrizione
+            Move  asArticoliOnline.nvalutazione to syMyShowArticoliBoxHtml.nvalutazionestelline
+            Move  asArticoliOnline.icodicearticolo to syMyShowArticoliBoxHtml.icodicearticolo
+            Move  asArticoliOnline.simmagine to syMyShowArticoliBoxHtml.simmagine
+            Move  asArticoliOnline.niva to syMyShowArticoliBoxHtml.niva
+            Move  asArticoliOnline.ivisite to syMyShowArticoliBoxHtml.iVisite
+            Move  asArticoliOnline.susato to syMyShowArticoliBoxHtml.Sstato
+            Move  asArticoliOnline.ndisponibile to syMyShowArticoliBoxHtml.nQtaDisponibile
+            Move  asArticoliOnline.ddatascadenzapromo to syMyShowArticoliBoxHtml.dscadenzapromo
+            Move asArticoliOnline.dDatainiziopromo to syMyShowArticoliBoxHtml.diniziopromo
+            Move asArticoliOnline.bpromoattiva to syMyShowArticoliBoxHtml.battivapromo
+            Move  asArticoliOnline.nPrezzoFissoPromozione to syMyShowArticoliBoxHtml.nPrezzoFissoPromozione
+            Move asArticoliOnline.nprezzoscontatopercentuale to   syMyShowArticoliBoxHtml.nprezzoscontatopercentuale
+            Move  asArticoliOnline.npercentopromo to syMyShowArticoliBoxHtml.npercentopromo
+            
+       
+             Move Self to syMyShowArticoliBoxHtml.hoMainView
+          
+            Function_Return syMyShowArticoliBoxHtml
+         End_Function
+                     
+            Procedure OnClick String sId String sParam
+                             String sCurrentlink shtml shome slinklevel1 shtmlnew
+                             Integer ipos ipos2 itotalpages
+                              // WebGet pitotalpages of oHomeallshoppingproductNew to  itotalpages
+                             Integer emode
+                              WebGet peMode of ghoWebApp to eMode
+                              // carica il record articolo
+                              Clear articolishop
+                              Send Clear of oarticolishop_DD
+                              Move sParam to articolishop.recordid
+                              Send Find of oarticolishop_DD EQ 1
+                              
+                            If (sID = "Articolo"  ) Begin
+
+                                
+                             Send   PopupTheDialog  of oSchedaarticoloMobile Self articolishop.recordid  "B2C"
+                              
+                               
+                                
+                            End
+                          Else If (sId ="stelline") Begin 
+                                WebSet psarticoloId of oValutazioneperarticoli to sParam
+                            
+     
+                              If (eMode >= rmMobile) Send   PopupTheDialog  of oValutazioneperarticoli Self articolishop.recordid 
+                               Else     Send   PopupTheDialog  of oValutazioneperarticoli Self articolishop.recordid   
+    
+                            End
+                 End_Procedure
+                       
+End_Class
+
+
+   Class cwebhtmlboxArticoloImages is a  cwebhtmlbox 
+            
+                Procedure construct_object
+                    Forward Send construct_object
+                    Set psCSSClass to "webboxPrices"
+                    
+                      Set piHeight to  (#SIZEIMGTHUMBHAMAZON# +30)
+                    Set piWidth to 0
+                    Set piColumnSpan to 2
+                     WebSetResponsive piHeight rmMobile to 180   
+                     Set psBackgroundColor to  "white"
+                    
+                     WebSetResponsive piColumnSpan rmMobile to 0
+                     WebSetResponsive piColumnindex rmMobile to 0
+                     Set piColumnindex to 0
+                     Set pbScroll to False
+                     Set pbShowBorder to False
+     
+                     Set pbServerOnClick to True
+                End_Procedure
+                
+
+                 Procedure MyRefresThis String simage
+                 End_Procedure
+
+          Procedure onclick String sId String sParam
+            // apre pagina articolo
+
+                    If (sID = "openview"  ) Begin
+                                   Integer emode  
+                                   Clear articolishop
+                                   Move sParam to articolishop.recordid
+                                   Find eq articolishop by Index.1
+                                   
+                                  WebGet peMode of ghoWebApp to eMode
+                              
+                                   Send  PopupTheDialog  of oSchedaarticoloMobile Self sParam   "B2C"
+                                 
+                            End
+            
+          End_Procedure
+           
+           Procedure MyUpdateHTML stShowArticoliBoxHtml pasArticoliOnline //Integer iindex Integer imode
+            // creiamo le slide aggiornate
+                    String shtml simmagine spathhtml shtmlphisicalpath sdatapath sprezzoeuro shtmlPrezzi
+                    Handle hoWorkspace
+                    Get phoWorkspace of ghoApplication to hoWorkSpace
+                    If (hoWorkSpace<>0 ) Begin
+                        Get psAppHtmlPath of hoWorkSpace to shtmlphisicalpath
+                        Get psDataPath    of hoWorkSpace to sdatapath
+                    End
+                     Get psAppHtmlPath of hoWorkspace to spathhtml
+                     Move ("images\products\") to shtmlphisicalpath
+                      Number nprezzoscontato
+                     //Send RegisterDownloadFolder of ghoWebResourceManager shtmlphisicalpath
+                      Move (String(trim(pasArticoliOnline.simmagine))) to simmagine
+                      Move (shtmlphisicalpath+(String(simmagine))) to simmagine
+ 
+                        Move ('<div Class="responsive-container">'+ ;
+                            '<a style="color: #000000"; data-ServerOnClick="openview" data-OnClickParam="%RecordPub%">'+;
+                            '<img src="%IMMAGINE%"  style="width:140px ; height:160px;  max-height:100%; margin:auto; display:block; max-width:100%;  border-radius:15% ; border: 2px solid #000000; object-fit: contain; background-size:contain; background-color:white">' + ;
+                            '</a>' + ;
+                            '</div>' ) to shtml
+                             
+                            Move (Replace("%IMMAGINE%",shtml,(#ESHOPCLUBLINK#-(trim(simmagine))))) to shtml
+                            Integer emode
+                            WebGet peMode of ghoWebApp to eMode
+                             Move (Replace("%RecordPub%",shtml, (trim(pasArticoliOnline.icodicearticolo)))) to shtml 
+                             
+                           
+                           // calcola lo sconto
+                            Move (pasArticoliOnline.nprezzoeuro - ( pasArticoliOnline.nprezzoeuro * (pasArticoliOnline.npercentopromo /100) )) to nprezzoscontato
+                              
+                               
+                    If ( pasArticoliOnline.dscadenzapromo >"") Begin
+                            If (eMode >= rmMobile) Begin  
+                                Move ' <div> <p style="text-align:center; color:black; font-size=30px">%EuroScontato%&euro;<br></p><p style="text-align:center; font-size=15px; color:red">%DCY%DCY<br></p><p style="text-align:center; font-size=15px; color=grey"><del>%Euro%</del>&euro;<br>scade %scadenza%</p></div>'to  shtmlPrezzi
+                            End    
+                            Else Begin 
+                                //Move ' <div   style="text-align: center"> <font size="3" color="black" >%EuroScontato%&#x2654;<br></font><font size="3" color="red">%DCY%D&yen<br></font><font size="1" color="grey"><del>%Euro%</del>&#x2654;<br>scade %scadenza%</font></div>'to  shtmlPrezzi
+                                Move ' <div> <p style="text-align:center; color:black; font-size=50px">%EuroScontato%&euro;<br></p><p style="text-align:center; font-size=25px; color:red">%DCY%DCY<br></p><p style="text-align:center; font-size=25px; color=grey"><del>%Euro%</del>&euro;<br>scade %scadenza%</p></div>'to  shtmlPrezzi
+                        
+                            End
+                               Move (Replace("%scadenza%",shtmlPrezzi, (String(pasArticoliOnline.dscadenzapromo)))) to shtmlPrezzi
+                          
+                            Move (Replace("%Euro%",shtmlPrezzi, (String( pasArticoliOnline.nprezzoeuro)))) to shtmlPrezzi
+                            Move (Replace("%EuroScontato%",shtmlPrezzi, (String( nprezzoscontato)))) to shtmlPrezzi
+                             
+                            
+                            Move (Replace("%DCY%",shtmlPrezzi,  (String( (FormatNumber(pasArticoliOnline.nprezzoDcy,2)))))) to shtmlPrezzi
+                    End      
+                          Send UpdateHTML shtml
+                   
+               End_Procedure
+          Function loadstruct Returns stArticoliamazon
+               Date dtoday
+               Sysdate dtoday
+               Integer ipage ilength
+               Move 58 to ilength
+               String sdescrizione slimiteddescription
+               //Move  (FillString(" ",ilength)) to sdescrizione
+
+
+               stArticoliamazon asMyArticoliOnline 
+               stShowArticoliBoxHtml asMyshowArticoliBoxHtml     
+                   Move articolishop.recordid to asMyArticoliOnline.icodicearticolo
+                   Move (ipage+1)  to asMyArticoliOnline.ipagina
+                   Move (Pad ( (left(articolishop.descrizione,ilength)), ilength  ) )  to slimiteddescription
+
+                   Move slimiteddescription to asMyArticoliOnline.sdescrizione
+                   Move articolishop.immagine1 to  asMyArticoliOnline.simmagine
+                   Move articolishop.nrstelle  to  asMyArticoliOnline.nvalutazione
+                   Move articolishop.prezzoeuro  to  asMyArticoliOnline.nprezzoeuro
+                   // applica il cambio nello step succeessivo 
+                   
+                   If (articolishop.scadenzapromo >= dtoday and articolishop.datainiziopromo <=dtoday) Begin 
+                       
+                       If (articolishop.Promodcypercento>0) Move (articolishop.prezzoeuro - ( articolishop.prezzoeuro * articolishop.Promodcypercento /100)) to asMyArticoliOnline.nprezzoscontatopercentuale
+                       Else Move articolishop.prezzoeuroduranteofferta to asMyArticoliOnline.nPrezzoFissoPromozione
+                   End
+                      If (articolishop.Promodcypercento>0) Move articolishop.Promodcypercento to asMyArticoliOnline.npercentopromo
+                       Move articolishop.scadenzapromo to asMyArticoliOnline.ddatascadenzapromo
+                       Move articolishop.Promodcypercento to   asMyArticoliOnline.npercentopromo
+               
+ 
+                     Move 0 to  asMyArticoliOnline.npercentodcy   
+                    Move articolishop.totalevalutazioni to  asMyArticoliOnline.inumerorecensioni
+                   //Move articolishop.percentodcy  to  asArticoliOnline.npercentodcy      
+                   Move articolishop.vatuk  to  asMyArticoliOnline.niva  
+                   Move articolishop.totalevisite  to  asMyArticoliOnline.ivisite
+                    Move articolishop.stato  to  asMyArticoliOnline.sUsato  
+                    Move articolishop.qtadisponibile to  asMyArticoliOnline.ndisponibile
+                    Move articolishop.datainiziopromo to asMyArticoliOnline.dDatainiziopromo
+                    Move (articolishop.attivapromodcy="S") to asMyArticoliOnline.bpromoattiva
+                    Move articolishop.Promodcypercento to asMyArticoliOnline.npercentopromo
+                    If ( articolishop.fidelityenabled="S") Begin 
+                      If (articolishop.percentofidelity >0 ) Begin 
+                         Move (articolishop.prezzoeuro * (articolishop.percentofidelity/100)) to  asMyArticoliOnline.ndcyf
+                         
+                      End
+                      Else Move articolishop.fissodcyf to asMyArticoliOnline.ndcyf
+                   End
+                     //WebSet asArticoliOnline to asMyArticoliOnline
+                    // WebSet asshowArticoliBoxHtml to asMyArticoliOnline
+                    Function_Return asMyArticoliOnline
+                        
+         End_Function
+             
+
+ 
+  
+          End_Class
+
+
+
+Class cDwProductAdd is a cWebButtonTranslate
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        
+        Set piColumnSpan to 1
+        Set piColumnIndex to 1
+        Set psCaption to "Aggiungi"
+         WebSetResponsive piColumnSpan rmMobile to 0
+        { WebProperty=Server }
+        Property String psItemID ""
+
+        { WebProperty=Server }
+        Property String psqtyid "_qty"
+
+        
+        { WebProperty=Server }
+        Property String psItemImg ""
+
+        { WebProperty=Server }
+        Property String psItemDes ""
+
+        { WebProperty=Server }
+        Property Integer piContaTaglie ""
+
+
+        { WebProperty=Server }
+        Property String psShop ""
+
+
+        { WebProperty=Server }
+        Property String pstaglia ""
+        
+        { WebProperty=Server }
+        Property String pscolore ""
+        
+
+       { WebProperty=Server }
+        Property String psCurrency "Eur" // dcys dcy
+
+       { WebProperty=Server }
+        Property Number pnAddValue 0 
+        
+       { WebProperty=Server }
+        Property Number pnTotaleCart  0 
+        
+    End_Procedure
+    
+    Procedure OnClick
+        String sItemId sItemImg sItemdes scurrency sqtyid sshop staglia scolore
+        Handle hoQtyFrm
+        Integer iQty icontataglie
+        Number nvalue ntotalcart
+        Boolean bok
+        WebGet psItemID to sItemId
+        WebGet psItemImg to sItemImg
+        WebGet psItemdes to sItemdes
+        WebGet pnAddValue to nvalue
+        WebGet pnTotaleCart to ntotalcart
+        WebGet psCurrency to scurrency
+        WebGet psShop to  sshop
+        WebGet psqtyid to sqtyid
+        WebGet pstaglia to staglia
+        WebGet pscolore to scolore
+        WebGet piContataglie to icontataglie
+        Get DynamicObject (Replaces(" ", sItemId, "_") + sqtyid ) to hoQtyFrm
+       If (icontataglie =0)   Begin 
+         WebGet psValue of hoQtyFrm to iQty
+      
+       End
+       Else Move 1 to iQty
+        
+       
+         Send Clear of  oarticolishop_dd
+         Move sItemId to articolishop.recordid
+         Send Find of oArticolishop_dd EQ 1
+         
+       //todo: se l'articolo ha taglie e colori visualizza la sceda articolo prima di aggiungere nel carrello
+        If (articolishop.contataglie > 0 or articolishop.contacolori>0 ) Begin
+              Send  PopupTheDialog  of oSchedaarticoloMobile Self articolishop.recordid   "B2C"
+              Procedure_Return
+        End
+        Else Begin 
+            Delegate Send AddProduct sItemId iQty sItemImg sitemdes scurrency nvalue sshop 0 0 (&bok) staglia scolore
+            If (bok)  Send ShowInfoBox ;
+                (TranslateString("Il Prodotto è stato aggiunto nel carrello")) ;
+                 (TranslateString("Complimenti!"))
+         End
+    End_Procedure
+End_Class
+
+
+Class cDwProductAddWish is a cWebButtonTranslate
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        
+        Set piColumnSpan to 1
+        Set piColumnIndex to 0
+        Set psCaption to "Aggiungi Lista desideri"
+        
+        { WebProperty=Server }
+        Property String psItemID ""
+ 
+         WebSetResponsive piColumnSpan rmMobile to 4
+        
+    End_Procedure
+    
+    Procedure OnClick
+        String sItemId  
+        
+        WebGet psItemID to sItemId
+  
+        Delegate Send AddProductWishlist sItemId  
+    End_Procedure
+End_Class
+
+Class cDwProductQty is a cwebcombotranslate
+    Procedure Construct_Object
+        Forward Send Construct_Object
+           Set psBackgroundColor to "white"
+        Set piColumnIndex to 0
+        Set piColumnSpan to 1
+        Set pbShowLabel to False
+        Set psLabel to ""
+        Set peDataType to typeNumber
+        Set piPrecision to 0
+        Set psValue to 1
+        // Set peLabelPosition to lpTop
+         Set pbServerOnChange to True
+          WebSetResponsive piColumnSpan rmMobile to 0
+       { WebProperty=Server }
+        Property String psItemID ""
+        
+       { WebProperty=Server }
+         Property String  psShop ""
+        
+        
+    End_Procedure
+
+         
+
+//                    Procedure OnChange String sNewValue String sOldValue
+//                        Forward Send OnChange sNewValue sOldValue
+//                        Number nprezzo
+//                        String spuntifidelity
+//                        WebGet psItemID to sproductId
+//                        Send Clear of oarticolishop_DD
+//                        Move sproductId to articolishop.recordid
+//                        Send Find of oarticolishop_DD EQ 1
+//                        
+////                        If (articolishop.fidelityenabled = "S" ) Begin 
+////                            
+////                            Move (articolishop.prezzoeuro * Integer (sNewValue)) to nprezzo 
+////                            If  (articolishop.percentofidelity >0 ) Move  ( nprezzo * (articolishop.percentofidelity/100) ) to spuntifidelity
+////                             Else Move (articolishop.fissodcyf * Integer (sNewValue)) to spuntifidelity   
+////                             WebSet pscaption of oWebLabelFidelity  to ("DCYFidelity:"+(String(spuntifidelity)))
+////                             WebSet pnpuntifidelity of oSchedaarticoloNew to spuntifidelity
+////                        End
+//                    End_Procedure
+
+  
+                     Procedure OnSetCalculatedValue String ByRef sValue
+                                  String smultiply sproductId
+                                  Number  nminimo nqtadisp
+                                   Integer   i iqta
+                               
+                               WebGet psItemID to sproductId
+                                Send Clear of oarticolishop_DD
+                                Move sproductId to articolishop.recordid
+                                Send Find of oarticolishop_DD EQ 1
+                                 Get Field_Current_Value of oarticolishop_DD Field articolishop.qtamultipliminimo to smultiply
+                                
+                                Get Field_Current_Value of oarticolishop_DD Field articolishop.qtaminimaordinabile to nminimo
+                               If (nminimo>1 and smultiply="S") Begin
+                                  If ( (mod ((Integer(sValue)) , (Integer(nminimo )))   <> 0  )) ;
+                                    Move ( (Integer(sValue)) / (Integer(nminimo ))) to sValue
+                               End
+                                
+                                Get Field_Current_Value of oarticolishop_DD Field articolishop.qtadisponibile to nqtadisp
+                                WebSet pbRender to (nqtadisp>0) 
+                     End_Procedure  
+                          
+                    Procedure COMBO_delete_data
+                             Set private_paRowIDs to (ResizeArray(private_paRowIDs(Self),0))
+                    End_Procedure
+                          // riempie in base alla quantità disponibile sino massimmo
+                          Procedure OnFill
+                                Forward Send OnFill
+                                String smultiply  sproductId
+                                Number nminimo
+                                Integer   i iqta
+                                Send Combo_Delete_Data
+                                WebGet psItemID to sproductId
+                                
+                                    Send Clear of oarticolishop_DD
+                                    Move sproductId to articolishop.recordid
+                                    Send Find of oarticolishop_DD EQ 1
+                                
+                                Get Field_Current_Value of oarticolishop_DD Field articolishop.qtamultipliminimo to smultiply
+                                Get field_current_value of oarticolishop_DD Field articolishop.qtadisponibile to iqta
+                                Get Field_Current_Value of oarticolishop_DD Field articolishop.qtaminimaordinabile to nminimo
+                                
+                                If (iqta > 100) Move 100 to iqta
+                                If (nminimo>1 and smultiply="S") Move (iqta / nminimo ) to iqta
+                                 For i from 1 to (iqta)
+                                    If (nminimo>1 and smultiply="S") Begin
+                                        Send AddComboItem (i*nminimo)  (i*nminimo)
+                                    End
+                                     Else Send AddComboItem i  i
+                                 Loop
+                    End_Procedure               
+
+End_Class
+ 
+Class cDwProductQtyOnOrder is a  cDwProductQty  
+    
+//            Procedure OnChange String sNewValue String sOldValue
+//                         Forward Send OnChange sNewValue sOldValue
+//                         Integer  iOrdernumber
+//                         String sitemid
+//                         Integer iRowItem
+//                         Move orderDtl.Order_Number to iOrdernumber
+//                          WebGet psItemID to sitemid
+//                          Send Clear of oOrderDtl_DD
+//                          Move sitemid to orderDtl.Item_ID
+//                          Move iOrdernumber to orderDtl.Order_Number
+//                          Send Find of oOrderDtl_DD EQ 6 
+//                          If (FindErr) Procedure_Return
+//                         Get field_Current_value of oOrderDtl_DD Field orderDtl.Order_Number to iOrdernumber
+//                         Get field_Current_value of oOrderDtl_DD Field orderDtl.Detail_Number to iRowItem
+//                         Set Field_Changed_Value of oOrderDtl_DD Field orderDtl.Qty_Ordered to (String(sNewValue))
+//                         Send Request_Save of oOrderDtl_DD
+//                             
+//                        // aggiorna array
+//             End_Procedure
+        Procedure Construct_Object
+                Forward Send Construct_Object
+                   Set psBackgroundColor to "white"
+                Set piColumnIndex to 0
+                Set piColumnSpan to 1
+                Set pbShowLabel to False
+                Set psLabel to ""
+                Set peDataType to typeNumber
+                Set piPrecision to 0
+                Set psValue to 0
+                // Set peLabelPosition to lpTop
+                 Set pbServerOnChange to True
+                 
+               { WebProperty=Server }
+                Property String psItemID ""
+
+              { WebProperty=client }
+                Property Integer piqty  0
+
+                
+            End_Procedure
+
+                Procedure OnFill
+                                
+                                String smultiply  sproductId
+                                Number nminimo
+                                Integer   i iqta
+                                Send Combo_Delete_Data
+                                WebGet psItemID to sproductId
+                                
+                                    Send Clear of oarticolishop_DD
+                                    Move sproductId to articolishop.recordid
+                                    Send Find of oarticolishop_DD EQ 1
+                                
+                                Get Field_Current_Value of oarticolishop_DD Field articolishop.qtamultipliminimo to smultiply
+                                WebGet piqty to iqta
+                                
+                                If ( iqta = 0 ) Get field_current_value of oarticolishop_DD Field articolishop.qtadisponibile to iqta
+                                Get Field_Current_Value of oarticolishop_DD Field articolishop.qtaminimaordinabile to nminimo
+                                
+                                If (iqta > 100) Move 100 to iqta
+                                If (nminimo>1 and smultiply="S") Move (iqta / nminimo ) to iqta
+                                 Send AddComboItem 0 0 
+                                 For i from 1 to (iqta)
+                                    If (nminimo>1 and smultiply="S") Begin
+                                        Send AddComboItem (i*nminimo)  (i*nminimo)
+                                    End
+                                     Else Send AddComboItem i  i
+                                 Loop
+                    End_Procedure      
+ 
+               Procedure OnChange String sNewValue String sOldValue
+                    String srowid sproductId smultiply sitemid
+                    Integer iProdCol  iQtyCol ivalCol ipos iProdImgCol  iDescol iOrdernumber
+                    Number nminimo
+                    Move orderDtl.Order_Number to iOrdernumber
+                  WebGet psItemID to sitemid
+                  Send Clear of oOrderDtl_DD
+                  Move sitemid to orderDtl.Item_ID
+                  Move iOrdernumber to orderDtl.Order_Number
+                  Send Find of oOrderDtl_DD EQ 6 
+                  If (FindErr) Procedure_Return
+                          
+            
+                    If (sNewValue = 0 ) Begin 
+                        
+                      //  Send RemoveRow of   oCartList sitemid
+                        Send RemoveProduct sitemid
+                    End
+                    Else Begin 
+                          tDwCartItem[]  aCart
+                         tDwCartItem newItm
+//                        Get piColumnId of oProductImgCol to iProdImgCol
+//                        Get piColumnId of oQtyCol to iQtyCol
+//                        Get piColumnId of oValueCol to ivalCol
+//                        Get piColumnId of oProductdesCol to iDescol
+                        
+                         WebGet paShoppingCart of oDynamicSHop  to aCart
+        
+                        Move sitemid to newItm.sProductID
+                       Move  sOldValue to newItm.iQty
+                       // WebGet psvalue of oValueCol  to  newItm.nvalue
+                         Move (BinarySearchArray(newItm, aCart)) to iPos
+                        If (iPos >= 0) Begin
+                            
+                                    Send Clear of oarticolishop_DD
+                                    Move aCart[iPos].sProductID to articolishop.recordid
+                                    Send Find of oarticolishop_DD EQ 1
+               
+               
+                                   Get Field_Current_Value of oarticolishop_DD Field articolishop.qtamultipliminimo to smultiply
+                                   Get Field_Current_Value of oarticolishop_DD Field articolishop.qtaminimaordinabile to nminimo
+                                   If (nminimo = 0) Move 1 to nminimo
+                                   
+                               If (nminimo>1 and smultiply="S") Begin
+                                  If ( (mod ((Integer(sNewValue)) , (Integer(nminimo )))   <> 0  )) ;
+                                       Move ( (Integer(sNewValue)) / (Integer(nminimo ))) to sNewValue
+                                     
+                               End
+                               If  ( Number(sNewValue) = 0)  Move 1  to sNewValue
+                               If  ( Number(sNewValue) > articolishop.qtadisponibile)  Move articolishop.qtadisponibile to sNewValue
+                               Else If  ( Number(sNewValue) < nminimo ) Move nminimo to sNewValue
+                               Move ( Number(sNewValue)  ) to aCart[iPos].iQty
+                                  Get Field_Current_Value of oarticolishop_DD Field articolishop.qtadisponibile to aCart[iPos].nqtadisponibile
+                                
+                                   Move sNewValue to  aCart[iPos].iQty
+                                   WebSet paShoppingCart of oDynamicSHop  to aCart
+                               
+                                    Set Field_Changed_Value of  oorderDtl_DD Field    orderDtl.Qty_Ordered to sNewValue
+                                     Send Request_Save of oorderDtl_DD   
+ 
+
+                        End
+                       
+                    End
+                End_Procedure
+ 
+End_Class    
+
+
+Class cDwProductContainer is a cWebGroup
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        
+        Set pbShowCaption to False
+        Set piColumnSpan to 0
+        Set piColumnIndex to 0
+        //  WebSetResponsive  pbScroll  rmMobile to True
+          Set piColumnCount to 12
+          WebSetResponsive piColumnCount rmMobile to 6  
+           Set psBackgroundColor to "white"
+           Set pbShowBorder to True
+    End_Procedure
+End_Class
+
+Class cDwCategorieGrp is a cWebGroup
+    Procedure Construct_Object
+        Forward Send Construct_Object
+           Set psBackgroundColor to "white"
+        Set piColumnSpan to 0
+        Set piColumnIndex to 0
+        Set piColumnCount to 12
+         // WebSetResponsive piColumnCount rmMobile to 6 
+       // WebSetResponsive pbScroll rmMobile to True
+        Set pbShowBorder to True
+        Set pbShowCaption to False
+    End_Procedure    
+End_Class
+
+Class cDwCategorieLbl is a cWebLabel
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set psBackgroundColor to "white"
+        Set piColumnSpan to 6
+        Set piColumnIndex to 0
+       Set  peWordBreak to wbPreWrap
+        WebSetResponsive  piColumnSpan  rmMobile to 0
+ 
+
+        Set psCSSClass to "labelboldBiggerwhite"
+        Set peWordBreak to True
+         
+    End_Procedure
+End_Class
+
+ 
+
+Class cboxpagaconcrediti is a cwebcheckboxTranslate
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set psBackgroundColor to "white"
+        
+        Set piColumnIndex to 7
+        Set piColumnSpan to 3
+        WebSetResponsive piColumnSpan rmMobile to 0
+        WebSetResponsive piColumnIndex rmMobile to 0
+        
+        Set pbServerOnChange to True
+        
+        Set psUnchecked to "N"
+        Set psChecked to "S"
+        Set psCaption to "paga con crediti"
+    End_Procedure
+    Procedure OnChange String sNewValue String sOldValue
+ 
+     
+     End_Procedure
+
+End_Class
+
+Class cDwCategorieExpandBtn is a cWebButtonTranslate
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        //   Set psBackgroundColor to "blue"
+        Set psCaption to "Rivedi gli articoli"
+        Set piColumnIndex to 7
+         WebSetResponsive  piColumnIndex  rmMobile to 0
+         WebSetResponsive  piColumnSpan  rmMobile to 0
+         WebSetResponsive psCSSClass rmMobile to "labelsmallfont"
+         
+        Set piColumnSpan to 2
+        
+        { WebProperty=Server }
+        Property String psCategorieID ""
+        
+        { WebProperty=Server }
+        Property Boolean pbProductsVisible False
+    End_Procedure
+    
+    Procedure OnClick
+        Boolean bVisible
+        String sCatId
+        
+        WebGet pbProductsVisible to bVisible
+        WebGet psCategorieId to sCatId
+        
+        If (bVisible) Begin
+            Delegate Send HideProducts sCatId
+            WebSet psCaption to (translatestring("Rivedi gli articoli"))
+        End
+        Else Begin
+            Delegate Send ShowProducts sCatId
+            WebSet psCaption to "-"
+        End
+        
+        WebSet pbProductsVisible to (not(bVisible))
+    End_Procedure
+End_Class
+
+Class cDwSHopCartExpandBtn is a cWebButtonTranslate
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        //   Set psBackgroundColor to "blue"
+        Set psCaption to "Rivedi gli articoli" //"+"
+        Set piColumnIndex to 10
+         WebSetResponsive  piColumnIndex  rmMobile to 0
+         WebSetResponsive  piColumnSpan  rmMobile to 0
+         
+        Set piColumnSpan to 2
+        
+        { WebProperty=Server }
+        Property String psShop ""
+   
+      { WebProperty=Server }
+        Property Integer piNumord ""
+        
+        { WebProperty=Server }
+        Property Boolean pbProductsVisible False
+    End_Procedure
+    
+    Procedure OnClick
+        Boolean bVisible
+        String sShop
+        Integer inumord
+        WebGet pbProductsVisible to bVisible
+        WebGet psShop to sShop
+        WebGet piNumord to inumord
+        
+        
+        If (bVisible) Begin
+            Delegate Send HideProducts sShop inumord
+            WebSet psCaption to (translatestring("Rivedi gli articoli")) //"+"
+        End
+        Else Begin
+            Delegate Send ShowProducts sShop inumord
+            WebSet psCaption to "-"
+        End
+        
+        WebSet pbProductsVisible to (not(bVisible))
+    End_Procedure
+End_Class

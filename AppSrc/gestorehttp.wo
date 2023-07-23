@@ -2,9 +2,13 @@
 Use cutentiDataDictionary.dd
 Use ccoinsDataDictionary.dd
 Use carticoliDataDictionary.dd
+Use cnegoziDataDictionary.dd
 
 //  With the cWebHttpHandler you handle complete HTTP requests.
 Object oGestorehttp is a cWebHttpHandler
+    Object onegozi_DD is a cnegoziDataDictionary
+    End_Object
+
     Object oarticoli_DD is a carticoliDataDictionary
     End_Object
 
@@ -56,6 +60,9 @@ Object oGestorehttp is a cWebHttpHandler
      End
    Else  If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovoarticolo") Begin
       Send  SaveNewarticolo True ""
+   End
+      Else  If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovonegozio") Begin
+      Send  SaveNewNegozio True ""
      End
      Else Begin
         Send SetResponseStatus 404 "Entity not known" 0
@@ -275,6 +282,37 @@ End_Procedure
         End
     End_Procedure
 
+ 
+ Procedure Negozio String sKey String skeycomune
+        Handle hoJson
+        
+        Send Clear of onegozi_dd
+        Move sKey to negozi.recordid
+      //Move skeycomune to negozi.comunita
+        Send Find of onegozi_dd EQ 1
+        
+        If (Found) Begin
+            Get Create (RefClass(cJsonObject)) to hoJson
+            Send InitializeJsonType of hoJson jsonTypeObject
+            
+            Send SetMemberValue of hoJson "recorid" jsonTypestring negozi.recordid
+            Send SetMemberValue of hoJson "nomenegozio" jsonTypeString (Trim(negozi.nomenegozio))
+            Send SetMemberValue of hoJson "moneta" jsonTypeString (Trim(negozi.moneta))
+            Send SetMemberValue of hoJson "categoria" jsonTypeString (Trim(negozi.categoria))
+            Send SetMemberValue of hoJson "comunita" jsonTypeString (Trim(negozi.comunita))
+            Send SetMemberValue of hoJson "datareg" jsonTypeString (Trim(negozi.datareg))
+         
+ 
+              
+            
+            Send OutputJson hoJson
+            Send Destroy of hoJson
+        End
+        Else Begin
+            Send SetResponseStatus 404 "Resource not found"
+        End
+ End_Procedure
+ 
    Procedure SaveNewarticolo Boolean bCreate String sKey
     
         Boolean bSuccess
@@ -377,6 +415,119 @@ End_Procedure
             Send Destroy of hoJson
         End
     End_Procedure
+
+
+  Procedure SaveNewNegozio Boolean bCreate String sKey
+    
+        Boolean bSuccess
+        String sVal
+        Boolean bVal bErr
+        Handle hoJson
+       
+        If (bCreate) Begin
+            Send Clear of onegozi_DD
+        End
+        Else Begin 
+            // ricerca uno esistente
+        
+        //  Find the right record
+        
+//            Send Clear of oarticoli_dd
+//            Move sKey to utenti.username
+//            
+//            Send Find of oCustomer_DD EQ 1
+//            
+//            If (not(Found)) Begin
+//                Send SetResponseStatus 404 "Resource not found"
+//                Procedure_Return
+//            End
+        End
+  
+        //  Read the request data
+        Get RequestDataJson (&hoJson) to bSuccess
+        
+        If (bSuccess) Begin
+            Send ErrorQueueStart
+//            
+           //  Set the values
+            If (HasMember(hoJson, "Auth")) Begin
+                // validazione autorizzazione
+            End
+            Else Begin 
+                Send SetResponseStatus 404 "Validazione non accettata"
+            End
+              If (HasMember(hoJson, "Comunita")) Begin
+              Get MemberValue of hoJson "Comunita" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.comunita)) to sVal
+             End
+//    
+            If (HasMember(hoJson, "Negozio")) Begin
+              Get MemberValue of hoJson "Negozio" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.nomenegozio)) to sVal
+             End        
+             If (HasMember(hoJson, "Moneta")) Begin
+                 Get MemberValue of hoJson "Moneta" to sVal
+                 Set Field_Changed_Value of onegozi_DD (RefTable(negozi.moneta)) to sVal
+             End
+//            
+             If (HasMember(hoJson, "Latitudine")) Begin
+               Get MemberValue of hoJson "Latitudine" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.latitudine)) to sVal
+             End
+//            
+            If (HasMember(hoJson, "Longitudine")) Begin
+                Get MemberValue of hoJson "Longitudine" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.longitudine)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Categoria")) Begin
+                Get MemberValue of hoJson "Categoria" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.categoria)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Tag")) Begin
+                Get MemberValue of hoJson "Tag" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.tag)) to sVal
+            End
+            
+            If (HasMember(hoJson, "Nazione")) Begin
+                Get MemberValue of hoJson "Nazione" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.nazione )) to sVal
+            End
+             If (HasMember(hoJson, "Citta")) Begin
+                Get MemberValue of hoJson "Citta" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.citta )) to sVal
+            End
+         If (HasMember(hoJson, "Sitoweb")) Begin
+                Get MemberValue of hoJson "Sitoweb" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.sitoweb )) to sVal
+         End            
+         If (HasMember(hoJson, "Linkvetrina")) Begin
+                Get MemberValue of hoJson "Linkvetrina" to sVal
+                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.linkvetrina )) to sVal
+            End
+            
+ 
+ //  Perform the save
+            If (ErrorCount(Self) = 0) Begin
+                Get Request_Validate of onegozi_dd to bErr
+                If (not(bErr)) Begin
+                   Send Request_Save of onegozi_dd     
+                   
+                   If (not(Err)) Begin
+                        Send negozio negozi.recordid negozi.comunita
+                   End
+                End
+            End            
+            
+            Send ErrorQueueEnd
+            Send ErrorReportJson
+        End
+        If (hoJson > 0) Begin
+            Send Destroy of hoJson
+        End
+    End_Procedure
+
 
  Procedure Customer String sKey String skeycomune
         Handle hoJson

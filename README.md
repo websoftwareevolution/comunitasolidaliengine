@@ -51,3 +51,7 @@ nel body:
     "Email": "",
     "Moneta": "val"
 }
+
+API in Elaborazione:
+POST: NuovoNegozio
+

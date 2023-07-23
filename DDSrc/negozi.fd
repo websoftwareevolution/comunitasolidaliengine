@@ -1,0 +1,15 @@
+#REPLACE FILE5 negozi
+#REPLACE negozi.File_Number |CI5
+#REPLACE negozi.recordid |FN5,1
+#REPLACE negozi.nomenegozio |FS5,2
+#REPLACE negozi.comunita |FS5,3
+#REPLACE negozi.moneta |FS5,4
+#REPLACE negozi.latitudine |FN5,5
+#REPLACE negozi.longitudine |FN5,6
+#REPLACE negozi.categoria |FS5,7
+#REPLACE negozi.tag |FS5,8
+#REPLACE negozi.nazione |FS5,9
+#REPLACE negozi.citta |FS5,10
+#REPLACE negozi.datareg |FD5,11
+#REPLACE negozi.sitoweb |FS5,12
+#REPLACE negozi.linkvetrina |FS5,13

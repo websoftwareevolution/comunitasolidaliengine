@@ -1,0 +1,31 @@
+﻿Use DataDict.pkg
+
+Open negozi
+Open sistema
+
+Class cnegoziDataDictionary is a DataDictionary
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set Main_File to negozi.File_Number
+
+        Set Add_System_File to sistema.File_Number DD_Lock_On_All
+
+        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+
+        Set Field_Auto_Increment Field negozi.recordid to File_Field sistema.contatorenegozi
+
+    End_Procedure
+    
+    Procedure creating
+        Forward Send Creating
+        Date dtoday
+        Sysdate dtoday
+        Move dtoday to negozi.datareg
+        
+    End_Procedure
+
+End_Class

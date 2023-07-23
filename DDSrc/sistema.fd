@@ -3,3 +3,4 @@
 #REPLACE sistema.contatoreutenti |FN2,1
 #REPLACE sistema.contatorecomunita |FN2,2
 #REPLACE sistema.contatoremonete |FN2,3
+#REPLACE sistema.contatorenegozi |FN2,4

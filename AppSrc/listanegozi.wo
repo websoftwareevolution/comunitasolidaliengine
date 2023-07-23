@@ -1,0 +1,596 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebButton.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+Use cWebMenuGroup.pkg 
+Use cWebMenuItem.pkg
+Use cWebForm.pkg
+Use cWebColumnButton.pkg
+Use cwshpcntrDataDictionary.dd
+ 
+
+//Use zoomnegozio.wo
+Use cWebGeoLocation.pkg
+Use cWebCheckBox.pkg
+
+Object oListanegozi is a cWebView 
+  
+    Set psCaption to "Lista negozi"
+    Set pbShowCaption to False
+    Set piMaxWidth to 1024
+    Set piColumnCount to 6
+    Set peViewType to vtSelect
+    Set psStateViewName to "shoplist"
+
+{WebProperty=server}
+Property Number pnPosizioneINiziale_lat -1
+{WebProperty=server}
+Property Number pnPosizioneINiziale_lon -1
+{WebProperty=server}
+Property Number pnVelocitaINiziale 0
+
+ 
+ 
+  Procedure GeoQuery_Callback Integer iErr Number nLatitude Number nLongitude Number nAccuracy Number nSpeed Number nHeading
+                If (not(iErr)) Begin
+                   // Send ShowInfoBox (SFormat("Lat: %1 Long: %2 Acc: %3 Speed: %4 Head: %5", nLatitude, nLongitude, nAccuracy, nSpeed, nHeading))
+                     WebSet pnPosizioneINiziale_lat of oListanegozi to nLatitude
+                    WebSet pnPosizioneINiziale_lon  of oListanegozi  to nLongitude
+                    WebSet pnVelocitaINiziale   of oListanegozi  to nSpeed
+           
+
+                
+                End
+  End_Procedure
+      
+   WebPublishProcedure GeoQuery_Callback
+   
+Set pbServerOnShow to True
+
+  
+   Procedure onload
+       
+      Send QueryLocation of oWebGeoLocation1 (RefProc(GeoQuery_Callback)) Self
+       
+   End_Procedure
+
+    Object oWebGeoLocation1 is a cWebGeoLocation
+            Set pbAutoStart to True
+            Set pbAutoStop to True
+      
+                { WebProperty=Server }
+                Property Integer piCount 0
+        
+        
+            Procedure ButtonGeoCallback Integer eConfirmMode
+                If (eConfirmMode=cmYes) Begin
+                    String sfilename
+                   Get psLoginName of ghoWebSessionManager to members.username
+              
+                    Send Find of omembers_DD EQ 2
+                    If (Found) Begin 
+                        Set field_changed_value of  omembers_DD Field members.flagNOgeolocalizzazione to "S"
+                        Send Request_Save of    omembers_DD 
+                    End
+                End
+            End_Procedure
+            
+            // this tells the system that this method is allowed for this object
+            WebPublishProcedure ButtonGeoCallback
+         
+        
+            Procedure OnError Integer iCode String sMessage
+                    WebSet pbRender of oErrorLbl to True
+                    WebSet psCaption of oErrorLbl to ( TranslateString("Geolocalizzazione device disabilitata") )
+              
+               // Error DFERR_OPERATOR sMessage
+               // 
+               String sfilename
+               Get psLoginName of ghoWebSessionManager to members.username
+               Send Find of omembers_DD EQ 2
+               
+               If ( members.flagNOgeolocalizzazione ="")  Begin 
+                  Send ShowYesNo (Self) (RefProc(ButtonGeoCallback)) ;
+                    (translatestring("Non è possibile calcolare coordinate dei negozi e mostrarti i percorsi per arrivarci. Questo messaggio non sarà più visualizzato. " )) ;
+                     (translatestring("Geolocalizzazione telefono disabilitata")) 
+                End
+            End_Procedure   
+                
+                Procedure OnLocationChange Number nLatitude2 Number nLongitude2 Number nAccuracy Number nSpeed Number nHeading
+                    Integer iCount
+                    String slat slong
+                    Number nLatitude   nLongitude  
+ 
+//                    
+                    WebGet piCount to iCount
+                    Increment iCount
+                    WebSet piCount to iCount
+                   // WebSet psValue of oCountFrm to iCount
+                  // Send ClearRouteLocations 
+                         WebGet pnPosizioneINiziale_lat of oListanegozi to nLatitude
+                        WebGet pnPosizioneINiziale_lon  of oListanegozi  to nLongitude
+                        WebGet pnVelocitaINiziale   of oListanegozi  to nSpeed
+                    
+                    String slat1 sLat2 slong1 slong2
+                    Real rdistance
+                      Move (Replace(",",nLatitude,".")) to slat1
+                      Move (Replace(",",nLongitude,".")) to slong1
+                      
+                   	//Send AddLatLonLocation  sLat1   sLong1 "start"
+                      Move (Replace(",",nLatitude2,".")) to slat2
+                      Move (Replace(",",nLongitude2,".")) to slong2
+                   //	Send AddLatLonLocation  sLat2   sLong2 "finish"
+                   	
+                   	  Get getDistanceBetweenPoints (replace(".",sLat1,",")) (replace(".",sLong1,","))    (replace(".",sLat2,",")) (replace(".",slong2,","))  to rdistance
+                    //Send  RequestShowMapRoute  
+                    WebSet pbRender of oErrorLbl to False
+                End_Procedure
+
+
+   
+
+  
+    End_Object
+
+   Procedure OnBeforeShow 
+      Send QueryLocation of oWebGeoLocation1 (RefProc(GeoQuery_Callback)) Self
+  
+   End_Procedure
+ 
+ 
+    WebSetResponsive piColumnCount rmTabletPortrait to 3
+  
+    Object ocategorieNegozi_DD is a ccategorieNegoziDataDictionaryForwin
+    End_Object
+
+    Object owshpcntr_DD is a cwshpcntrDataDictionary
+    End_Object
+
+    Object omembers_DD is a cmembersDataDictionary
+        Set DDO_Server to ocategorieNegozi_DD
+        Set DDO_Server to owshpcntr_DD
+        
+       // Set Auto_Fill_State to True
+        
+        Procedure onconstrain 
+            Constrain members.nomenegozio gt ""
+            Constrain members.logonegozio gt ""
+             
+        End_Procedure
+    End_Object
+
+    Set Main_DD to omembers_DD
+    Set Server to omembers_DD
+
+    // Your DDO structure will go here
+
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtSelect
+ 
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 6
+
+    WebSetResponsive piColumnCount rmTabletPortrait to 3
+    
+          Object oErrorLbl is a cWebLabel
+                Set psCaption to "Error: <text>"
+                Set peAlign to alignCenter
+                Set piColumnSpan to 0
+                Set psCSSClass to "LoginWarning"
+                Set piColumnIndex to 3
+                Set pbRender to False
+                
+                WebSetResponsive piColumnIndex rmMobile to 0
+          End_Object
+
+//          Object oWebCheckboxAttivageo is a cWebCheckboxTranslate
+//              Set piColumnSpan to 0
+//              Set psCaption to "Attiva geolocalizzazione negozi"
+//              Set pbServeronchange to True
+//               Set psChecked to "S"
+//
+//              Procedure onchange String sNewValue String sOldValue
+//                 
+//                    String susername
+//                    Send Clear of omembers_DD
+//                    Get psloginname of ghoWebSessionManager to members.username
+//                    Send Find of omembers_DD EQ 2
+//                    If (Found) Begin 
+//                        If (sNewValue ="S" ) Set Field_Changed_Value of omembers_DD Field members.flagNOgeolocalizzazione to ""
+//                        Else Set Field_Changed_Value of omembers_DD Field members.flagNOgeolocalizzazione to "S" // disabilita controlli
+//                        Send request_save
+//                    End
+//                    
+//            
+//              End_Procedure
+//          End_Object
+//          
+    Object oList is a cWebList
+        Set pbServerOnRowClick to True
+        Set piColumnSpan to 0
+        Set pbServerOnRowClick to True
+        Set pbFillHeight to True
+        Set psCSSClass to "MobileList"
+        Set piSortColumn to 3
+        Set pbShowHeader to False
+        Set pbAllowDeleteRow to False
+          Set pbDataAware to False
+        Procedure onload 
+              Send Find of omembers_DD FIRST_RECORD 2
+              Send GridRefresh
+        End_Procedure
+        WebSetResponsive piColumnSpan rmTabletPortrait to 0
+
+        // place web column controls controls here.
+
+         Procedure OnManualLoadData tWebRow[] ByRef aTheRows String ByRef sCurrentRowID
+                Forward Send OnManualLoadData (&aTheRows) (&sCurrentRowID)
+                Integer iNum isize i icount
+                Boolean bgeononattivo
+                String sloginName sPath sval sPathiMAGE slanguage
+               //Get ShopAvatarsFolder of oZoomNegozio to sPath
+               Move "images/loghi" to SPATH
+                WebGet pslanguage of oWebApp to slanguage
+                WebGet pbRender of oErrorLbl to bgeononattivo
+                
+                Send Clear of omembers_DD 
+                For_All members by Index.2
+                            Constrain members.nomenegozio gt ""
+                            Constrain members.logonegozio gt ""   
+                            Constrain members.negoziante eq "S"
+                Do
+                    Move members.recordid    to aTheRows[i].sRowID
+                
+                 If (Trim(members.logonegozio) <> "") Begin
+                     Move (sPath + "/" + Trim(members.logonegozio)) to sPathiMAGE
+                End
+                Else Begin
+                    Move (sPath + "/NONE.jpg") to sPathiMAGE
+                End
+                   Move sPathiMAGE to aTheRows[i].aCells[0].aOptions[0]
+                   Move members.nomenegozio to  aTheRows[i].aCells[1].sValue
+                   Move members.nomenegozio to  aTheRows[i].aCells[1].sTooltip
+                   // lingua utente
+                   If (slanguage = "FR" and  categorieNegozi.Descrizione_FR>"") Begin 
+                        Move   categorieNegozi.Descrizione_fr to  aTheRows[i].aCells[2].sValue
+                    Move   categorieNegozi.Descrizione_fr to  aTheRows[i].aCells[2].sTooltip
+               
+                   
+                   End
+                   Else If (slanguage = "ES" and  categorieNegozi.Descrizione_ES>"") Begin 
+                    Move   categorieNegozi.Descrizione_ES to  aTheRows[i].aCells[2].sValue
+                    Move   categorieNegozi.Descrizione_ES to  aTheRows[i].aCells[2].sTooltip
+                   
+                   
+                   End
+                   Else If (slanguage = "DE" and  categorieNegozi.Descrizione_DE>"") Begin 
+                   
+                    Move   categorieNegozi.Descrizione_DE to  aTheRows[i].aCells[2].sValue
+                    Move   categorieNegozi.Descrizione_DE to  aTheRows[i].aCells[2].sTooltip
+                   
+                   End
+                    Else If (slanguage = "EN" and  categorieNegozi.Descrizione_EN>"") Begin 
+                   
+                    Move   categorieNegozi.Descrizione_EN to  aTheRows[i].aCells[2].sValue
+                    Move   categorieNegozi.Descrizione_EN to  aTheRows[i].aCells[2].sTooltip
+                   
+                   End
+                   Else If (slanguage = "PT" ) Begin //TODO: categorie portoghese
+//                    Move   categorieNegozi.Descrizione to  aTheRows[i].aCells[2].sValue
+//                    Move   categorieNegozi.Descrizione to  aTheRows[i].aCells[2].sTooltip
+//                   
+                   
+                   End
+                  
+                   Else Begin 
+                    Move   categorieNegozi.Descrizione to  aTheRows[i].aCells[2].sValue
+                    Move   categorieNegozi.Descrizione to  aTheRows[i].aCells[2].sTooltip
+                   End
+                   
+                   Number nval
+                    If  (members.latitudine=0 or members.longitudine=0) 
+                    Else If  ( (not(bgeononattivo)) and members.flagNOgeolocalizzazione="")  Get getdistance to nval
+                  
+                   If  (members.latitudine=0 or members.longitudine=0) Begin 
+                       Move (TranslateString("solo on line"))   to aTheRows[i].aCells[3].sTooltip
+                        Move "Online"   to aTheRows[i].aCells[4].sValue
+                        Move "onlinecellmasktext" to aTheRows[i].aCells[3].sCssClassName
+                         Move "onlinecell" to aTheRows[i].aCells[4].sCssClassName
+                        Move "100000" to aTheRows[i].aCells[3].sValue
+                         Move (trim(members.citta)) to aTheRows[i].aCells[5].sValue
+                        Move ( TranslateString("Città:" - (trim(members.citta ))))  to aTheRows[i].aCells[5].sTooltip
+ 
+         
+                   End
+                   Else   Begin 
+ 
+                           
+                        If ( bgeononattivo or   members.flagNOgeolocalizzazione="S")  Move ""   to aTheRows[i].aCells[4].sValue
+                        Else   Move "Km"   to aTheRows[i].aCells[4].sValue
+                        
+                        If (bgeononattivo or     members.flagNOgeolocalizzazione="S" ) Move "" to aTheRows[i].aCells[3].sValue
+                        Else Move nval to aTheRows[i].aCells[3].sValue
+                         Move sval to aTheRows[i].aCells[3].sTooltip
+                     
+                          Move (trim(members.citta)) to aTheRows[i].aCells[5].sValue
+                           Move ( TranslateString("Città:" - (trim(members.citta ))))  to aTheRows[i].aCells[5].sTooltip
+ 
+                
+                   End
+                  
+                   Add 1 to i
+                End_For_All
+         End_Procedure 
+         
+                Function getdistance Returns String
+                     Number nLatitude nLongitude 
+                     String svalue
+                     Real rdistance
+                      WebGet pnPosizioneINiziale_lat of olistanegozi to nLatitude
+                        WebGet pnPosizioneINiziale_lon of olistanegozi to nLongitude
+                        If  (nLatitude=-1 or nLongitude=-1)      Function_Return "" // Get getaddressbylatlon of (oMapquestHttp(oWebApp)) nLatitude nLongitude to stmygeolocatio
+                        WebGet pnPosizioneINiziale_lat of olistanegozi to nLatitude
+                        WebGet pnPosizioneINiziale_lon of olistanegozi to nLongitude
+ 
+                       
+                     //If  (members.latitudine=0 or members.longitudine=0) Move "ND" to svalue
+                    // Else  Begin 
+                        Get getDistanceBetweenPoints (replace(".",nLatitude,",")) (replace(".",nLongitude,","))    (replace(".",members.latitudine,",")) (replace(".",members.longitudine,","))  to rdistance
+                      // Move ( (String(rdistance)) + String("km")  ) to svalue
+                     //End
+                     Function_Return rdistance
+                 End_Function
+            
+  Object oWebColumnImage1 is a cWebColumnImage
+            Set psCaption to "Image"
+            Set psCSSClass to "ColImgRound"
+            Set piWidth to 80
+            Set pbFixedWidth to True
+            Set pbDynamic to True
+            Set piImageHeight to 46
+            Set piImageWidth to 46
+            Set piListRowSpan to 2
+            Set peAlign to alignCenter
+            Set pePosition to wiCover
+          
+            Procedure OnDefineImages
+                String sPath sUrl
+                
+                Forward Send OnDefineImages
+                
+                //  Determine avatar image url
+                Get ShopAvatarsFolder of oZoomNegozio to sPath
+                If (Trim(members.logonegozio) <> "") Begin
+                    Move (sPath + "\" + Trim(members.logonegozio)) to sPath
+                End
+                Else Begin
+                    Move (sPath + "\NONE.jpg") to sPath
+                End
+                Get DownloadURL of ghoWebResourceManager sPath to  sUrl
+                Send AddImage sUrl
+            End_Procedure
+        End_Object
+
+        Object omembers_nomeegozio is a cWebColumn
+           // Entry_Item members.nomenegozio
+            Set peWordBreak to wbWrap
+            Set piWidth to 80
+        End_Object
+
+        Object ocategorieNegozi_Descrizione is a cWebColumn
+           // Entry_Item categorieNegozi.Descrizione
+            Set peWordBreak to wbWrap
+            Set piWidth to 80
+        End_Object
+
+//        Object omembers_telefono is a cWebColumn
+//            Entry_Item members.telefono
+//          
+//            Set piWidth to 60
+//        End_Object
+   
+        //4
+        Object omembers_distanza is a cWebColumn
+           Set peDataType to typeNumber
+           Set piPrecision to 2
+            Set piWidth to 50
+            Set pbSortable to True
+    
+
+   // The OnSetCalculatedValue procedure can be used on any data entry object (DEO)
+            Procedure OnSetCalculatedValue String ByRef sValue
+                
+            End_Procedure
+    
+                Procedure GeoQuery_Callback2 Integer iErr Number nLatitude Number nLongitude Number nAccuracy Number nSpeed Number nHeading
+                        If (not(iErr)) Begin
+                           // Send ShowInfoBox (SFormat("Lat: %1 Long: %2 Acc: %3 Speed: %4 Head: %5", nLatitude, nLongitude, nAccuracy, nSpeed, nHeading))
+                             WebSet pnPosizioneINiziale_lat of oListanegozi to nLatitude
+                            WebSet pnPosizioneINiziale_lon  of oListanegozi  to nLongitude
+                            WebSet pnVelocitaINiziale   of oListanegozi  to nSpeed
+                   
+        
+                        
+                        End
+          End_Procedure
+              
+           WebPublishProcedure GeoQuery_Callback2
+                 
+             Procedure OnSetCalculatedValue String ByRef sValue
+//                         Real rdistance
+//                         Number nLatitude nLongitude
+//                         If ( members.Recnum = 0)  Procedure_Return
+//                        WebGet pnPosizioneINiziale_lat of olistanegozi to nLatitude
+//                        WebGet pnPosizioneINiziale_lon of olistanegozi to nLongitude
+//                        If  (nLatitude=-1 or nLongitude=-1)      Procedure_Return // Get getaddressbylatlon of (oMapquestHttp(oWebApp)) nLatitude nLongitude to stmygeolocatio
+//                        WebGet pnPosizioneINiziale_lat of olistanegozi to nLatitude
+//                        WebGet pnPosizioneINiziale_lon of olistanegozi to nLongitude
+// 
+//                       //Move  (trim(stMynegozioMap[i].snomenegozio) * (Trim(  stMynegozioMap[i].scitta))) to sdes
+//                       
+//                     If  (members.latitudine=0 or members.longitudine=0) Move "ND" to svalue
+//                     Else  Begin 
+//                        Get getDistanceBetweenPoints (replace(".",nLatitude,",")) (replace(".",nLongitude,","))    (replace(".",members.latitudine,",")) (replace(".",members.longitudine,","))  to rdistance
+//                       Move ( (String(rdistance))+"km") to svalue
+//                     End
+//                       
+
+             End_Procedure
+             
+        End_Object
+
+        // sample of a right-aligned info column button
+         Object ounitamisuradistanza is a cWebColumn
+           Set piWidth to 45
+           Set pbFixedWidth to True
+ 
+             Set peAlign to alignleft
+ 
+//
+       End_Object 
+
+        Object oCityval is a cWebColumn
+           Set piWidth to 70
+           //Set pbRender to False
+            Set pbNewLine to True
+             Set peAlign to alignleft
+ 
+//
+       End_Object 
+
+
+//        
+             //
+        // Depending on how you are using this view, you may wish to
+        // 1. Close the view, which will update the invoking view:
+        //      Send NavigateClose Self
+        // 2. Navigate forward to another view (either a from-main Zoom or a from-parent select):
+        //      Send NavigateForward of oZoomMainView Self
+        //      Send NavigateForward of oSelectChildView Self
+        //    Note: Do not forget to register the forward navigation paths using WebRegisterPath
+        
+          WebRegisterPath ntNavigateForward oZoomnegozio
+          
+          
+
+        Procedure OnRowClick String sRowID
+
+            // If this view is being used in multiple contexts, you may need a block of code
+            // like this to handle different types of navigation
+            tWebNavigateData NavigateData
+            Get GetNavigateData to NavigateData
+            Send Clear of omembers_DD
+            Move sRowID to members.recordid
+            Send Find of omembers_DD EQ 1
+            WebSet pirecordid of oZoomnegozio to sRowID
+            Case Begin
+                Case (NavigateData.eNavigateType=nfFromParent)
+                    // If from parent, this is a constrained drilldown.
+                    // If here, you probably want to Zoom this record or continue to drilldown
+                    //   (See 2 above). 
+                    Send NavigatePath
+                    Case Break
+                Case (NavigateData.eNavigateType=nfFromChild)
+                    // If from child, this is a probably a parent lookup from a Zoom,
+                    // so you just want to close (See 1 above)
+                    Send NavigateClose Self
+                    Case Break
+                Case (NavigateData.eNavigateType=nfFromMain)
+                    // If from main, this is a propbably a main file lookup from a Zoom, 
+                    // so you just want to close (see 1 above). 
+                    // This is not used often with the drilldown style
+                    Send NavigatePath 
+                    Case Break
+                Case Else // must be nfUndefined
+                    // This may be the start of a drilldown query or some kind of custom query.
+                    // You may have Set NavigateData.eViewTask to provide more information
+                    // about this. This could be a NavigateClose or a NaviateForward
+                    Send NavigatePath
+            Case End
+
+        End_Procedure
+
+        // this makes the zoom view read-only or new or some other customization
+         Procedure OnGetNavigateForwardData tWebNavigateData ByRef NavigateData Handle hoToView
+                Move True to NavigateData.bReadOnly
+               
+               Move False to NavigateData.bNewRecord
+ 
+   
+            End_Procedure
+
+    End_Object    
+    
+
+    // add action menu items here
+    
+    Object oActionGroup is a cWebMenuGroup
+        Set psGroupName to "MainActions"
+
+        Object oSearch is a cWebMenuItem
+            Set psCaption to C_$Search
+            Set psCSSClass to "WebPromptMenuItem"
+        
+            Procedure OnClick
+                Send Search of oList
+            End_Procedure            
+        End_Object
+ 
+
+
+        // Sample top/bottom button
+        Object oFindTop is a cWebMenuItem
+            Set psCaption to C_$Top
+            Set peActionDisplay to adMenu
+            Set pbBeginGroup to True             
+        
+            Procedure OnClick
+                Send MoveToFirstRow of oList
+            End_Procedure
+            
+        End_Object
+
+        Object oFindLast is a cWebMenuItem
+            Set psCaption to C_$Bottom
+            Set peActionDisplay to adMenu             
+        
+            Procedure OnClick
+                Send MoveToLastRow of oList
+            End_Procedure
+            
+        End_Object
+    End_Object
+
+    // Add code to customize your Select View based on how it was invoked.
+    // Use NavigateData to determine the context this view will be used in.
+    Procedure OnNavigateForward tWebNavigateData NavigateData Integer hoInvokingView Integer hoInvokingObject
+
+        // if this view is being used in multiple contexts, you may need a block of code
+        // like this to handle customizations. This would include hiding rows and buttons
+        // (WebSet pbRender) and changing the values of various captions.
+        Case Begin
+            Case (NavigateData.eNavigateType=nfFromParent)
+                // If from parent, this is a constrained drill down.
+                // If needed you could check NavigateData.iTable to determine the constraining parent.
+                Case Break
+                
+            Case (NavigateData.eNavigateType=nfFromChild)
+                // If from child, this is a probably a parent lookup from a Zoom
+                Case Break
+                
+            Case (NavigateData.eNavigateType=nfFromMain)
+                // If from main, this is a propbably a main file lookup from a Zoom.
+                // This is not used often with the drilldown style
+                Case Break
+                
+            Case Else // must be nfUndefined
+                // This may be the start of a drilldown query or some kind ofcustom query.
+                // You may have Set NavigateData.eViewTask to provide more information about this.
+                  
+        Case End
+        
+    End_Procedure
+
+End_Object
