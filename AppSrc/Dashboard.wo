@@ -329,125 +329,125 @@ Object oDashboard is a cWebView
  
        
             Procedure ShowFoundProducts  stFoundProducts[] mystFoundProducts
-                Integer iCount imarkettype iqta iViewType eMode icategoriaID
-                Boolean bfound  bok
-                Date dtoday
-                Sysdate dtoday
-                String sid
-                WebGet psValue of oWebComboCategoria to icategoriaID
-                 stArticoliamazon asMyArticoliOnline
-               stShowArticoliBoxHtml  syMyShowArticoliBoxHtml
-                Handle hoGroup hoLabel hoAddBtn hoVendorGrp hoProductContainer hoImg hodesart hodesartImg hoqtyBtn
-                //WebGet  piViewMarketType of owebapp to iViewType
-
-                        Get CreateDynamicObject (RefClass(cDwCategorieGrp)) ("found_vcatdyngrp") "" to hoGroup
-                           Send InitDynamicProp of hoGroup  "psCSSClass" "Groupbordergold"
-                           
-                          Send InitDynamicProp of hoGroup "psBackgroundColor"  "white"
-                        Get CreateDynamicObject (RefClass(cDwcategorielbl)) ("found_vcatdynlbl") ("found_vcatdyngrp") to hoLabel
-                        Send InitDynamicProp of hoLabel "psCaption" (translatestring("Prodotti trovati "))
-                        Send InitDynamicProp of hoLabel  "psCSSClass" "labelboldBiggerblack"
-                         Send InitDynamicProp of hoLabel "psBackgroundColor"  "white"
-
-                        Get CreateDynamicObject (RefClass(cDwProductContainer)) ("found_pcartgrp") ("found_vcatdyngrp") to hoProductContainer 
-                         Send InitDynamicProp of hoProductContainer "psBackgroundColor"  "white"
-                          Integer icountfoundproducts i
-                  Move (SizeOfArray(mystFoundProducts)) to icountfoundproducts
-                    
-                  String sStatoArticolo
-                  WebGet piViewMarketType of oDynamicshop to iMarketType
-                  If (iMarketType=0) Move "N" to sStatoArticolo
-                  Else If (iMarketType=1) Move "U" to sStatoArticolo 
-                  
-                 For i from 0 to ( icountfoundproducts-1)
-                   Send Clear of ocategoriemarketPlace_DD
-                   Send Clear of    oarticolishop_DD
-                   Move "S" to articolishop.pubblicato
-                   Move    mystFoundProducts[i].sid   to articolishop.recordid             
-                    Send Find of oarticolishop_DD eq 1
-                     If (Found) Begin
-                        Move (articolishop.pubblicato="S") to bfound
-                        If (bfound) If (icategoriaID<>-1 ) Move ( articolishop.categoriaid =  mystFoundProducts[i].icategoriaid) to bfound
-                            
-                         If ( bfound and articolishop.stato =  sStatoArticolo ) Begin
-                          
-                                       If (articolishop.scadenza>"" and articolishop.prezzoeuro>0) Begin 
-                                         Move (dtoday<=articolishop.scadenza) to bfound   
-                                       End
-                                       Else If (articolishop.prezzoeuro>0) Move True to bfound
-                                       If  (bfound and (iViewType=VIEWTYPEMARKETC2C)) Move  (articolishop.stato="S" or Articolishop.stato="U") to bfound
-                                         
-                         End
-                         //
-                         If bfound Begin 
-                              Move (Replaces(" ", Trim(articolishop.recordid), "_")) to sId
-                        
-                            Get CreateDynamicObject (RefClass(cDwProductGrp)) (sId + "_articologrpfound") ( "found_pcartgrp") "" to hoGroup
-                                     Send InitDynamicProp of hoGroup "psBackgroundColor"  "white"
-                            Send InitDynamicProp of hoGroup "psCaption" (Trim(articolishop.recordid))
-                               WebGet peMode of ghoWebApp to eMode
-                           If ( emode  =  rmDesktop or emode = rmTablet) Send InitDynamicProp of hoGroup "piColumnIndex" (Mod(iCount, 3) * 4)
-                           Else  Send InitDynamicProp of hoGroup "piColumnIndex" 0 // (Mod(iCount, 3) *1)
-                              
-                           Get CreateDynamicObject (RefClass(cwebhtmlboxArticoloImages)) (sId + "_descimagefound") (sId + "_articologrpfound") to hodesartImg
-                             Send InitDynamicProp of hodesartImg "psBackgroundColor"  "white"
-  
-                             Get CreateDynamicObject (RefClass(cWebHtmlarticoloDes)) (sId + "_descfound") (sId + "_articologrpfound") to hodesart
-                              Send InitDynamicProp of hodesart "piarticoloselezionato" sId
-                            Send InitDynamicProp of hodesart "psBackgroundColor"  "white"
-                              Get loadstruct of   hodesartImg   to     asMyArticoliOnline 
-                              Get movestruct    of    hodesart  asMyArticoliOnline    to  syMyShowArticoliBoxHtml
-                              Send myupdatehtml of   hodesart  syMyShowArticoliBoxHtml  
-  
-                              Send myupdatehtml of   hodesartImg  syMyShowArticoliBoxHtml  
-                              
-                              If (articolishop.qtadisponibile > 0 ) Begin
-                                    Get CreateDynamicObject (RefClass(cDwProductQty)) (sId + "_qty") (sId + "_articologrpfound") to hoAddBtn
-                                       Send InitDynamicProp of hoAddBtn "psBackgroundColor"  "white"
-                                    If (articolishop.qtamultipliminimo = "S") Move articolishop.qtaminimaordinabile to iqta
-                                    Else Move 1 to iqta
-                                    Send InitDynamicProp of hoAddBtn "psValue" iqta
-                                   Send InitDynamicProp of hoAddBtn "psItemID" (Trim(articolishop.recordid))
-                                     Send InitDynamicProp of hoAddBtn "psShop" (Trim(articolishop.owner))
-                               
-                               // prezzi
-                                    
-                                    Get CreateDynamicObject (RefClass(cDwProductAdd)) (sId + "_addfound") (sId + "_articologrpfound") to hoAddBtn
-                                        Send InitDynamicProp of hoAddBtn  "psBackgroundColor"  "white"
-                                    Send InitDynamicProp of hoAddBtn "psItemID" (Trim(articolishop.recordid))
-                                    Send InitDynamicProp of hoAddBtn "psItemImg" (Trim(articolishop.immagine1))
-                                    Send InitDynamicProp of hoAddBtn "psItemDes" (Trim(articolishop.descrizione))
-                                      Send InitDynamicProp of hoAddBtn "piContataglie"  articolishop.contataglie
-                               
-                                     If   (articolishop.contataglie>0 ) Begin 
-                                        Send InitDynamicProp of hoAddBtn "psCaption" (translatestring("vai alla scheda"))
-                                        Send InitDynamicProp of hoAddBtn "piContaTaglie"  articolishop.contataglie
-    
-                                     End
-                                 
-                                    If (articolishop.scadenzapromo >=dtoday and articolishop.datainiziopromo<=dtoday  and articolishop.attivapromodcy ="S") Begin 
-                                           If (articolishop.Promodcypercento>0 )  Send InitDynamicProp of hoAddBtn "pnAddValue"  (articolishop.prezzoeuro - (articolishop.prezzoeuro * articolishop.Promodcypercento/100)) 
-                                           Else Send InitDynamicProp of hoAddBtn "pnAddValue" (Trim(articolishop.prezzoeuroduranteofferta))
-                                    End
-                                    Else Send InitDynamicProp of hoAddBtn "pnAddValue" (Trim(articolishop.prezzoeuro))
-                                      Send InitDynamicProp of hoAddBtn "psShop" (Trim(articolishop.owner))
-                                    
-            //                        
-                                   
-                              End
-                               Increment iCount
-                        End
-  
-                     End //WHILE
+//                Integer iCount imarkettype iqta iViewType eMode icategoriaID
+//                Boolean bfound  bok
+//                Date dtoday
+//                Sysdate dtoday
+//                String sid
+//                WebGet psValue of oWebComboCategoria to icategoriaID
+//                 stArticoliamazon asMyArticoliOnline
+//               stShowArticoliBoxHtml  syMyShowArticoliBoxHtml
+//                Handle hoGroup hoLabel hoAddBtn hoVendorGrp hoProductContainer hoImg hodesart hodesartImg hoqtyBtn
+//                //WebGet  piViewMarketType of owebapp to iViewType
+//
+//                        Get CreateDynamicObject (RefClass(cDwCategorieGrp)) ("found_vcatdyngrp") "" to hoGroup
+//                           Send InitDynamicProp of hoGroup  "psCSSClass" "Groupbordergold"
+//                           
+//                          Send InitDynamicProp of hoGroup "psBackgroundColor"  "white"
+//                        Get CreateDynamicObject (RefClass(cDwcategorielbl)) ("found_vcatdynlbl") ("found_vcatdyngrp") to hoLabel
+//                        Send InitDynamicProp of hoLabel "psCaption" (translatestring("Prodotti trovati "))
+//                        Send InitDynamicProp of hoLabel  "psCSSClass" "labelboldBiggerblack"
+//                         Send InitDynamicProp of hoLabel "psBackgroundColor"  "white"
+//
+//                        Get CreateDynamicObject (RefClass(cDwProductContainer)) ("found_pcartgrp") ("found_vcatdyngrp") to hoProductContainer 
+//                         Send InitDynamicProp of hoProductContainer "psBackgroundColor"  "white"
+//                          Integer icountfoundproducts i
+//                  Move (SizeOfArray(mystFoundProducts)) to icountfoundproducts
 //                    
-                     
-                    // Send AppendDynamicObject (scatId + "_pcartgrp")
-    
-                 Loop // FOR I
-                          
- 
-   
-                 Send Activate    
+//                  String sStatoArticolo
+//                  WebGet piViewMarketType of oDynamicshop to iMarketType
+//                  If (iMarketType=0) Move "N" to sStatoArticolo
+//                  Else If (iMarketType=1) Move "U" to sStatoArticolo 
+//                  
+//                 For i from 0 to ( icountfoundproducts-1)
+//                   Send Clear of ocategoriemarketPlace_DD
+//                   Send Clear of    oarticolishop_DD
+//                   Move "S" to articolishop.pubblicato
+//                   Move    mystFoundProducts[i].sid   to articolishop.recordid             
+//                    Send Find of oarticolishop_DD eq 1
+//                     If (Found) Begin
+//                        Move (articolishop.pubblicato="S") to bfound
+//                        If (bfound) If (icategoriaID<>-1 ) Move ( articolishop.categoriaid =  mystFoundProducts[i].icategoriaid) to bfound
+//                            
+//                         If ( bfound and articolishop.stato =  sStatoArticolo ) Begin
+//                          
+//                                       If (articolishop.scadenza>"" and articolishop.prezzoeuro>0) Begin 
+//                                         Move (dtoday<=articolishop.scadenza) to bfound   
+//                                       End
+//                                       Else If (articolishop.prezzoeuro>0) Move True to bfound
+//                                       If  (bfound and (iViewType=VIEWTYPEMARKETC2C)) Move  (articolishop.stato="S" or Articolishop.stato="U") to bfound
+//                                         
+//                         End
+//                         //
+//                         If bfound Begin 
+//                              Move (Replaces(" ", Trim(articolishop.recordid), "_")) to sId
+//                        
+//                            Get CreateDynamicObject (RefClass(cDwProductGrp)) (sId + "_articologrpfound") ( "found_pcartgrp") "" to hoGroup
+//                                     Send InitDynamicProp of hoGroup "psBackgroundColor"  "white"
+//                            Send InitDynamicProp of hoGroup "psCaption" (Trim(articolishop.recordid))
+//                               WebGet peMode of ghoWebApp to eMode
+//                           If ( emode  =  rmDesktop or emode = rmTablet) Send InitDynamicProp of hoGroup "piColumnIndex" (Mod(iCount, 3) * 4)
+//                           Else  Send InitDynamicProp of hoGroup "piColumnIndex" 0 // (Mod(iCount, 3) *1)
+//                              
+//                           Get CreateDynamicObject (RefClass(cwebhtmlboxArticoloImages)) (sId + "_descimagefound") (sId + "_articologrpfound") to hodesartImg
+//                             Send InitDynamicProp of hodesartImg "psBackgroundColor"  "white"
+//  
+//                             Get CreateDynamicObject (RefClass(cWebHtmlarticoloDes)) (sId + "_descfound") (sId + "_articologrpfound") to hodesart
+//                              Send InitDynamicProp of hodesart "piarticoloselezionato" sId
+//                            Send InitDynamicProp of hodesart "psBackgroundColor"  "white"
+//                              Get loadstruct of   hodesartImg   to     asMyArticoliOnline 
+//                              Get movestruct    of    hodesart  asMyArticoliOnline    to  syMyShowArticoliBoxHtml
+//                              Send myupdatehtml of   hodesart  syMyShowArticoliBoxHtml  
+//  
+//                              Send myupdatehtml of   hodesartImg  syMyShowArticoliBoxHtml  
+//                              
+//                              If (articolishop.qtadisponibile > 0 ) Begin
+//                                    Get CreateDynamicObject (RefClass(cDwProductQty)) (sId + "_qty") (sId + "_articologrpfound") to hoAddBtn
+//                                       Send InitDynamicProp of hoAddBtn "psBackgroundColor"  "white"
+//                                    If (articolishop.qtamultipliminimo = "S") Move articolishop.qtaminimaordinabile to iqta
+//                                    Else Move 1 to iqta
+//                                    Send InitDynamicProp of hoAddBtn "psValue" iqta
+//                                   Send InitDynamicProp of hoAddBtn "psItemID" (Trim(articolishop.recordid))
+//                                     Send InitDynamicProp of hoAddBtn "psShop" (Trim(articolishop.owner))
+//                               
+//                               // prezzi
+//                                    
+//                                    Get CreateDynamicObject (RefClass(cDwProductAdd)) (sId + "_addfound") (sId + "_articologrpfound") to hoAddBtn
+//                                        Send InitDynamicProp of hoAddBtn  "psBackgroundColor"  "white"
+//                                    Send InitDynamicProp of hoAddBtn "psItemID" (Trim(articolishop.recordid))
+//                                    Send InitDynamicProp of hoAddBtn "psItemImg" (Trim(articolishop.immagine1))
+//                                    Send InitDynamicProp of hoAddBtn "psItemDes" (Trim(articolishop.descrizione))
+//                                      Send InitDynamicProp of hoAddBtn "piContataglie"  articolishop.contataglie
+//                               
+//                                     If   (articolishop.contataglie>0 ) Begin 
+//                                        Send InitDynamicProp of hoAddBtn "psCaption" (translatestring("vai alla scheda"))
+//                                        Send InitDynamicProp of hoAddBtn "piContaTaglie"  articolishop.contataglie
+//    
+//                                     End
+//                                 
+//                                    If (articolishop.scadenzapromo >=dtoday and articolishop.datainiziopromo<=dtoday  and articolishop.attivapromodcy ="S") Begin 
+//                                           If (articolishop.Promodcypercento>0 )  Send InitDynamicProp of hoAddBtn "pnAddValue"  (articolishop.prezzoeuro - (articolishop.prezzoeuro * articolishop.Promodcypercento/100)) 
+//                                           Else Send InitDynamicProp of hoAddBtn "pnAddValue" (Trim(articolishop.prezzoeuroduranteofferta))
+//                                    End
+//                                    Else Send InitDynamicProp of hoAddBtn "pnAddValue" (Trim(articolishop.prezzoeuro))
+//                                      Send InitDynamicProp of hoAddBtn "psShop" (Trim(articolishop.owner))
+//                                    
+//            //                        
+//                                   
+//                              End
+//                               Increment iCount
+//                        End
+//  
+//                     End //WHILE
+////                    
+//                     
+//                    // Send AppendDynamicObject (scatId + "_pcartgrp")
+//    
+//                 Loop // FOR I
+//                          
+// 
+//   
+//                 Send Activate    
                 
             End_Procedure
 

@@ -1,5 +1,5 @@
 Compiling Program: D:\DataFlex Projects\comunitasolidaliengine\AppSrc\WebApp.src
-Memory Available: 45388869632
+Memory Available: 46475284480
 1>Use AllWebAppClasses.pkg
 Using pre-compiled package ALLWEBAPPCLASSES.PKG
 Including file: AllWebAppClasses.x64.pkd    (D:\df201\Pkg\AllWebAppClasses.x64.pkd)
@@ -125,1622 +125,2049 @@ Including file: LoginEncryptionKey.inc    (D:\dataflex projects\comunitasolidali
 34721>    End_Object
 34722>End_Object
 34723>
-34723>Object oWebApp is a cWebApp
-34725>    Set psTheme to "Df_Material"
-34726>    Set peAlignView to alignCenter
-34727>    Set peLoginMode to lmLoginNone
-34728>   Set pbLogWebSession to False
-34729>    // It is important to set this so that all views will default
-34729>    // to drill down style views.
-34729>    Set peApplicationStyle to wvsDrillDown   
-34730>    Set peApplicationStateMode to asmHistoryAndUrls 
-34731>    Set psEncryptPassword to "_{8<B(nY~k_%>K/T:x@n#S=|QsE[W0umnS@S&|Ed"
-34732>
-34732>    Object oViewStack is a cWebViewStack
-34734>    End_Object
-34735>    
-34735>    Procedure HideHeader
-34738>        WebSet pbRender of oHeaderPanel to False
-34739>    End_Procedure
-34740>
-34740>    Procedure ShowHeader
-34743>        WebSet pbRender of oHeaderPanel to True 
-34744>    End_Procedure
-34745>
-34745>    Object oHeaderPanel is a cWebPanel
-34747>        Set peRegion to prTop
-34748>        Set psCSSClass to "HeaderPanel"
-34749>        
-34749>        Object oMenuPanel is a cWebPanel
-34751>            Set peRegion to prLeft
-34752>            Set piWidth to 50
-34753>            
-34753>            Object oMenuButton is a cWebMenuButton
-34755>                Set piMenuHeight to 500
-34756>
-34756>                Object oDashboard_itm is a cWebMenuItem
-34758>                    Set psCaption to C_$Dashboard
-34759>                    
-34759>                    WebRegisterPath ntNavigateBegin oDashboard
-34765>
-34765>                    Procedure OnClick
-34768>                        Send NavigatePath
-34769>                    End_Procedure
-34770>                End_Object
-34771>
-34771>                Object oViewMenu is a cWebMenuItem
-34773>                    Set psCaption to C_$View
+34723>Function translatestring Global String stext Returns String
+34725>    Function_Return  stext
+34726>End_Function
+34727>
+34727>Object oWebApp is a cWebApp
+34729>    Set psTheme to "Df_Material"
+34730>    Set peAlignView to alignCenter
+34731>    Set peLoginMode to lmLoginNone
+34732>   Set pbLogWebSession to False
+34733>    // It is important to set this so that all views will default
+34733>    // to drill down style views.
+34733>    Set peApplicationStyle to wvsDrillDown   
+34734>    Set peApplicationStateMode to asmHistoryAndUrls 
+34735>    Set psEncryptPassword to "_{8<B(nY~k_%>K/T:x@n#S=|QsE[W0umnS@S&|Ed"
+34736>
+34736>    Object oViewStack is a cWebViewStack
+34738>    End_Object
+34739>    
+34739>    Procedure HideHeader
+34742>        WebSet pbRender of oHeaderPanel to False
+34743>    End_Procedure
+34744>
+34744>    Procedure ShowHeader
+34747>        WebSet pbRender of oHeaderPanel to True 
+34748>    End_Procedure
+34749>
+34749>    Object oHeaderPanel is a cWebPanel
+34751>        Set peRegion to prTop
+34752>        Set psCSSClass to "HeaderPanel"
+34753>        
+34753>        Object oMenuPanel is a cWebPanel
+34755>            Set peRegion to prLeft
+34756>            Set piWidth to 50
+34757>            
+34757>            Object oMenuButton is a cWebMenuButton
+34759>                Set piMenuHeight to 500
+34760>
+34760>                Object oDashboard_itm is a cWebMenuItem
+34762>                    Set psCaption to C_$Dashboard
+34763>                    
+34763>                    WebRegisterPath ntNavigateBegin oDashboard
+34769>
+34769>                    Procedure OnClick
+34772>                        Send NavigatePath
+34773>                    End_Procedure
 34774>                End_Object
 34775>
-34775>                Object oSignOut_itm is a cWebMenuItem
-34777>                    Set psCaption to C_$LogOut
-34778>
-34778>                    Procedure OnClick
-34781>                        Send RequestLogOut of ghoWebSessionManager
-34782>                    End_Procedure
-34783>                End_Object
-34784>            End_Object  
-34785>
-34785>            Object oBackButton is a cWebButton
-34787>                Set psCSSClass to "WebBack_Icon"
-34788>                Set pbRender to False
-34789>                
-34789>                Procedure OnClick
-34792>                    Handle hoTop
-34792>                    
-34792>                    Get TopViewHandle of oViewStack to hoTop
-34793>                    If (hoTop > 0) Begin
-34795>                        Send NavigateCancel of hoTop 
-34796>                    End
-34796>                End_Procedure
-34797>            End_Object
-34798>            
-34798>            Send AddClient of oViewStack Self
-34799>                
-34799>            Procedure OnUpdateViewStack
-34802>                Handle hoTop hoDflt
-34802>                Integer eMode
-34802>                Boolean bTop
-34802>                
-34802>                WebGet peMode of ghoWebApp to eMode
-34805>                
-34805>                Get TopViewHandle of oViewStack to hoTop
-34806>                Get GetDefaultView to hoDflt
-34807>                Move (hoTop=0 or hoTop=hoDflt) to bTop
-34808>                
-34808>                WebSet pbRender of oBackButton to (not(bTop) and eMode >= rmMobile)
-34809>                WebSet pbRender of oMenuButton to (bTop or eMode < rmMobile)
-34810>            End_Procedure
-34811>
-34811>        End_Object
-34812>
-34812>        Object oCaptionPanel is a cWebPanel
-34814>            Set piColumnCount to 12
+34775>//              Object oNegoziList is a cWebMenuItem 
+34775>//      
+34775>//                   Set psCaption to  "Trova negozi"
+34775>//                      
+34775>//       
+34775>//                     Register_Object oListanegozi
+34775>//                     // WebRegisterPath ntNavigateForward oListanegozi
+34775>//        
+34775>//                            
+34775>//                              Procedure OnGetNavigateForwardData tWebNavigateData ByRef NavigateData Handle hoToView
+34775>//                                  Move nfFromMain to NavigateData.eNavigateType
+34775>//                              End_Procedure
+34775>//                      
+34775>//                   
+34775>//                    Procedure OnClick String sId String sParam
+34775>//                           Boolean BOK
+34775>//                          String sReason
+34775>//                          Get CanPushView of ghoWebViewStack oListanegozi (&sReason) to bOK
+34775>//                           If (not(bok)) Begin 
+34775>//                                          Get Reset of ghoWebViewStack True True to bok
+34775>//                           End
+34775>//                          If (bok) Send NavigatePath
+34775>//                    End_Procedure
+34775>//                    
+34775>//                 End_Object
+34775>
+34775>                Object oViewMenu is a cWebMenuItem
+34777>                    Set psCaption to C_$View
+34778>                End_Object
+34779>
+34779>                Object oSignOut_itm is a cWebMenuItem
+34781>                    Set psCaption to C_$LogOut
+34782>
+34782>                    Procedure OnClick
+34785>                        Send RequestLogOut of ghoWebSessionManager
+34786>                    End_Procedure
+34787>                End_Object
+34788>            End_Object  
+34789>
+34789>            Object oBackButton is a cWebButton
+34791>                Set psCSSClass to "WebBack_Icon"
+34792>                Set pbRender to False
+34793>                
+34793>                Procedure OnClick
+34796>                    Handle hoTop
+34796>                    
+34796>                    Get TopViewHandle of oViewStack to hoTop
+34797>                    If (hoTop > 0) Begin
+34799>                        Send NavigateCancel of hoTop 
+34800>                    End
+34800>                End_Procedure
+34801>            End_Object
+34802>            
+34802>            Send AddClient of oViewStack Self
+34803>                
+34803>            Procedure OnUpdateViewStack
+34806>                Handle hoTop hoDflt
+34806>                Integer eMode
+34806>                Boolean bTop
+34806>                
+34806>                WebGet peMode of ghoWebApp to eMode
+34809>                
+34809>                Get TopViewHandle of oViewStack to hoTop
+34810>                Get GetDefaultView to hoDflt
+34811>                Move (hoTop=0 or hoTop=hoDflt) to bTop
+34812>                
+34812>                WebSet pbRender of oBackButton to (not(bTop) and eMode >= rmMobile)
+34813>                WebSet pbRender of oMenuButton to (bTop or eMode < rmMobile)
+34814>            End_Procedure
 34815>
-34815>            Object oCaptionBreadcrumb is a cWebBreadcrumb
-34817>                Set peBreadcrumbStyle to crumbCaption
-34818>                WebSetResponsive peBreadcrumbStyle rmMobile to crumbDropDown
-34819>            End_Object         
-34820>        End_Object
-34821>        
-34821>        Object oActionPanel is a cWebPanel
-34823>            Set peRegion to prRight
-34824>            Set piColumnCount to 1
-34825>            Set piWidth to 120
-34826>
-34826>            Object oMainActions is a cWebActionBar
-34828>                Set psGroupName to "MainActions"
-34829>
-34829>                Set piColumnSpan to 0
-34830>                Set peAlign to alignRight
-34831>            End_Object
-34832>        End_Object
+34815>        End_Object
+34816>
+34816>        Object oCaptionPanel is a cWebPanel
+34818>            Set piColumnCount to 12
+34819>
+34819>            Object oCaptionBreadcrumb is a cWebBreadcrumb
+34821>                Set peBreadcrumbStyle to crumbCaption
+34822>                WebSetResponsive peBreadcrumbStyle rmMobile to crumbDropDown
+34823>            End_Object         
+34824>        End_Object
+34825>        
+34825>        Object oActionPanel is a cWebPanel
+34827>            Set peRegion to prRight
+34828>            Set piColumnCount to 1
+34829>            Set piWidth to 120
+34830>
+34830>            Object oMainActions is a cWebActionBar
+34832>                Set psGroupName to "MainActions"
 34833>
-34833>        Object oBreadcrumbPanel is a cWebPanel
-34835>            Set peRegion to prBottom
-34836>            
-34836>            Object oHorizontalBreadcrumb is a cWebBreadcrumb
-34838>                WebSetResponsive pbRender rmMobile to False
-34839>            End_Object         
-34840>        End_Object
-34841>
-34841>    End_Object    
-34842>
-34842>    Use SessionManager.wo
+34833>                Set piColumnSpan to 0
+34834>                Set peAlign to alignRight
+34835>            End_Object
+34836>        End_Object
+34837>
+34837>        Object oBreadcrumbPanel is a cWebPanel
+34839>            Set peRegion to prBottom
+34840>            
+34840>            Object oHorizontalBreadcrumb is a cWebBreadcrumb
+34842>                WebSetResponsive pbRender rmMobile to False
+34843>            End_Object         
+34844>        End_Object
+34845>
+34845>    End_Object    
+34846>
+34846>    Use SessionManager.wo
 Including file: SessionManager.wo    (D:\dataflex projects\comunitasolidaliengine\AppSrc\SessionManager.wo)
-34842>>>Use cWebSessionManagerStandard.pkg
+34846>>>Use cWebSessionManagerStandard.pkg
 Including file: cWebSessionManagerStandard.pkg    (D:\df201\Pkg\cWebSessionManagerStandard.pkg)
-34842>>>>>Use cWebSessionManager.pkg
-34842>>>>>Use cWebAppSessionDataDictionary.dd
+34846>>>>>Use cWebSessionManager.pkg
+34846>>>>>Use cWebAppSessionDataDictionary.dd
 Including file: cWebAppSessionDataDictionary.dd    (D:\df201\Pkg\cWebAppSessionDataDictionary.dd)
-34842>>>>>>>Use DataDict.pkg
-34842>>>>>>>
-34842>>>>>>>Open WebAppSession
-Including file: WebAppSession.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\WebAppSession.fd)
-34844>>>>>>>Open WebAppUser
-Including file: WebAppUser.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\WebAppUser.fd)
+34846>>>>>>>Use DataDict.pkg
 34846>>>>>>>
-34846>>>>>>>Class cWebAppSessionDataDictionary is a DataDictionary
-34847>>>>>>>    
-34847>>>>>>>    Procedure Construct_Object
-34849>>>>>>>        Forward Send Construct_Object
-34851>>>>>>>        Set Main_File to WebAppSession.File_Number
-34852>>>>>>>
-34852>>>>>>>        Set Add_Server_File to WebAppUser.File_Number
-34853>>>>>>>
-34853>>>>>>>        Set ParentNullAllowed WebAppUser.File_Number to True
-34854>>>>>>>
-34854>>>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
-34855>>>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
-34856>>>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
-34857>>>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+34846>>>>>>>Open WebAppSession
+Including file: WebAppSession.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\WebAppSession.fd)
+34848>>>>>>>Open WebAppUser
+Including file: WebAppUser.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\WebAppUser.fd)
+34850>>>>>>>
+34850>>>>>>>Class cWebAppSessionDataDictionary is a DataDictionary
+34851>>>>>>>    
+34851>>>>>>>    Procedure Construct_Object
+34853>>>>>>>        Forward Send Construct_Object
+34855>>>>>>>        Set Main_File to WebAppSession.File_Number
+34856>>>>>>>
+34856>>>>>>>        Set Add_Server_File to WebAppUser.File_Number
+34857>>>>>>>
+34857>>>>>>>        Set ParentNullAllowed WebAppUser.File_Number to True
 34858>>>>>>>
-34858>>>>>>>        Set Field_Option Field WebAppSession.Active DD_RETAIN to True
-34859>>>>>>>        Set Field_Checkbox_Values Field WebAppSession.Active to "Y" "N"
-34860>>>>>>>        Set Field_Error Field WebAppSession.Active to 500 "Invalid WebAppSession Active State"
-34861>>>>>>>
-34861>>>>>>>    End_Procedure
+34858>>>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+34859>>>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+34860>>>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+34861>>>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
 34862>>>>>>>
-34862>>>>>>>    Procedure Creating
-34864>>>>>>>        DateTime dtCurrentDateTime
-34864>>>>>>>        
-34864>>>>>>>        Forward Send Creating
-34866>>>>>>>        
-34866>>>>>>>        //  Init usecounter
-34866>>>>>>>        Move 0 to WebAppSession.UseCount
-34867>>>>>>>        
-34867>>>>>>>        //  Set the creation and access time to the current time
-34867>>>>>>>        Move (CurrentDateTime()) to dtCurrentDateTime
-34868>>>>>>>    
-34868>>>>>>>        Get TimeToString dtCurrentDateTime to WebAppSession.CreateTime
-34869>>>>>>>        Get TimeToString dtCurrentDateTime to WebAppSession.LastAccessTime
+34862>>>>>>>        Set Field_Option Field WebAppSession.Active DD_RETAIN to True
+34863>>>>>>>        Set Field_Checkbox_Values Field WebAppSession.Active to "Y" "N"
+34864>>>>>>>        Set Field_Error Field WebAppSession.Active to 500 "Invalid WebAppSession Active State"
+34865>>>>>>>
+34865>>>>>>>    End_Procedure
+34866>>>>>>>
+34866>>>>>>>    Procedure Creating
+34868>>>>>>>        DateTime dtCurrentDateTime
+34868>>>>>>>        
+34868>>>>>>>        Forward Send Creating
 34870>>>>>>>        
-34870>>>>>>>        Move dtCurrentDateTime to WebAppSession.CreateDate
-34871>>>>>>>        Move dtCurrentDateTime to WebAppSession.LastAccessDate
-34872>>>>>>>    End_Procedure
-34873>>>>>>>    
-34873>>>>>>>    
-34873>>>>>>>    
-34873>>>>>>>    //
-34873>>>>>>>    //  Converts the given time to an string that can be saved in the database.
-34873>>>>>>>    //
-34873>>>>>>>    //  Params:
-34873>>>>>>>    //      dtTime  Time to convert
-34873>>>>>>>    //  Returns:
-34873>>>>>>>    //      String with "HH:MM:SS" format
-34873>>>>>>>    //
-34873>>>>>>>    Function TimeToString DateTime dtTime Returns String
-34875>>>>>>>        String sHours sMinutes sSeconds
-34875>>>>>>>        
-34875>>>>>>>        //  Extract parts
-34875>>>>>>>        Move (String(DateGetHour(dtTime))) to sHours
-34876>>>>>>>        Move (String(DateGetMinute(dtTime))) to sMinutes
-34877>>>>>>>        Move (String(DateGetSecond(dtTime))) to sSeconds
-34878>>>>>>>        
-34878>>>>>>>        //  Fill out with 0
-34878>>>>>>>        If (Length(sHours) = 1) ;            Move ("0" + sHours) to sHours
-34881>>>>>>>        If (Length(sMinutes) = 1) ;            Move ("0" + sMinutes) to sMinutes
-34884>>>>>>>        If (Length(sSeconds) = 1) ;            Move ("0" + sSeconds) to sSeconds
-34887>>>>>>>        
-34887>>>>>>>        Function_Return (sHours + ":" + sMinutes + ":" + sSeconds)
-34888>>>>>>>    End_Function
-34889>>>>>>>    
-34889>>>>>>>    //
-34889>>>>>>>    //  Sets the time of the datetime variable to the time in the string.
-34889>>>>>>>    //
-34889>>>>>>>    //  Params:
-34889>>>>>>>    //      dtTime  Datetime variable to add time to
-34889>>>>>>>    //      sTimeString String with time in the format "HH:MM:SS"
-34889>>>>>>>    //  Returns:
-34889>>>>>>>    //      dtDateTime with the loaded time
-34889>>>>>>>    //
-34889>>>>>>>    Function StringToTime DateTime dtTime String sTimeString Returns DateTime
-34891>>>>>>>        String sHours sMinutes sSeconds
+34870>>>>>>>        //  Init usecounter
+34870>>>>>>>        Move 0 to WebAppSession.UseCount
+34871>>>>>>>        
+34871>>>>>>>        //  Set the creation and access time to the current time
+34871>>>>>>>        Move (CurrentDateTime()) to dtCurrentDateTime
+34872>>>>>>>    
+34872>>>>>>>        Get TimeToString dtCurrentDateTime to WebAppSession.CreateTime
+34873>>>>>>>        Get TimeToString dtCurrentDateTime to WebAppSession.LastAccessTime
+34874>>>>>>>        
+34874>>>>>>>        Move dtCurrentDateTime to WebAppSession.CreateDate
+34875>>>>>>>        Move dtCurrentDateTime to WebAppSession.LastAccessDate
+34876>>>>>>>    End_Procedure
+34877>>>>>>>    
+34877>>>>>>>    
+34877>>>>>>>    
+34877>>>>>>>    //
+34877>>>>>>>    //  Converts the given time to an string that can be saved in the database.
+34877>>>>>>>    //
+34877>>>>>>>    //  Params:
+34877>>>>>>>    //      dtTime  Time to convert
+34877>>>>>>>    //  Returns:
+34877>>>>>>>    //      String with "HH:MM:SS" format
+34877>>>>>>>    //
+34877>>>>>>>    Function TimeToString DateTime dtTime Returns String
+34879>>>>>>>        String sHours sMinutes sSeconds
+34879>>>>>>>        
+34879>>>>>>>        //  Extract parts
+34879>>>>>>>        Move (String(DateGetHour(dtTime))) to sHours
+34880>>>>>>>        Move (String(DateGetMinute(dtTime))) to sMinutes
+34881>>>>>>>        Move (String(DateGetSecond(dtTime))) to sSeconds
+34882>>>>>>>        
+34882>>>>>>>        //  Fill out with 0
+34882>>>>>>>        If (Length(sHours) = 1) ;            Move ("0" + sHours) to sHours
+34885>>>>>>>        If (Length(sMinutes) = 1) ;            Move ("0" + sMinutes) to sMinutes
+34888>>>>>>>        If (Length(sSeconds) = 1) ;            Move ("0" + sSeconds) to sSeconds
 34891>>>>>>>        
-34891>>>>>>>        //  Extract parts
-34891>>>>>>>        Move (Mid(sTimeString, 2, 1)) to sHours
-34892>>>>>>>        Move (Mid(sTimeString, 2, 4)) to sMinutes
-34893>>>>>>>        Move (Mid(sTimeString, 2, 7)) to sSeconds
-34894>>>>>>>        
-34894>>>>>>>        //  Set to DateTime
-34894>>>>>>>        Move (DateSetHour(dtTime, (Integer(sHours)))) to dtTime
-34895>>>>>>>        Move (DateSetMinute(dtTime, (Integer(sMinutes)))) to dtTime
-34896>>>>>>>        Move (DateSetSecond(dtTime, (Integer(sSeconds)))) to dtTime
-34897>>>>>>>        
-34897>>>>>>>        Function_Return dtTime
-34898>>>>>>>    End_Function
-34899>>>>>>>
-34899>>>>>>>End_Class
-34900>>>>>Use cWebAppUserDataDictionary.dd
+34891>>>>>>>        Function_Return (sHours + ":" + sMinutes + ":" + sSeconds)
+34892>>>>>>>    End_Function
+34893>>>>>>>    
+34893>>>>>>>    //
+34893>>>>>>>    //  Sets the time of the datetime variable to the time in the string.
+34893>>>>>>>    //
+34893>>>>>>>    //  Params:
+34893>>>>>>>    //      dtTime  Datetime variable to add time to
+34893>>>>>>>    //      sTimeString String with time in the format "HH:MM:SS"
+34893>>>>>>>    //  Returns:
+34893>>>>>>>    //      dtDateTime with the loaded time
+34893>>>>>>>    //
+34893>>>>>>>    Function StringToTime DateTime dtTime String sTimeString Returns DateTime
+34895>>>>>>>        String sHours sMinutes sSeconds
+34895>>>>>>>        
+34895>>>>>>>        //  Extract parts
+34895>>>>>>>        Move (Mid(sTimeString, 2, 1)) to sHours
+34896>>>>>>>        Move (Mid(sTimeString, 2, 4)) to sMinutes
+34897>>>>>>>        Move (Mid(sTimeString, 2, 7)) to sSeconds
+34898>>>>>>>        
+34898>>>>>>>        //  Set to DateTime
+34898>>>>>>>        Move (DateSetHour(dtTime, (Integer(sHours)))) to dtTime
+34899>>>>>>>        Move (DateSetMinute(dtTime, (Integer(sMinutes)))) to dtTime
+34900>>>>>>>        Move (DateSetSecond(dtTime, (Integer(sSeconds)))) to dtTime
+34901>>>>>>>        
+34901>>>>>>>        Function_Return dtTime
+34902>>>>>>>    End_Function
+34903>>>>>>>
+34903>>>>>>>End_Class
+34904>>>>>Use cWebAppUserDataDictionary.dd
 Including file: cWebAppUserDataDictionary.dd    (D:\df201\Pkg\cWebAppUserDataDictionary.dd)
-34900>>>>>>>Use DataDict.pkg
-34900>>>>>>>Open WebAppUser
-34902>>>>>>>Open WebAppSession
-34904>>>>>>>
-34904>>>>>>>Class cWebAppUserDataDictionary is a DataDictionary
-34905>>>>>>>    
-34905>>>>>>>    Procedure Construct_Object
-34907>>>>>>>        Forward Send Construct_Object
-34909>>>>>>>        Set Main_File to WebAppUser.File_Number
-34910>>>>>>>
-34910>>>>>>>        Set Add_Client_File to WebAppSession.File_Number
-34911>>>>>>>
-34911>>>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
-34912>>>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
-34913>>>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
-34914>>>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
-34915>>>>>>>    End_Procedure
-34916>>>>>>>
-34916>>>>>>>End_Class
-34917>>>>>
-34917>>>>>Class cWebSessionManagerStandard is a cWebSessionManager
-34918>>>>>    
-34918>>>>>    Procedure Construct_Object
-34920>>>>>        Handle hoUserDD hoSessionDD
-34920>>>>>        
-34920>>>>>        Forward Send Construct_Object
-34922>>>>>        
-34922>>>>>        Property Handle phoUserDD 0      // Handle to the WebAppUser DDO
-34923>>>>>        Property Handle phoSessionDD 0   // Handle to the WebAppSession DDO        
+34904>>>>>>>Use DataDict.pkg
+34904>>>>>>>Open WebAppUser
+34906>>>>>>>Open WebAppSession
+34908>>>>>>>
+34908>>>>>>>Class cWebAppUserDataDictionary is a DataDictionary
+34909>>>>>>>    
+34909>>>>>>>    Procedure Construct_Object
+34911>>>>>>>        Forward Send Construct_Object
+34913>>>>>>>        Set Main_File to WebAppUser.File_Number
+34914>>>>>>>
+34914>>>>>>>        Set Add_Client_File to WebAppSession.File_Number
+34915>>>>>>>
+34915>>>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+34916>>>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+34917>>>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+34918>>>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+34919>>>>>>>    End_Procedure
+34920>>>>>>>
+34920>>>>>>>End_Class
+34921>>>>>
+34921>>>>>Class cWebSessionManagerStandard is a cWebSessionManager
+34922>>>>>    
+34922>>>>>    Procedure Construct_Object
+34924>>>>>        Handle hoUserDD hoSessionDD
 34924>>>>>        
-34924>>>>>        Get Create (RefClass(cWebAppUserDataDictionary)) to hoUserDD
-34925>>>>>        Get Create (RefClass(cWebAppSessionDataDictionary)) to hoSessionDD
-34926>>>>>        Set DDO_Server of hoSessionDD to hoUserDD
-34927>>>>>
-34927>>>>>        Set phoUserDD to hoUserDD
-34928>>>>>        Set phoSessionDD to hoSessionDD
-34929>>>>>        Property Boolean pbCreatingNewSession False
-34930>>>>>        Property String psLoginName
-34931>>>>>        Property String psUserName ""
-34932>>>>>        Property Integer piUserRights 0
-34933>>>>>    End_Procedure
-34934>>>>>    
-34934>>>>>    Function CreateSession String sRemoteAddress Returns String
-34936>>>>>        String sSessionKey
-34936>>>>>        Integer iErr
-34936>>>>>        Boolean bLogWebSession
-34936>>>>>        Handle hoSessionDD       
-34936>>>>>        Get phoSessionDD to hoSessionDD
-34937>>>>>        
-34937>>>>>        //  Get session key
-34937>>>>>        Forward Get CreateSession sRemoteAddress to sSessionKey
-34939>>>>>        
-34939>>>>>        Get pbLogWebSession to bLogWebSession
-34940>>>>>        If not bLogWebSession Begin
-34942>>>>>            Function_Return sSessionKey        
-34943>>>>>        End
-34943>>>>>>
-34943>>>>>
-34943>>>>>        //  Store session
-34943>>>>>        Send Clear of hoSessionDD
-34944>>>>>        Set Field_Changed_Value of hoSessionDD Field WebAppSession.SessionKey to sSessionKey
-34945>>>>>        Set Field_Changed_Value of hoSessionDD Field WebAppSession.RemoteAddress to sRemoteAddress
-34946>>>>>        Set Field_Changed_Value of hoSessionDD Field WebAppSession.Active to "Y"
-34947>>>>>        Get Request_Validate of hoSessionDD to iErr
-34948>>>>>        If (iErr) Begin
-34950>>>>>            // this should not happen. If it does its a programming error
-34950>>>>>            Error DFERR_PROGRAM C_$WebAppSesionValidateFailed
-34951>>>>>>
-34951>>>>>            Function_Return ""
-34952>>>>>        End
-34952>>>>>>
-34952>>>>>        Send Request_Save of hoSessionDD
-34953>>>>>        If (Err) Begin
-34955>>>>>            // this shouldn't happen, if it does likely a duplicate session key issue, even through request_save already gave an error we give another one to make tracking down easier
-34955>>>>>            Error DFERR_PROGRAM C_$WebAppSesionSaveFailed
+34924>>>>>        Forward Send Construct_Object
+34926>>>>>        
+34926>>>>>        Property Handle phoUserDD 0      // Handle to the WebAppUser DDO
+34927>>>>>        Property Handle phoSessionDD 0   // Handle to the WebAppSession DDO        
+34928>>>>>        
+34928>>>>>        Get Create (RefClass(cWebAppUserDataDictionary)) to hoUserDD
+34929>>>>>        Get Create (RefClass(cWebAppSessionDataDictionary)) to hoSessionDD
+34930>>>>>        Set DDO_Server of hoSessionDD to hoUserDD
+34931>>>>>
+34931>>>>>        Set phoUserDD to hoUserDD
+34932>>>>>        Set phoSessionDD to hoSessionDD
+34933>>>>>        Property Boolean pbCreatingNewSession False
+34934>>>>>        Property String psLoginName
+34935>>>>>        Property String psUserName ""
+34936>>>>>        Property Integer piUserRights 0
+34937>>>>>    End_Procedure
+34938>>>>>    
+34938>>>>>    Function CreateSession String sRemoteAddress Returns String
+34940>>>>>        String sSessionKey
+34940>>>>>        Integer iErr
+34940>>>>>        Boolean bLogWebSession
+34940>>>>>        Handle hoSessionDD       
+34940>>>>>        Get phoSessionDD to hoSessionDD
+34941>>>>>        
+34941>>>>>        //  Get session key
+34941>>>>>        Forward Get CreateSession sRemoteAddress to sSessionKey
+34943>>>>>        
+34943>>>>>        Get pbLogWebSession to bLogWebSession
+34944>>>>>        If not bLogWebSession Begin
+34946>>>>>            Function_Return sSessionKey        
+34947>>>>>        End
+34947>>>>>>
+34947>>>>>
+34947>>>>>        //  Store session
+34947>>>>>        Send Clear of hoSessionDD
+34948>>>>>        Set Field_Changed_Value of hoSessionDD Field WebAppSession.SessionKey to sSessionKey
+34949>>>>>        Set Field_Changed_Value of hoSessionDD Field WebAppSession.RemoteAddress to sRemoteAddress
+34950>>>>>        Set Field_Changed_Value of hoSessionDD Field WebAppSession.Active to "Y"
+34951>>>>>        Get Request_Validate of hoSessionDD to iErr
+34952>>>>>        If (iErr) Begin
+34954>>>>>            // this should not happen. If it does its a programming error
+34954>>>>>            Error DFERR_PROGRAM C_$WebAppSesionValidateFailed
+34955>>>>>>
+34955>>>>>            Function_Return ""
+34956>>>>>        End
 34956>>>>>>
-34956>>>>>            Function_Return ""
-34957>>>>>        End
-34957>>>>>>
-34957>>>>>       
-34957>>>>>        Function_Return sSessionKey        
-34958>>>>>    End_Function
-34959>>>>>    
-34959>>>>>    
-34959>>>>>    Function ValidateSession String sSessionKey Boolean bOptLoadWebApp Returns Boolean
-34961>>>>>        DateTime dtLastAccess dtCurrent
-34961>>>>>        TimeSpan tsDiff
-34961>>>>>        Integer iErr iSessionTimeout iSpanMinutes
-34961>>>>>        Boolean bResult bCreatingNewSession
-34961>>>>>        Boolean bLogWebSession bLoadWebApp
-34961>>>>>        Integer eLoginMode
-34961>>>>>        String sTime
-34961>>>>>        Handle hoSessionDD hoUserDD       
-34961>>>>>        
-34961>>>>>        Move False to bLoadWebApp
-34962>>>>>        If (num_arguments >= 2) Begin
-34964>>>>>            Move bOptLoadWebApp to bLoadWebApp
-34965>>>>>        End
-34965>>>>>>
+34956>>>>>        Send Request_Save of hoSessionDD
+34957>>>>>        If (Err) Begin
+34959>>>>>            // this shouldn't happen, if it does likely a duplicate session key issue, even through request_save already gave an error we give another one to make tracking down easier
+34959>>>>>            Error DFERR_PROGRAM C_$WebAppSesionSaveFailed
+34960>>>>>>
+34960>>>>>            Function_Return ""
+34961>>>>>        End
+34961>>>>>>
+34961>>>>>       
+34961>>>>>        Function_Return sSessionKey        
+34962>>>>>    End_Function
+34963>>>>>    
+34963>>>>>    
+34963>>>>>    Function ValidateSession String sSessionKey Boolean bOptLoadWebApp Returns Boolean
+34965>>>>>        DateTime dtLastAccess dtCurrent
+34965>>>>>        TimeSpan tsDiff
+34965>>>>>        Integer iErr iSessionTimeout iSpanMinutes
+34965>>>>>        Boolean bResult bCreatingNewSession
+34965>>>>>        Boolean bLogWebSession bLoadWebApp
+34965>>>>>        Integer eLoginMode
+34965>>>>>        String sTime
+34965>>>>>        Handle hoSessionDD hoUserDD       
 34965>>>>>        
-34965>>>>>        Get phoSessionDD to hoSessionDD
-34966>>>>>        Get phoUserDD to hoUserDD
-34967>>>>>        
-34967>>>>>        Get pbLogWebSession to bLogWebSession
-34968>>>>>        Get peLoginMode to eLoginMode
+34965>>>>>        Move False to bLoadWebApp
+34966>>>>>        If (num_arguments >= 2) Begin
+34968>>>>>            Move bOptLoadWebApp to bLoadWebApp
+34969>>>>>        End
+34969>>>>>>
 34969>>>>>        
-34969>>>>>        // for this object, you can only disable logging if login completely is disabled
-34969>>>>>        If (not(bLogWebSession) and (eLoginMode<>lmLoginNone)) Begin
-34971>>>>>            Error DFERR_PROGRAM C_$WebSessionLoggingMustBeEnabled
-34972>>>>>>
-34972>>>>>            Function_Return False
-34973>>>>>        End
-34973>>>>>>
-34973>>>>>
-34973>>>>>        //  Clear session properties
-34973>>>>>        Set psSessionKey to ""
-34974>>>>>        Send UpdateSessionProperties True
-34975>>>>>        
-34975>>>>>        If not bLogWebSession Begin
-34977>>>>>            Forward Get ValidateSession sSessionKey to bResult
-34979>>>>>            Function_Return bResult
-34980>>>>>        End        
-34980>>>>>>
-34980>>>>>        
-34980>>>>>        Move False to bResult
-34981>>>>>        Get piSessionTimeout to iSessionTimeout 
-34982>>>>>        
-34982>>>>>        //  Check if session exists
-34982>>>>>        Send Clear of hoSessionDD
-34983>>>>>        Move sSessionKey to WebAppSession.SessionKey
-34984>>>>>        Send Find of hoSessionDD EQ Index.1
-34985>>>>>            
-34985>>>>>        If (Found) Begin
-34987>>>>>            //  Calculate timespan between now and last access time
-34987>>>>>            Move (CurrentDateTime()) to dtCurrent
-34988>>>>>            Move WebAppSession.LastAccessDate to dtLastAccess
-34989>>>>>            Get StringToTime of hoSessionDD dtLastAccess WebAppSession.LastAccessTime to dtLastAccess
-34990>>>>>            Move (dtCurrent - dtLastAccess) to tsDiff
-34991>>>>>            Move (SpanTotalMinutes(tsDiff)) to iSpanMinutes
-34992>>>>>            
-34992>>>>>            //  Check if session didn't time out
-34992>>>>>            If (IsDateValid(dtLastAccess) and (iSessionTimeout <= 0 or (iSpanMinutes < iSessionTimeout)) and WebAppSession.Active = "Y") Begin
-34994>>>>>                Forward Get ValidateSession sSessionKey to bResult
-34996>>>>>                   
-34996>>>>>                If (bResult) Begin
-34998>>>>>                    //  Update session record
-34998>>>>>                    Get TimeToString of hoSessionDD dtCurrent to sTime 
-34999>>>>>                    Set Field_Changed_Value of hoSessionDD Field WebAppSession.LastAccessDate to dtCurrent
-35000>>>>>                    Set Field_Changed_Value of hoSessionDD Field WebAppSession.LastAccessTime to sTime
-35001>>>>>                    Set Field_Changed_Value of hoSessionDD Field WebAppSession.UseCount to (WebAppSession.UseCount + 1)
-35002>>>>>                    Get Request_Validate of hoSessionDD to iErr
-35003>>>>>                    If (iErr) Begin
-35005>>>>>                        // this should not happen. If it does its a programming error
-35005>>>>>                        Error DFERR_PROGRAM C_$WebAppSesionValidateFailed
-35006>>>>>>
-35006>>>>>                        Function_Return False
-35007>>>>>                    End
-35007>>>>>>
-35007>>>>>                    Send Request_Save of hoSessionDD
-35008>>>>>                    
-35008>>>>>                    //  Update user properties
-35008>>>>>                    Send UpdateSessionProperties False
-35009>>>>>                End
-35009>>>>>>
-35009>>>>>            End
-35009>>>>>>
-35009>>>>>            Else Begin
-35010>>>>>                // Test the Creating New Session Flag to protect against infinite recursion....
-35010>>>>>                Get pbCreatingNewSession to bCreatingNewSession
-35011>>>>>                
-35011>>>>>                If (not(bCreatingNewSession)) Begin
-35013>>>>>                    Set pbCreatingNewSession to True                    
-35014>>>>>                    Get RecreateSession of ghoWebApp to bResult
-35015>>>>>                    Set pbCreatingNewSession to False
-35016>>>>>                    
-35016>>>>>                    If (not(bLoadWebApp)) Begin
-35018>>>>>                        Move False to bResult   //  We can only continue immediately if we were loading the webapp, other operations are not allowed!
-35019>>>>>                        Error DFERR_WEBAPP_SESSION_TIMEOUT "Your application session has timed out or is inactive, please login again."
-35020>>>>>>
-35020>>>>>                        Send NavigateRefresh of ghoWebApp          // refresh the WebApp at the client (triggers a login)
-35021>>>>>                    End
-35021>>>>>>
-35021>>>>>                End
-35021>>>>>>
-35021>>>>>            End
-35021>>>>>>
-35021>>>>>        End
-35021>>>>>>
-35021>>>>>        Else Begin
-35022>>>>>            Error DFERR_WEBAPP_BAD_SESSION_KEY "Session key not known (reload page to recreate session)"
-35023>>>>>>
-35023>>>>>        End
-35023>>>>>>
-35023>>>>>        
-35023>>>>>        Function_Return bResult
-35024>>>>>    End_Function
-35025>>>>>    
-35025>>>>>    Function UserLogin String sLoginName String sPassword Returns Boolean
-35027>>>>>        String sSessionKey sUserPassword
-35027>>>>>        Handle hoSessionDD hoUserDD
-35027>>>>>        Boolean bMatch  
+34969>>>>>        Get phoSessionDD to hoSessionDD
+34970>>>>>        Get phoUserDD to hoUserDD
+34971>>>>>        
+34971>>>>>        Get pbLogWebSession to bLogWebSession
+34972>>>>>        Get peLoginMode to eLoginMode
+34973>>>>>        
+34973>>>>>        // for this object, you can only disable logging if login completely is disabled
+34973>>>>>        If (not(bLogWebSession) and (eLoginMode<>lmLoginNone)) Begin
+34975>>>>>            Error DFERR_PROGRAM C_$WebSessionLoggingMustBeEnabled
+34976>>>>>>
+34976>>>>>            Function_Return False
+34977>>>>>        End
+34977>>>>>>
+34977>>>>>
+34977>>>>>        //  Clear session properties
+34977>>>>>        Set psSessionKey to ""
+34978>>>>>        Send UpdateSessionProperties True
+34979>>>>>        
+34979>>>>>        If not bLogWebSession Begin
+34981>>>>>            Forward Get ValidateSession sSessionKey to bResult
+34983>>>>>            Function_Return bResult
+34984>>>>>        End        
+34984>>>>>>
+34984>>>>>        
+34984>>>>>        Move False to bResult
+34985>>>>>        Get piSessionTimeout to iSessionTimeout 
+34986>>>>>        
+34986>>>>>        //  Check if session exists
+34986>>>>>        Send Clear of hoSessionDD
+34987>>>>>        Move sSessionKey to WebAppSession.SessionKey
+34988>>>>>        Send Find of hoSessionDD EQ Index.1
+34989>>>>>            
+34989>>>>>        If (Found) Begin
+34991>>>>>            //  Calculate timespan between now and last access time
+34991>>>>>            Move (CurrentDateTime()) to dtCurrent
+34992>>>>>            Move WebAppSession.LastAccessDate to dtLastAccess
+34993>>>>>            Get StringToTime of hoSessionDD dtLastAccess WebAppSession.LastAccessTime to dtLastAccess
+34994>>>>>            Move (dtCurrent - dtLastAccess) to tsDiff
+34995>>>>>            Move (SpanTotalMinutes(tsDiff)) to iSpanMinutes
+34996>>>>>            
+34996>>>>>            //  Check if session didn't time out
+34996>>>>>            If (IsDateValid(dtLastAccess) and (iSessionTimeout <= 0 or (iSpanMinutes < iSessionTimeout)) and WebAppSession.Active = "Y") Begin
+34998>>>>>                Forward Get ValidateSession sSessionKey to bResult
+35000>>>>>                   
+35000>>>>>                If (bResult) Begin
+35002>>>>>                    //  Update session record
+35002>>>>>                    Get TimeToString of hoSessionDD dtCurrent to sTime 
+35003>>>>>                    Set Field_Changed_Value of hoSessionDD Field WebAppSession.LastAccessDate to dtCurrent
+35004>>>>>                    Set Field_Changed_Value of hoSessionDD Field WebAppSession.LastAccessTime to sTime
+35005>>>>>                    Set Field_Changed_Value of hoSessionDD Field WebAppSession.UseCount to (WebAppSession.UseCount + 1)
+35006>>>>>                    Get Request_Validate of hoSessionDD to iErr
+35007>>>>>                    If (iErr) Begin
+35009>>>>>                        // this should not happen. If it does its a programming error
+35009>>>>>                        Error DFERR_PROGRAM C_$WebAppSesionValidateFailed
+35010>>>>>>
+35010>>>>>                        Function_Return False
+35011>>>>>                    End
+35011>>>>>>
+35011>>>>>                    Send Request_Save of hoSessionDD
+35012>>>>>                    
+35012>>>>>                    //  Update user properties
+35012>>>>>                    Send UpdateSessionProperties False
+35013>>>>>                End
+35013>>>>>>
+35013>>>>>            End
+35013>>>>>>
+35013>>>>>            Else Begin
+35014>>>>>                // Test the Creating New Session Flag to protect against infinite recursion....
+35014>>>>>                Get pbCreatingNewSession to bCreatingNewSession
+35015>>>>>                
+35015>>>>>                If (not(bCreatingNewSession)) Begin
+35017>>>>>                    Set pbCreatingNewSession to True                    
+35018>>>>>                    Get RecreateSession of ghoWebApp to bResult
+35019>>>>>                    Set pbCreatingNewSession to False
+35020>>>>>                    
+35020>>>>>                    If (not(bLoadWebApp)) Begin
+35022>>>>>                        Move False to bResult   //  We can only continue immediately if we were loading the webapp, other operations are not allowed!
+35023>>>>>                        Error DFERR_WEBAPP_SESSION_TIMEOUT "Your application session has timed out or is inactive, please login again."
+35024>>>>>>
+35024>>>>>                        Send NavigateRefresh of ghoWebApp          // refresh the WebApp at the client (triggers a login)
+35025>>>>>                    End
+35025>>>>>>
+35025>>>>>                End
+35025>>>>>>
+35025>>>>>            End
+35025>>>>>>
+35025>>>>>        End
+35025>>>>>>
+35025>>>>>        Else Begin
+35026>>>>>            Error DFERR_WEBAPP_BAD_SESSION_KEY "Session key not known (reload page to recreate session)"
+35027>>>>>>
+35027>>>>>        End
+35027>>>>>>
 35027>>>>>        
-35027>>>>>        Get phoSessionDD to hoSessionDD
-35028>>>>>        Get phoUserDD to hoUserDD
-35029>>>>>        Integer iErr eLoginMode
-35029>>>>>        
-35029>>>>>        // Refind session record
-35029>>>>>        Get psSessionKey to sSessionKey
-35030>>>>>        Send Clear of hoSessionDD
-35031>>>>>        Move sSessionKey to WebAppSession.SessionKey
-35032>>>>>        Send Find of hoSessionDD EQ Index.1
+35027>>>>>        Function_Return bResult
+35028>>>>>    End_Function
+35029>>>>>    
+35029>>>>>    Function UserLogin String sLoginName String sPassword Returns Boolean
+35031>>>>>        String sSessionKey sUserPassword
+35031>>>>>        Handle hoSessionDD hoUserDD
+35031>>>>>        Boolean bMatch  
+35031>>>>>        
+35031>>>>>        Get phoSessionDD to hoSessionDD
+35032>>>>>        Get phoUserDD to hoUserDD
+35033>>>>>        Integer iErr eLoginMode
 35033>>>>>        
-35033>>>>>        If (Found and WebAppSession.SessionKey = sSessionKey) Begin
-35035>>>>>            Get peLoginMode to eLoginMode
-35036>>>>>            
-35036>>>>>            //  Find the user
-35036>>>>>            Move sLoginName to WebAppUser.LoginName
-35037>>>>>            Send Find of hoUserDD EQ Index.1
-35038>>>>>            
-35038>>>>>            // Check username and password
-35038>>>>>            If (Found and (Lowercase(sLoginName) = Lowercase(Trim(WebAppUser.LoginName)))) Begin
-35040>>>>>                Get Field_Current_Value of hoUserDD Field WebAppUser.Password to sUserPassword
-35041>>>>>                Get ComparePasswords (Trim(sUserPassword)) (Trim(sPassword)) to bMatch
-35042>>>>>                
-35042>>>>>                If (bMatch) Begin
-35044>>>>>                    // Store the login
-35044>>>>>                    Set Field_Changed_Value of hoUserDD Field WebAppUser.LastLogin to (CurrentDateTime())
-35045>>>>>                    Get Request_Validate of hoSessionDD to iErr
-35046>>>>>                    If (iErr) Begin
-35048>>>>>                        // this should not happen. If it does its a programming error
-35048>>>>>                        Error DFERR_PROGRAM C_$WebAppSesionValidateFailed
-35049>>>>>>
-35049>>>>>                        Function_Return False
-35050>>>>>                    End
-35050>>>>>>
-35050>>>>>                    
-35050>>>>>                    Send Request_Save of hoSessionDD
-35051>>>>>                    
-35051>>>>>                    // Update session properties
-35051>>>>>                    Send UpdateSessionProperties False
-35052>>>>>                    Send NotifyChangeRights
-35053>>>>>                    Function_Return True
-35054>>>>>                End
+35033>>>>>        // Refind session record
+35033>>>>>        Get psSessionKey to sSessionKey
+35034>>>>>        Send Clear of hoSessionDD
+35035>>>>>        Move sSessionKey to WebAppSession.SessionKey
+35036>>>>>        Send Find of hoSessionDD EQ Index.1
+35037>>>>>        
+35037>>>>>        If (Found and WebAppSession.SessionKey = sSessionKey) Begin
+35039>>>>>            Get peLoginMode to eLoginMode
+35040>>>>>            
+35040>>>>>            //  Find the user
+35040>>>>>            Move sLoginName to WebAppUser.LoginName
+35041>>>>>            Send Find of hoUserDD EQ Index.1
+35042>>>>>            
+35042>>>>>            // Check username and password
+35042>>>>>            If (Found and (Lowercase(sLoginName) = Lowercase(Trim(WebAppUser.LoginName)))) Begin
+35044>>>>>                Get Field_Current_Value of hoUserDD Field WebAppUser.Password to sUserPassword
+35045>>>>>                Get ComparePasswords (Trim(sUserPassword)) (Trim(sPassword)) to bMatch
+35046>>>>>                
+35046>>>>>                If (bMatch) Begin
+35048>>>>>                    // Store the login
+35048>>>>>                    Set Field_Changed_Value of hoUserDD Field WebAppUser.LastLogin to (CurrentDateTime())
+35049>>>>>                    Get Request_Validate of hoSessionDD to iErr
+35050>>>>>                    If (iErr) Begin
+35052>>>>>                        // this should not happen. If it does its a programming error
+35052>>>>>                        Error DFERR_PROGRAM C_$WebAppSesionValidateFailed
+35053>>>>>>
+35053>>>>>                        Function_Return False
+35054>>>>>                    End
 35054>>>>>>
-35054>>>>>                Else Begin
-35055>>>>>                    //  We should rely directly on this buffer elsewhere but just be sure
-35055>>>>>                    Send Clear of hoUserDD
-35056>>>>>                End
-35056>>>>>>
-35056>>>>>            End
-35056>>>>>>
-35056>>>>>        End
-35056>>>>>>
-35056>>>>>          
-35056>>>>>        Function_Return False
-35057>>>>>    End_Function
-35058>>>>>    
-35058>>>>>    Function IsLoggedIn Returns Boolean
-35060>>>>>        String sLoginName
-35060>>>>>        Boolean bLogWebSession bLoggedIn
-35060>>>>>        
-35060>>>>>        Get pbLogWebSession to bLogWebSession
-35061>>>>>        If not bLogWebSession Begin
-35063>>>>>            Forward Get IsLoggedIn to bLoggedIn
-35065>>>>>            Function_Return bLoggedIn
-35066>>>>>        End
-35066>>>>>>
-35066>>>>>        
-35066>>>>>        Get psLoginName to sLoginName
-35067>>>>>        
-35067>>>>>        Function_Return (sLoginName <> "")
-35068>>>>>    End_Function
-35069>>>>>    
-35069>>>>>    
-35069>>>>>    //
-35069>>>>>    // This procedure is called when validating a session and after logging in. Its purpose is to 
-35069>>>>>    // update properties based on the session and user data. Augment this function to update 
-35069>>>>>    // properties based on the session / user table. Note that WebAppUser and WebAppSession contain
-35069>>>>>    // the right records when this procedure is called.
-35069>>>>>    //
-35069>>>>>    // Params:
-35069>>>>>    //      bClear   True if the procedure is called before session validation to clear properties.
-35069>>>>>    //
-35069>>>>>    Procedure UpdateSessionProperties Boolean bClear
-35071>>>>>        Handle hoUserDD
+35054>>>>>                    
+35054>>>>>                    Send Request_Save of hoSessionDD
+35055>>>>>                    
+35055>>>>>                    // Update session properties
+35055>>>>>                    Send UpdateSessionProperties False
+35056>>>>>                    Send NotifyChangeRights
+35057>>>>>                    Function_Return True
+35058>>>>>                End
+35058>>>>>>
+35058>>>>>                Else Begin
+35059>>>>>                    //  We should rely directly on this buffer elsewhere but just be sure
+35059>>>>>                    Send Clear of hoUserDD
+35060>>>>>                End
+35060>>>>>>
+35060>>>>>            End
+35060>>>>>>
+35060>>>>>        End
+35060>>>>>>
+35060>>>>>          
+35060>>>>>        Function_Return False
+35061>>>>>    End_Function
+35062>>>>>    
+35062>>>>>    Function IsLoggedIn Returns Boolean
+35064>>>>>        String sLoginName
+35064>>>>>        Boolean bLogWebSession bLoggedIn
+35064>>>>>        
+35064>>>>>        Get pbLogWebSession to bLogWebSession
+35065>>>>>        If not bLogWebSession Begin
+35067>>>>>            Forward Get IsLoggedIn to bLoggedIn
+35069>>>>>            Function_Return bLoggedIn
+35070>>>>>        End
+35070>>>>>>
+35070>>>>>        
+35070>>>>>        Get psLoginName to sLoginName
 35071>>>>>        
-35071>>>>>        Get phoUserDD to hoUserDD
-35072>>>>>        
-35072>>>>>        //  Update user properties
-35072>>>>>        If (not(bClear) and HasRecord(hoUserDD)) Begin
-35074>>>>>            Set psUsername to (Trim(WebAppUser.FullName))
-35075>>>>>            Set psLoginName to (Trim(WebAppUser.LoginName))
-35076>>>>>            Set piUserRights to WebAppUser.Rights
-35077>>>>>            
-35077>>>>>            Send OnSessionPropertiesSet 
-35078>>>>>        End
-35078>>>>>>
-35078>>>>>        Else Begin
-35079>>>>>            Set psUsername to ""
-35080>>>>>            Set psLoginName to ""
-35081>>>>>            Set piUserRights to 0
-35082>>>>>            
-35082>>>>>            Send OnSessionPropertiesClear
-35083>>>>>        End
-35083>>>>>>
-35083>>>>>    End_Procedure
-35084>>>>>    
-35084>>>>>    //
-35084>>>>>    // This function is called to perform the password comparison. It gets the entered password and
-35084>>>>>    // the password value of the user table as parameters. The WebAppUser buffer will contain the
-35084>>>>>    // right record. This function can be augmented to implement security features like storing the
-35084>>>>>    // password as a hashed value.
-35084>>>>>    //
-35084>>>>>    // Params:
-35084>>>>>    //      sUserPassword       Value of the WebAppUser.Password field.
-35084>>>>>    //      sEnteredPassword    Value entered on the login screen during login.
-35084>>>>>    //
-35084>>>>>    Function ComparePasswords String sUserPassword String sEnteredPassword Returns Boolean
-35086>>>>>        Function_Return (sUserPassword = sEnteredPassword)
-35087>>>>>    End_Function
+35071>>>>>        Function_Return (sLoginName <> "")
+35072>>>>>    End_Function
+35073>>>>>    
+35073>>>>>    
+35073>>>>>    //
+35073>>>>>    // This procedure is called when validating a session and after logging in. Its purpose is to 
+35073>>>>>    // update properties based on the session and user data. Augment this function to update 
+35073>>>>>    // properties based on the session / user table. Note that WebAppUser and WebAppSession contain
+35073>>>>>    // the right records when this procedure is called.
+35073>>>>>    //
+35073>>>>>    // Params:
+35073>>>>>    //      bClear   True if the procedure is called before session validation to clear properties.
+35073>>>>>    //
+35073>>>>>    Procedure UpdateSessionProperties Boolean bClear
+35075>>>>>        Handle hoUserDD
+35075>>>>>        
+35075>>>>>        Get phoUserDD to hoUserDD
+35076>>>>>        
+35076>>>>>        //  Update user properties
+35076>>>>>        If (not(bClear) and HasRecord(hoUserDD)) Begin
+35078>>>>>            Set psUsername to (Trim(WebAppUser.FullName))
+35079>>>>>            Set psLoginName to (Trim(WebAppUser.LoginName))
+35080>>>>>            Set piUserRights to WebAppUser.Rights
+35081>>>>>            
+35081>>>>>            Send OnSessionPropertiesSet 
+35082>>>>>        End
+35082>>>>>>
+35082>>>>>        Else Begin
+35083>>>>>            Set psUsername to ""
+35084>>>>>            Set psLoginName to ""
+35085>>>>>            Set piUserRights to 0
+35086>>>>>            
+35086>>>>>            Send OnSessionPropertiesClear
+35087>>>>>        End
+35087>>>>>>
+35087>>>>>    End_Procedure
 35088>>>>>    
-35088>>>>>    Procedure OnSessionPropertiesSet
-35090>>>>>        //  Empty event stub
-35090>>>>>    End_Procedure
-35091>>>>>    
-35091>>>>>    Procedure OnSessionPropertiesClear
-35093>>>>>        //  Empty event stub
-35093>>>>>    End_Procedure
-35094>>>>>    
-35094>>>>>    Procedure EndSession
-35096>>>>>        Integer iErr
-35096>>>>>        Boolean bLogWebSession
-35096>>>>>        Handle hoSessionDD       
-35096>>>>>        
-35096>>>>>        Get phoSessionDD to hoSessionDD
-35097>>>>>        Get pbLogWebSession to bLogWebSession
-35098>>>>>        If not bLogWebSession Begin
-35100>>>>>            Forward Send EndSession
-35102>>>>>            Procedure_Return
-35103>>>>>        End
-35103>>>>>>
-35103>>>>>            
-35103>>>>>        //  Check if session exists
-35103>>>>>        Send Clear of hoSessionDD
-35104>>>>>        Get psSessionKey to WebAppSession.SessionKey
-35105>>>>>        
-35105>>>>>        Send Find of hoSessionDD EQ Index.1
-35106>>>>>        If (Found) Begin
-35108>>>>>            Set Field_Changed_Value of hoSessionDD Field WebAppSession.Active to "N"
-35109>>>>>            Get Request_Validate of hoSessionDD to iErr
-35110>>>>>            If (iErr) Begin
-35112>>>>>                // this should not happen. If it does its a programming error
-35112>>>>>                Error DFERR_PROGRAM C_$WebAppSesionValidateFailed
-35113>>>>>>
-35113>>>>>                Procedure_Return
-35114>>>>>            End
-35114>>>>>>
-35114>>>>>            Send Request_Save of hoSessionDD
-35115>>>>>        End
-35115>>>>>>
-35115>>>>>    End_Procedure
-35116>>>>>
-35116>>>>>End_Class
-35117>>>>>
-35117>>>
-35117>>>Object oSessionManager is a cWebSessionManagerStandard
-35119>>>End_Object
-35120>>>
-35120>>>
-35120>    Use Login.wo
+35088>>>>>    //
+35088>>>>>    // This function is called to perform the password comparison. It gets the entered password and
+35088>>>>>    // the password value of the user table as parameters. The WebAppUser buffer will contain the
+35088>>>>>    // right record. This function can be augmented to implement security features like storing the
+35088>>>>>    // password as a hashed value.
+35088>>>>>    //
+35088>>>>>    // Params:
+35088>>>>>    //      sUserPassword       Value of the WebAppUser.Password field.
+35088>>>>>    //      sEnteredPassword    Value entered on the login screen during login.
+35088>>>>>    //
+35088>>>>>    Function ComparePasswords String sUserPassword String sEnteredPassword Returns Boolean
+35090>>>>>        Function_Return (sUserPassword = sEnteredPassword)
+35091>>>>>    End_Function
+35092>>>>>    
+35092>>>>>    Procedure OnSessionPropertiesSet
+35094>>>>>        //  Empty event stub
+35094>>>>>    End_Procedure
+35095>>>>>    
+35095>>>>>    Procedure OnSessionPropertiesClear
+35097>>>>>        //  Empty event stub
+35097>>>>>    End_Procedure
+35098>>>>>    
+35098>>>>>    Procedure EndSession
+35100>>>>>        Integer iErr
+35100>>>>>        Boolean bLogWebSession
+35100>>>>>        Handle hoSessionDD       
+35100>>>>>        
+35100>>>>>        Get phoSessionDD to hoSessionDD
+35101>>>>>        Get pbLogWebSession to bLogWebSession
+35102>>>>>        If not bLogWebSession Begin
+35104>>>>>            Forward Send EndSession
+35106>>>>>            Procedure_Return
+35107>>>>>        End
+35107>>>>>>
+35107>>>>>            
+35107>>>>>        //  Check if session exists
+35107>>>>>        Send Clear of hoSessionDD
+35108>>>>>        Get psSessionKey to WebAppSession.SessionKey
+35109>>>>>        
+35109>>>>>        Send Find of hoSessionDD EQ Index.1
+35110>>>>>        If (Found) Begin
+35112>>>>>            Set Field_Changed_Value of hoSessionDD Field WebAppSession.Active to "N"
+35113>>>>>            Get Request_Validate of hoSessionDD to iErr
+35114>>>>>            If (iErr) Begin
+35116>>>>>                // this should not happen. If it does its a programming error
+35116>>>>>                Error DFERR_PROGRAM C_$WebAppSesionValidateFailed
+35117>>>>>>
+35117>>>>>                Procedure_Return
+35118>>>>>            End
+35118>>>>>>
+35118>>>>>            Send Request_Save of hoSessionDD
+35119>>>>>        End
+35119>>>>>>
+35119>>>>>    End_Procedure
+35120>>>>>
+35120>>>>>End_Class
+35121>>>>>
+35121>>>
+35121>>>Object oSessionManager is a cWebSessionManagerStandard
+35123>>>End_Object
+35124>>>
+35124>>>
+35124>    Use Login.wo
 Including file: Login.wo    (D:\dataflex projects\comunitasolidaliengine\AppSrc\Login.wo)
-35120>>>Use cWebView.pkg
-35120>>>Use cWebForm.pkg
-35120>>>Use cWebButton.pkg
-35120>>>Use cWebPanel.pkg
-35120>>>Use cWebLabel.pkg
-35120>>>Use cWebSpacer.pkg
-35120>>>Use cWebImage.pkg
-35120>>>
-35120>>>Object oLogin is a cWebView
-35122>>>    Set piMinWidth to 250
-35123>>>    Set piMaxWidth to 420
-35124>>>    Set pbLoginModeEnforced to False
-35125>>>    Set piColumnCount to 12
-35126>>>    Set psCSSClass to "LoginView"
-35127>>>    Set pbServerOnSubmit to True
-35128>>>    
-35128>>>    Set psStateViewName to "Login"
-35129>>>    Set pbStateReplace to True  // Always replace the state so the login never becomes its own history item
-35130>>>    
-35130>>>    Property String psPrevStateHash ""  // Remember the state hash that the user navigated too so we can redirect after login
+35124>>>Use cWebView.pkg
+35124>>>Use cWebForm.pkg
+35124>>>Use cWebButton.pkg
+35124>>>Use cWebPanel.pkg
+35124>>>Use cWebLabel.pkg
+35124>>>Use cWebSpacer.pkg
+35124>>>Use cWebImage.pkg
+35124>>>
+35124>>>Object oLogin is a cWebView
+35126>>>    Set piMinWidth to 250
+35127>>>    Set piMaxWidth to 420
+35128>>>    Set pbLoginModeEnforced to False
+35129>>>    Set piColumnCount to 12
+35130>>>    Set psCSSClass to "LoginView"
+35131>>>    Set pbServerOnSubmit to True
+35132>>>    
+35132>>>    Set psStateViewName to "Login"
+35133>>>    Set pbStateReplace to True  // Always replace the state so the login never becomes its own history item
 35134>>>    
-35134>>>    Delegate Set phoLoginView to Self
-35136>>>    
-35136>>>    Object oTopSpacer is a cWebSpacer
-35138>>>        Set pbFillHeight to True
-35139>>>        Set piColumnSpan to 12
-35140>>>    End_Object
-35141>>>    
-35141>>>    Object oWarning is a cWebLabel
-35143>>>        Set pbVisible to False
-35144>>>        Set psCaption to "Invalid User ID or password. \n\rHint: 'Guest' & 'guest'."
-35145>>>        Set peAlign to alignCenter
-35146>>>        Set piColumnSpan to 12
-35147>>>        Set psCSSClass to "LoginWarning"
-35148>>>    End_Object
-35149>>>    
-35149>>>    Object oLogo is a cWebImage
-35151>>>        Set piColumnSpan to 10
-35152>>>        Set psUrl to "images/DF_Logo_Retina.png"
-35153>>>        Set pePosition to wiFit
-35154>>>        Set piColumnIndex to 1
-35155>>>        Set piHeight to 160
-35156>>>        
-35156>>>        WebSetResponsive piHeight rmMobile to 100  // Best for small smart phones
-35157>>>    End_Object
-35158>>>    
-35158>>>    Object oLoginName is a cWebForm
-35160>>>        Set psLabel to "User ID:"
-35161>>>        Set peLabelPosition to lpTop
-35162>>>        Set piMaxLength to 20
-35163>>>        Set piColumnIndex to 1
-35164>>>        Set pbShowLabel to False
-35165>>>        Set psPlaceHolder to "loginname"
-35166>>>        Set piColumnSpan to 10
-35167>>>        Set psAutoComplete to "username"
-35168>>>    End_Object
-35169>>>    
-35169>>>    Object oPassword is a cWebForm
-35171>>>        Set psLabel to "Password:"
-35172>>>        Set pbPassword to True
-35173>>>        Set peLabelAlign to alignLeft
-35174>>>        Set piMaxLength to 20
-35175>>>        Set peLabelPosition to lpTop
-35176>>>        Set pbShowLabel to False
-35177>>>        Set psPlaceHolder to "password"
-35178>>>        Set piColumnSpan to 10
-35179>>>        Set piColumnIndex to 1
-35180>>>        Set psAutoComplete to "current-password"
-35181>>>    End_Object
-35182>>>    
-35182>>>    Object oWebSpacer1 is a cWebSpacer
-35184>>>        Set piColumnSpan to 12
-35185>>>        Set piHeight to 10
-35186>>>    End_Object
-35187>>>    
-35187>>>    Object oLoginButton is a cWebButton
-35189>>>        Set pbShowLabel to False
-35190>>>        Set psCaption to "sign in"
-35191>>>        Set pbServerOnClick to True
-35192>>>        Set piColumnSpan to 10
-35193>>>        Set piColumnIndex to 1
-35194>>>        
-35194>>>        Procedure OnClick
-35197>>>            Send DoLogin
-35198>>>        End_Procedure
-35199>>>    End_Object
-35200>>>    
-35200>>>    Object oBottomSpacer is a cWebSpacer
-35202>>>        Set pbFillHeight to True
-35203>>>        Set piColumnSpan to 12
-35204>>>    End_Object
-35205>>>    
-35205>>>    Procedure DoLogin
-35208>>>        String sLoginName sPassword sPrevStateHash
-35208>>>        Boolean bResult
-35208>>>        
-35208>>>        WebGet psValue of oLoginName to sLoginName
-35211>>>        WebGet psValue of oPassword to sPassword
-35214>>>        
-35214>>>        Get UserLogin of ghoWebSessionManager sLoginName sPassword to bResult
-35215>>>        
-35215>>>        If (bResult) Begin
-35217>>>            Send Hide of oLogin
-35218>>>            Send ShowHeader of ghoWebApp
-35219>>>            WebSet psCSSClass of ghoWebApp to ""
-35220>>>            
-35220>>>            WebGet psPrevStateHash to sPrevStateHash
-35223>>>            Send NavigateToStateHash of ghoWebApp sPrevStateHash True
+35134>>>    Property String psPrevStateHash ""  // Remember the state hash that the user navigated too so we can redirect after login
+35138>>>    
+35138>>>    Delegate Set phoLoginView to Self
+35140>>>    
+35140>>>    Object oTopSpacer is a cWebSpacer
+35142>>>        Set pbFillHeight to True
+35143>>>        Set piColumnSpan to 12
+35144>>>    End_Object
+35145>>>    
+35145>>>    Object oWarning is a cWebLabel
+35147>>>        Set pbVisible to False
+35148>>>        Set psCaption to "Invalid User ID or password. \n\rHint: 'Guest' & 'guest'."
+35149>>>        Set peAlign to alignCenter
+35150>>>        Set piColumnSpan to 12
+35151>>>        Set psCSSClass to "LoginWarning"
+35152>>>    End_Object
+35153>>>    
+35153>>>    Object oLogo is a cWebImage
+35155>>>        Set piColumnSpan to 10
+35156>>>        Set psUrl to "images/DF_Logo_Retina.png"
+35157>>>        Set pePosition to wiFit
+35158>>>        Set piColumnIndex to 1
+35159>>>        Set piHeight to 160
+35160>>>        
+35160>>>        WebSetResponsive piHeight rmMobile to 100  // Best for small smart phones
+35161>>>    End_Object
+35162>>>    
+35162>>>    Object oLoginName is a cWebForm
+35164>>>        Set psLabel to "User ID:"
+35165>>>        Set peLabelPosition to lpTop
+35166>>>        Set piMaxLength to 20
+35167>>>        Set piColumnIndex to 1
+35168>>>        Set pbShowLabel to False
+35169>>>        Set psPlaceHolder to "loginname"
+35170>>>        Set piColumnSpan to 10
+35171>>>        Set psAutoComplete to "username"
+35172>>>    End_Object
+35173>>>    
+35173>>>    Object oPassword is a cWebForm
+35175>>>        Set psLabel to "Password:"
+35176>>>        Set pbPassword to True
+35177>>>        Set peLabelAlign to alignLeft
+35178>>>        Set piMaxLength to 20
+35179>>>        Set peLabelPosition to lpTop
+35180>>>        Set pbShowLabel to False
+35181>>>        Set psPlaceHolder to "password"
+35182>>>        Set piColumnSpan to 10
+35183>>>        Set piColumnIndex to 1
+35184>>>        Set psAutoComplete to "current-password"
+35185>>>    End_Object
+35186>>>    
+35186>>>    Object oWebSpacer1 is a cWebSpacer
+35188>>>        Set piColumnSpan to 12
+35189>>>        Set piHeight to 10
+35190>>>    End_Object
+35191>>>    
+35191>>>    Object oLoginButton is a cWebButton
+35193>>>        Set pbShowLabel to False
+35194>>>        Set psCaption to "sign in"
+35195>>>        Set pbServerOnClick to True
+35196>>>        Set piColumnSpan to 10
+35197>>>        Set piColumnIndex to 1
+35198>>>        
+35198>>>        Procedure OnClick
+35201>>>            Send DoLogin
+35202>>>        End_Procedure
+35203>>>    End_Object
+35204>>>    
+35204>>>    Object oBottomSpacer is a cWebSpacer
+35206>>>        Set pbFillHeight to True
+35207>>>        Set piColumnSpan to 12
+35208>>>    End_Object
+35209>>>    
+35209>>>    Procedure DoLogin
+35212>>>        String sLoginName sPassword sPrevStateHash
+35212>>>        Boolean bResult
+35212>>>        
+35212>>>        WebGet psValue of oLoginName to sLoginName
+35215>>>        WebGet psValue of oPassword to sPassword
+35218>>>        
+35218>>>        Get UserLogin of ghoWebSessionManager sLoginName sPassword to bResult
+35219>>>        
+35219>>>        If (bResult) Begin
+35221>>>            Send Hide of oLogin
+35222>>>            Send ShowHeader of ghoWebApp
+35223>>>            WebSet psCSSClass of ghoWebApp to ""
 35224>>>            
-35224>>>            // clear the login values. we don't want to return the login id & password as synchronized properties....
-35224>>>            WebSet psValue of oLoginName to ""
-35225>>>            WebSet psValue of oPassword  to ""
-35226>>>            WebSet pbVisible of oWarning to False
-35227>>>        End
-35227>>>>
-35227>>>        Else Begin
-35228>>>            WebSet pbVisible of oWarning to True
-35229>>>        End
-35229>>>>
-35229>>>    End_Procedure
-35230>>>    
-35230>>>    Procedure OnSubmit
-35233>>>        Send DoLogin
-35234>>>    End_Procedure
-35235>>>    
-35235>>>    Procedure OnLoad
-35238>>>        String sPrevStateHash sView
-35238>>>        
-35238>>>        Forward Send OnLoad
-35240>>>        
-35240>>>        //  Store the current state so we can go back to that later (only if it points to a different view)
-35240>>>        Get StateHash of ghoWebApp to sPrevStateHash
-35241>>>        Send ParseViewStateHash sPrevStateHash (&sView)
-35242>>>        If (Lowercase(sView) <> Lowercase(psStateViewName(Self))) Begin
-35244>>>            WebSet psPrevStateHash to sPrevStateHash
-35245>>>        End
-35245>>>>
-35245>>>        
-35245>>>    End_Procedure
-35246>>>    
-35246>>>    Procedure OnBeforeShow
-35249>>>        //  Hide header & apply nice background style
-35249>>>        Send HideHeader to ghoWebApp
-35250>>>        WebSet psCSSClass of ghoWebApp to "LoginBackground"
-35251>>>    End_Procedure
-35252>>>    
-35252>>>End_Object
-35253>>>
-35253>>>
-35253>>>
-35253>>>
-35253>    Use WebResourceManager.wo
+35224>>>            WebGet psPrevStateHash to sPrevStateHash
+35227>>>            Send NavigateToStateHash of ghoWebApp sPrevStateHash True
+35228>>>            
+35228>>>            // clear the login values. we don't want to return the login id & password as synchronized properties....
+35228>>>            WebSet psValue of oLoginName to ""
+35229>>>            WebSet psValue of oPassword  to ""
+35230>>>            WebSet pbVisible of oWarning to False
+35231>>>        End
+35231>>>>
+35231>>>        Else Begin
+35232>>>            WebSet pbVisible of oWarning to True
+35233>>>        End
+35233>>>>
+35233>>>    End_Procedure
+35234>>>    
+35234>>>    Procedure OnSubmit
+35237>>>        Send DoLogin
+35238>>>    End_Procedure
+35239>>>    
+35239>>>    Procedure OnLoad
+35242>>>        String sPrevStateHash sView
+35242>>>        
+35242>>>        Forward Send OnLoad
+35244>>>        
+35244>>>        //  Store the current state so we can go back to that later (only if it points to a different view)
+35244>>>        Get StateHash of ghoWebApp to sPrevStateHash
+35245>>>        Send ParseViewStateHash sPrevStateHash (&sView)
+35246>>>        If (Lowercase(sView) <> Lowercase(psStateViewName(Self))) Begin
+35248>>>            WebSet psPrevStateHash to sPrevStateHash
+35249>>>        End
+35249>>>>
+35249>>>        
+35249>>>    End_Procedure
+35250>>>    
+35250>>>    Procedure OnBeforeShow
+35253>>>        //  Hide header & apply nice background style
+35253>>>        Send HideHeader to ghoWebApp
+35254>>>        WebSet psCSSClass of ghoWebApp to "LoginBackground"
+35255>>>    End_Procedure
+35256>>>    
+35256>>>End_Object
+35257>>>
+35257>>>
+35257>>>
+35257>>>
+35257>    Use WebResourceManager.wo
 Including file: WebResourceManager.wo    (D:\dataflex projects\comunitasolidaliengine\AppSrc\WebResourceManager.wo)
-35253>>>Use cWebResourceManager.pkg
-35253>>>
-35253>>>Object oWebResourceManager is a cWebResourceManager
-35255>>>End_Object
-35256>    
-35256>    Use Dashboard.wo
+35257>>>Use cWebResourceManager.pkg
+35257>>>
+35257>>>Object oWebResourceManager is a cWebResourceManager
+35259>>>End_Object
+35260>    
+35260>    Use Dashboard.wo
 Including file: Dashboard.wo    (D:\dataflex projects\comunitasolidaliengine\AppSrc\Dashboard.wo)
-35256>>>Use cWebView.pkg
-35256>>>Use cWebPanel.pkg
-35256>>>Use cWebForm.pkg
-35256>>>Use cWebButton.pkg
-35256>>>Use cWebGroup.pkg
-35256>>>Use cWebSpacer.pkg
-35256>>>Use cWebHtmlBox.pkg
-35256>>>Use cWebMenuGroup.pkg
-35256>>>Use cWebMenuItem.pkg
-35256>>>Use cWebLabel.pkg
-35256>>>Use cWebList.pkg
-35256>>>Use cWebColumn.pkg
-35256>>>Use carticoliDataDictionary.dd
+35260>>>Use cWebView.pkg
+35260>>>Use cWebPanel.pkg
+35260>>>Use cWebForm.pkg
+35260>>>Use cWebButton.pkg
+35260>>>Use cWebGroup.pkg
+35260>>>Use cWebSpacer.pkg
+35260>>>Use cWebHtmlBox.pkg
+35260>>>Use cWebMenuGroup.pkg
+35260>>>Use cWebMenuItem.pkg
+35260>>>Use cWebLabel.pkg
+35260>>>Use cWebList.pkg
+35260>>>Use cWebColumn.pkg
+35260>>>Use carticoliDataDictionary.dd
 Including file: carticoliDataDictionary.dd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\carticoliDataDictionary.dd)
-35256>>>>>Use DataDict.pkg
-35256>>>>>
-35256>>>>>Open articoli
+35260>>>>>Use DataDict.pkg
+35260>>>>>
+35260>>>>>Open articoli
 Including file: articoli.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\articoli.fd)
-35258>>>>>
-35258>>>>>Class carticoliDataDictionary is a DataDictionary
-35259>>>>>    
-35259>>>>>    Procedure Construct_Object
-35261>>>>>        Forward Send Construct_Object
-35263>>>>>        Set Main_File to articoli.File_Number
-35264>>>>>
-35264>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
-35265>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
-35266>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
-35267>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+35262>>>>>
+35262>>>>>Class carticoliDataDictionary is a DataDictionary
+35263>>>>>    
+35263>>>>>    Procedure Construct_Object
+35265>>>>>        Forward Send Construct_Object
+35267>>>>>        Set Main_File to articoli.File_Number
 35268>>>>>
-35268>>>>>    End_Procedure
-35269>>>>>    
-35269>>>>>    Procedure creating
-35271>>>>>        Forward Send Creating
-35273>>>>>        Date dtoday
-35273>>>>>        Sysdate dtoday
-35274>>>>>        Move dtoday to articoli.datareg
-35275>>>>>        
-35275>>>>>    End_Procedure
-35276>>>>>
-35276>>>>>End_Class
-35277>>>
-35277>>> 
-35277>>> Struct stFoundProducts
-35277>>>    String sid
-35277>>>    String sdes
-35277>>>    Number nrate
-35277>>>    Integer icategoriaid
-35277>>>    String scity
-35277>>> End_Struct
-35277>>>
-35277>>>Use sql.pkg
-35277>>> 
-35277>>>Object oDashboard is a cWebView
-35279>>>    Object OARTICOLISHOP_DD is a carticoliDataDictionary
-35281>>>    End_Object
-35282>>>
-35282>>>    Object oSqlHandleManager is a cSQLHandleManager
-35284>>>    End_Object
-35285>>>    
-35285>>>    Set Main_DD to OARTICOLISHOP_DD
-35286>>>    Set Server to OARTICOLISHOP_DD
-35287>>>
-35287>>>    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-35287>>>    // Add a DDO Structure 
-35287>>>    //
-35287>>>    // There is no need to synchronize a DD structure on the client so we do
-35287>>>    // not set the Server property or send ADDOStructure. We will simply use
-35287>>>    // DDO's to mine data and generate HTML for our cWebHTMLBox objects.
-35287>>>    // It is the HTML in these objects that is sent to the client each time 
-35287>>>    // this page is shown.
-35287>>>    //
-35287>>>    // Also, it is important for the drill-down Navigation interface that we
-35287>>>    // do not set the Server property to some DDO because this will affect 
-35287>>>    // constraints in the next view that we navigate to.
-35287>>>    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-35287>>>
-35287>>>    Set piMaxWidth to 1024
-35288>>>    
-35288>>>    Set psCaption to "Dashboard"
-35289>>>    Set peViewType to vtUndefined
-35290>>>    Set pbShowCaption to False
-35291>>>    Set psCSSClass to "Dashboard"
-35292>>>    
-35292>>>    Object oWebMainPanel is a cWebPanel
-35294>>>        Set piColumnCount to 24
-35295>>>        
-35295>>>        // - - - - - - - - - - - - - - -
-35295>>>        // Main Panel's Responsive Rules
-35295>>>        // - - - - - - - - - - - - - - -
-35295>>>        WebSetResponsive piColumnCount rmMobile to 1
-35296>>>        WebSetResponsive piColumnCount rmTabletPortrait to 16
-35297>>>    
-35297>>>        Object oTiles_grp is a cWebGroup
-35299>>>            Set piColumnSpan to 6
-35300>>>            Set pbShowBorder to False
-35301>>>            Set pbShowCaption to False
-35302>>>            Set piColumnCount to 12
-35303>>>            
-35303>>>            Set psCSSClass to "TilesGroup"
-35304>>>    
-35304>>>            Object oWelcomeTile is a cWebHtmlBox
-35306>>>                Set piColumnSpan to 7
-35307>>>                Set psCSSClass to "Tile Light"
-35308>>>                Set psHtml to '<div Class="WebCon_Sizer"><div class="Tile_Title">Welcome</div><div Class="Tile_Subtitle">--</div></div>'
-35309>>>    
-35309>>>                Procedure OnLoad
-35312>>>                    Send UpdateHTML ('<div class="WebCon_Sizer">' + ;                                     '<div class="Tile_Title">Welcome</div>' +;                                     '<div class="Tile_Subtitle">' - htmlEncode(psUserName(ghoWebSessionManager)) - '</div>' +;                                     '</div>')
-35313>>>                End_Procedure
-35314>>>                
-35314>>>            End_Object
-35315>>>            
-35315>>>        End_Object 
-35316>>>          Object oLatestActivity_grp is a cWebGroup
-35318>>>            Set piColumnSpan to 8
-35319>>>            Set piColumnIndex to 8
-35320>>>            Set pbShowBorder to False
-35321>>>            Set pbShowCaption to False
-35322>>>            Set piColumnCount to 12
-35323>>>            Set psCSSClass to "LatestActivity"
-35324>>>            
-35324>>>            Object oLatestActivity_lbl is a cWebLabel
-35326>>>                Set psCaption to "Ultimi articoli"
-35327>>>                Set piColumnSpan to 0
-35328>>>                Set psCSSClass to "LabelTitle"
-35329>>>            End_Object
-35330>>>        Object oLatestActivity_list is a cWebHtmlList
-35332>>>                Set Server to OARTICOLISHOP_DD
-35333>>>                Set psCSSClass to "LatestActivity"
-35334>>>                Set psHtmlBefore to '<ul>'
-35335>>>                Set psHtmlTemplate to '<li><div class="FirstLine MinorText">{{oarticoli_Date}}</div><div class="MainText">Articolo - {{oCodicearticolo}}</div><div class="MinorText">Desrizione {{odescrizione}}</div><div class="MainText">Comunità {{odescrizione}} </li>'
-35336>>>                Set psHtmlAfter to '</ul>'
-35337>>>                Set piLimitRows to 4
-35338>>>                Set pbReverseOrdering to True
-35339>>>                Set pbServerOnRowClick to True
-35340>>>                
-35340>>>                Object oarticoli_Date is a cWebColumn
-35342>>>                    Entry_Item articoli.datareg
-35343>>>                    Set psCaption to "data"
-35344>>>                    Set piWidth to 50
-35345>>>                End_Object
-35346>>>            
-35346>>>                Object oCodicearticolo is a cWebColumn
-35348>>>                    Entry_Item articoli.codarticolo
-35349>>>                    Set psCaption to "Codice articolo"
-35350>>>                    Set piWidth to 50
-35351>>>                End_Object
-35352>>>            
-35352>>>                Object odescrizione is a cWebColumn
-35354>>>                    Entry_Item articoli.descrizionesintetica
-35355>>>                    Set psCaption to "descrizione"
-35356>>>                    Set piWidth to 50
-35357>>>                End_Object
-35358>>>         
-35358>>>                  Object ocumunita is a cWebColumn
-35360>>>                    Entry_Item articoli.comunita
-35361>>>                    Set psCaption to "comunita"
-35362>>>                    Set piWidth to 50
-35363>>>                  End_Object 
-35364>>>                  
-35364>>>             //   WebRegisterPath ntNavigateForward oZoomOrder
-35364>>>                
-35364>>>                Procedure OnRowClick String sRowID
-35367>>>                //    Send NavigatePath
-35367>>>                End_Procedure
-35368>>>                
-35368>>>                Procedure OnGetNavigateForwardData tWebNavigateData  ByRef NavigateData Handle hoToView
-35371>>>                    Move True to NavigateData.bReadOnly
-35372>>>                End_Procedure
-35373>>>            End_Object
-35374>>>
-35374>>>        End_Object
-35375>>>
-35375>>>        Object oDynamicshop is a cWebGroup
-35377>>>            Set psCaption to "Ricerca articoli"
-35378>>>            Set piColumnCount to 12   
-35379>>>            
-35379>>>//            
-35379>>>//        Object oWebComboCategoria is a cWebCombo
-35379>>>//            Set pbAddEmptyItem to True
-35379>>>//            Set piColumnSpan to 4
-35379>>>//             WebSetResponsive piColumnSpan rmMobile to 2
-35379>>>//             Set pbShowLabel to False
-35379>>>//             
-35379>>>//            Set psEmptyItemDescription to (TranslateString("Tutte le categorie"))
-35379>>>//
-35379>>>//             Procedure OnFill
-35379>>>//                  String slanguage
-35379>>>//                  Forward Send OnFill
-35379>>>//                  WebGet pslanguage of oWebApp to slanguage
-35379>>>//                  Send AddComboItem -1  (TranslateString("Tutte le categorie"))
-35379>>>//                  For_All categoriemarketPlace by Index.2
-35379>>>//                    Do
-35379>>>//                    If (slanguage="IT") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione
-35379>>>//                     Else If (slanguage="DE") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_de
-35379>>>//                     Else If (slanguage="EN") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_en
-35379>>>//                     Else If (slanguage="ES") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_es
-35379>>>//                    Else If (slanguage="FR") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_fr
-35379>>>//                     Else If (slanguage="RU") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_ru
-35379>>>//                     Else Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione
-35379>>>//                      
-35379>>>//                  End_For_All
-35379>>>//             End_Procedure
-35379>>>//        End_Object
-35379>>>//        
-35379>>>
-35379>>>
-35379>>>        Object oWebFormRicerca is a cWebForm 
-35381>>>           
-35381>>>            Set pbPromptButton to True
-35382>>>            Set pbShowLabel to False
-35383>>>            Set piColumnIndex to 4
-35384>>>            WebSetResponsive piColumnSpan rmMobile to 4
-35385>>>            WebSetResponsive piColumnIndex rmMobile to 2
-35386>>>            
-35386>>>            Set pbServerOnPrompt to True
-35387>>>            Set piColumnSpan to 12
-35388>>>            Procedure onprompt 
-35391>>>                // ricerca sql
-35391>>>                stFoundProducts[] mystFoundProducts
-35391>>>                stFoundProducts[] mystFoundProducts
-35392>>>                String sSearchstring squery scategoria
-35392>>>                Boolean BFOUND
-35392>>>                WebGet psValue to sSearchstring 
-35395>>>              //  WebGet psValue of oWebComboCategoria to scategoria
-35395>>>                If (scategoria = "") Move "-1" to scategoria
-35398>>>//                SELECT recordid, descrizione, descrizionefull,  MATCH (descrizione, descrizionefull) AGAINST ('prva testa 1 ' IN NATURAL LANGUAGE MODE) as score
-35398>>>//                 from  articolishop WHERE MATCH(descrizione,descrizionefull) AGAINST('prova testa '  IN NATURAL LANGUAGE MODE);
-35398>>>
-35398>>>                         Get SQLEscapedStr of OARTICOLISHOP_DD  sSearchstring to sSearchstring 
-35399>>>
-35399>>>                  Move ( "SELECT recordid, descrizionesintetica, descrizionecompleta, categoriaid, " + ;                         "  MATCH (descrizionesintetica, descrizionecompleta) AGAINST(" + ;                         (SFormat ("'%1 '",sSearchstring))    +;                         "IN NATURAL LANGUAGE MODE) as score "  + ;                         "FROM  articolishop WHERE MATCH(descrizionesintetica, descrizionecompleta) AGAINST(" + ;                          (SFormat ("'%1 '",sSearchstring))    + ;                          "IN NATURAL LANGUAGE MODE);" ) to squery 
-35400>>>                    Handle    hoDoc  hostatm
-35400>>>                    String sid sdes srate
-35400>>>                    Get sqlFileConnect of osqlHandlemanager (refTable(articoli)) to hoDoc
-35401>>>                    If (hoDoc <> 0 ) Begin 
-35403>>>                        String[] avalues
-35404>>>                        Integer icountrow iFetchResult
-35404>>>                         Get SQLOpen of hoDoc to hostatm
-35405>>>                         Send SqlExecDirect of hostatm squery
-35406>>>                         Get SQLFetchRowValues of hostatm to avalues
-35407>>>                        
-35407>>>                         While ( piFetchResult(hostatm) =1)
-35411>>>                               Move (SizeOfArray(avalues)) to iFetchResult
-35412>>>                              If iFetchResult Begin
-35414>>>                               
-35414>>>                                If ( scategoria <> "-1" ) Move  (  avalues[3] = scategoria)  to bfound
-35417>>>                                Else Move True to bfound
-35419>>>                                If (pos("@",sSearchstring)) Begin 
-35421>>>                                    Integer itagstartpos itagEndPos
-35421>>>                                    String sSourceLine scity
-35421>>>                                      Move (pos("@",sSearchstring)) to itagstartpos
-35422>>>                                       Move (replace("@",sSearchstring,"|")) to sSourceLine
-35423>>>                                       Move (pos("@",sSourceLine)) to itagEndPos
-35424>>>                                       Move (mid(sSourceLine,(itagendPos-iTagStartpos-1),(itagStartPos+1)) ) to scity
-35425>>>                                       // 
-35425>>>                                End
-35425>>>>
-35425>>>                                If (bfound) Begin 
-35427>>>                                    
-35427>>>                                    Move avalues[0] to mystFoundProducts[icountrow].sid
-35428>>>                                    Move avalues[1] to mystFoundProducts[icountrow].sdes
-35429>>>                                    Move avalues[3] to mystFoundProducts[icountrow].icategoriaid
-35430>>>                                    
-35430>>>                                    Move (replace(".",avalues[4],",")) to mystFoundProducts[icountrow].nrate
-35431>>>                                       Increment icountrow
-35432>>>                                End
-35432>>>>
-35432>>>                              End
-35432>>>>
-35432>>>                               Get SQLFetchRowValues of hostatm to avalues
-35433>>>                              
-35433>>>                        Loop
-35434>>>>
-35434>>>                         Send SQLClose of hostatm
-35435>>>                    End
-35435>>>>
-35435>>>                     Send SQLDisconnect of hoDoc
-35436>>>                     If (scity>"" ) Begin 
-35438>>>                      // verifica se i prodotti trovati si trovano nella città richiesta
-35438>>>                     // 1) cerca proprietario articolo e in che città si trova
-35438>>>                     //
-35438>>>                     End
-35438>>>>
-35438>>>                     
-35438>>>//                   WebSet pMyLocalstFoundProducts of oDynamicshop to mystFoundProducts
-35438>>>//                   Send RenderFoundproducts of oWebDynamicObjectContainer3 mystFoundProducts
-35438>>>//                   Boolean bret                   //toglie la pagina dei prodotti del negozio se c'
-35438>>>//                   //        Procedure HideProducts String scatId
-35438>>>//                   Get   IsRendered of  oWebDynamicObjectContainer4   ("shop_vcatdyngrp") to bret
-35438>>>//                  If bret Send DestroyDynamicObject  of  oWebDynamicObjectContainer4 ("shop_vcatdyngrp")
-35438>>> 
-35438>>>            End_Procedure 
-35439>>>        End_Object
-35440>>>
-35440>>>        End_Object
-35441>>>    
-35441>>>    End_Object
-35442>>>    
-35442>>>    Procedure OnBeforeShow
-35445>>>        // Each time this view is shown we will update the appropriate information.
-35445>>>    End_Procedure
-35446>>>
-35446>>>End_Object
-35447>    Use gestorehttp.wo
-Including file: gestorehttp.wo    (D:\dataflex projects\comunitasolidaliengine\AppSrc\gestorehttp.wo)
-35447>>>Use cWebHttpHandler.pkg
-35447>>>Use cutentiDataDictionary.dd
-Including file: cutentiDataDictionary.dd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\cutentiDataDictionary.dd)
-35447>>>>>Use DataDict.pkg
-35447>>>>>
-35447>>>>>Open utenti
-Including file: utenti.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\utenti.fd)
-35449>>>>>
-35449>>>>>Class cutentiDataDictionary is a DataDictionary
-35450>>>>>    
-35450>>>>>    Procedure Construct_Object
-35452>>>>>        Forward Send Construct_Object
-35454>>>>>        Set Main_File to utenti.File_Number
-35455>>>>>
-35455>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
-35456>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
-35457>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
-35458>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
-35459>>>>>
-35459>>>>>    End_Procedure
-35460>>>>>
-35460>>>>>End_Class
-35461>>>Use ccoinsDataDictionary.dd
-Including file: ccoinsDataDictionary.dd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\ccoinsDataDictionary.dd)
-35461>>>>>Use DataDict.pkg
-35461>>>>>
-35461>>>>>Open coins
-Including file: coins.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\coins.fd)
-35463>>>>>
-35463>>>>>Class ccoinsDataDictionary is a DataDictionary
-35464>>>>>    
-35464>>>>>    Procedure Construct_Object
-35466>>>>>        Forward Send Construct_Object
-35468>>>>>        Set Main_File to coins.File_Number
-35469>>>>>
-35469>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
-35470>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
-35471>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
-35472>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
-35473>>>>>
-35473>>>>>    End_Procedure
-35474>>>>>
-35474>>>>>End_Class
-35475>>>Use carticoliDataDictionary.dd
+35268>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+35269>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+35270>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+35271>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+35272>>>>>
+35272>>>>>    End_Procedure
+35273>>>>>    
+35273>>>>>    Procedure creating
+35275>>>>>        Forward Send Creating
+35277>>>>>        Date dtoday
+35277>>>>>        Sysdate dtoday
+35278>>>>>        Move dtoday to articoli.datareg
+35279>>>>>        
+35279>>>>>    End_Procedure
+35280>>>>>
+35280>>>>>End_Class
+35281>>>Use cnegoziDataDictionary.dd
+Including file: cnegoziDataDictionary.dd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\cnegoziDataDictionary.dd)
+35281>>>>>Use DataDict.pkg
+35281>>>>>
+35281>>>>>Open negozi
+Including file: negozi.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\negozi.fd)
+35283>>>>>Open sistema
+Including file: sistema.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\sistema.fd)
+35285>>>>>
+35285>>>>>Class cnegoziDataDictionary is a DataDictionary
+35286>>>>>    
+35286>>>>>    Procedure Construct_Object
+35288>>>>>        Forward Send Construct_Object
+35290>>>>>        Set Main_File to negozi.File_Number
+35291>>>>>
+35291>>>>>        Set Add_System_File to sistema.File_Number DD_Lock_On_All
+35292>>>>>
+35292>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+35293>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+35294>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+35295>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+35296>>>>>
+35296>>>>>        Set Field_Auto_Increment Field negozi.recordid to File_Field sistema.contatorenegozi
+35297>>>>>
+35297>>>>>    End_Procedure
+35298>>>>>    
+35298>>>>>    Procedure creating
+35300>>>>>        Forward Send Creating
+35302>>>>>        Date dtoday
+35302>>>>>        Sysdate dtoday
+35303>>>>>        Move dtoday to negozi.datareg
+35304>>>>>        
+35304>>>>>    End_Procedure
+35305>>>>>
+35305>>>>>End_Class
+35306>>>
+35306>>> 
+35306>>> Struct stFoundProducts
+35306>>>    String sid
+35306>>>    String sdes
+35306>>>    Number nrate
+35306>>>    Integer icategoriaid
+35306>>>    String scity
+35306>>> End_Struct
+35306>>>
+35306>>>Use sql.pkg
+35306>>> 
+35306>>>Object oDashboard is a cWebView
+35308>>>    Object onegozi_DD is a cnegoziDataDictionary
+35310>>>    End_Object
+35311>>>
+35311>>>    Object OARTICOLISHOP_DD is a carticoliDataDictionary
+35313>>>    End_Object
+35314>>>
+35314>>>    Object oSqlHandleManager is a cSQLHandleManager
+35316>>>    End_Object
+35317>>>    
+35317>>>    Set Main_DD to OARTICOLISHOP_DD
+35318>>>    Set Server to OARTICOLISHOP_DD
+35319>>>
+35319>>>     Property  stFoundProducts[] pMyLocalstFoundProducts
+35322>>>     
+35322>>>    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
+35322>>>    // Add a DDO Structure 
+35322>>>    //
+35322>>>    // There is no need to synchronize a DD structure on the client so we do
+35322>>>    // not set the Server property or send ADDOStructure. We will simply use
+35322>>>    // DDO's to mine data and generate HTML for our cWebHTMLBox objects.
+35322>>>    // It is the HTML in these objects that is sent to the client each time 
+35322>>>    // this page is shown.
+35322>>>    //
+35322>>>    // Also, it is important for the drill-down Navigation interface that we
+35322>>>    // do not set the Server property to some DDO because this will affect 
+35322>>>    // constraints in the next view that we navigate to.
+35322>>>    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+35322>>>
+35322>>>    Set piMaxWidth to 1024
+35323>>>    
+35323>>>    Set psCaption to "Dashboard"
+35324>>>    Set peViewType to vtUndefined
+35325>>>    Set pbShowCaption to False
+35326>>>    Set psCSSClass to "Dashboard"
+35327>>>    
+35327>>>    Object oWebMainPanel is a cWebPanel
+35329>>>        Set piColumnCount to 24
+35330>>>        
+35330>>>        // - - - - - - - - - - - - - - -
+35330>>>        // Main Panel's Responsive Rules
+35330>>>        // - - - - - - - - - - - - - - -
+35330>>>        WebSetResponsive piColumnCount rmMobile to 1
+35331>>>        WebSetResponsive piColumnCount rmTabletPortrait to 16
+35332>>>        
+35332>>>          Object oRecentComunita_grp is a cWebGroup
+35334>>>            Set piColumnSpan to 8
+35335>>>            Set pbShowBorder to False
+35336>>>            Set pbShowCaption to False
+35337>>>            Set piColumnCount to 12
+35338>>>            Set psCSSClass to "RecentList"
+35339>>>            
+35339>>>            Object oRecentCustomers_lbl is a cWebLabel
+35341>>>                Set psCaption to "Nuovi Negozi"
+35342>>>                Set piColumnSpan to 0
+35343>>>                Set psCSSClass to "LabelTitle"
+35344>>>            End_Object
+35345>>>
+35345>>>            Object oRecentComunita_list is a cWebHtmlList
+35347>>>                Set Server to onegozi_DD
+35348>>>                Set psCSSClass to "LatestActivity"
+35349>>>                Set psHtmlBefore to '<ul>'
+35350>>>                  Set psHtmlTemplate to '<li><div class="FirstLine MinorText">{{odatanegozio}}</div><div class="MainText">{{oNomenegozio}}</div><div class="MinorText">città - {{ocittanegozio}}</div><div class="MainText">Comunità {{oComuinitaNegozio}} </li>'
+35351>>>   
+35351>>>                Set psHtmlAfter to '</ul>'
+35352>>>                Set piLimitRows to 8
+35353>>>                Set pbServerOnRowClick to True
+35354>>>                Set piOrdering to 1
+35355>>>                Set pbReverseOrdering to True
+35356>>>    
+35356>>>               Object odatanegozio is a cWebColumn
+35358>>>                    Entry_Item negozi.datareg
+35359>>>                    Set psCaption to "data"
+35360>>>                    Set piWidth to 50
+35361>>>                   End_Object
+35362>>>                    
+35362>>>                Object oNomenegozio is a cWebColumn
+35364>>>                    Entry_Item negozi.nomenegozio
+35365>>>                    Set psCaption to "Nome negozio"
+35366>>>                    Set piWidth to 50
+35367>>>                End_Object
+35368>>>        
+35368>>>                        
+35368>>>                Object ocittanegozio is a cWebColumn
+35370>>>                    Entry_Item negozi.citta
+35371>>>                    Set psCaption to "Città"
+35372>>>                    Set piWidth to 50
+35373>>>                End_Object
+35374>>>                
+35374>>>               Object oComuinitaNegozio is a cWebColumn
+35376>>>                    Entry_Item negozi.comunita
+35377>>>                    Set psCaption to "Comunità"
+35378>>>                    Set piWidth to 50
+35379>>>               End_Object
+35380>>>               
+35380>>>              //  WebRegisterPath ntNavigateForward oZoomNegozio
+35380>>>
+35380>>>                Procedure OnRowClick String sRowID
+35383>>>                    Send NavigatePath
+35384>>>                End_Procedure
+35385>>>
+35385>>>                Procedure OnGetNavigateForwardData tWebNavigateData  ByRef NavigateData Handle hoToView
+35388>>>                    Move True to NavigateData.bReadOnly
+35389>>>                End_Procedure
+35390>>>            End_Object
+35391>>>            
+35391>>>        End_Object
+35392>>>
+35392>>>          Object oLatestActivity_grp is a cWebGroup
+35394>>>            Set piColumnSpan to 8
+35395>>>            Set piColumnIndex to 8
+35396>>>            Set pbShowBorder to False
+35397>>>            Set pbShowCaption to False
+35398>>>            Set piColumnCount to 12
+35399>>>            Set psCSSClass to "LatestActivity"
+35400>>>            
+35400>>>            Object oLatestActivity_lbl is a cWebLabel
+35402>>>                Set psCaption to "Ultimi articoli"
+35403>>>                Set piColumnSpan to 0
+35404>>>                Set psCSSClass to "LabelTitle"
+35405>>>            End_Object
+35406>>>        Object oLatestActivity_list is a cWebHtmlList
+35408>>>                Set Server to OARTICOLISHOP_DD
+35409>>>                Set psCSSClass to "LatestActivity"
+35410>>>                Set psHtmlBefore to '<ul>'
+35411>>>                Set psHtmlTemplate to '<li><div class="FirstLine MinorText">{{oarticoli_Date}}</div><div class="MainText">Articolo - {{oCodicearticolo}}</div><div class="MinorText">Descrizione - {{odescrizione}}</div><div class="MainText">Comunità {{ocumunita}} </li>'
+35412>>>                Set psHtmlAfter to '</ul>'
+35413>>>                Set piLimitRows to 4
+35414>>>                Set pbReverseOrdering to True
+35415>>>                Set pbServerOnRowClick to True
+35416>>>                
+35416>>>                Object oarticoli_Date is a cWebColumn
+35418>>>                    Entry_Item articoli.datareg
+35419>>>                    Set psCaption to "data"
+35420>>>                    Set piWidth to 50
+35421>>>                End_Object
+35422>>>            
+35422>>>                Object oCodicearticolo is a cWebColumn
+35424>>>                    Entry_Item articoli.codarticolo
+35425>>>                    Set psCaption to "Codice articolo"
+35426>>>                    Set piWidth to 50
+35427>>>                End_Object
+35428>>>            
+35428>>>                Object odescrizione is a cWebColumn
+35430>>>                    Entry_Item articoli.descrizionesintetica
+35431>>>                    Set psCaption to "descrizione"
+35432>>>                    Set piWidth to 50
+35433>>>                End_Object
+35434>>>         
+35434>>>                  Object ocumunita is a cWebColumn
+35436>>>                    Entry_Item articoli.comunita
+35437>>>                    Set psCaption to "comunita"
+35438>>>                    Set piWidth to 50
+35439>>>                  End_Object 
+35440>>>                  
+35440>>>             //   WebRegisterPath ntNavigateForward oZoomOrder
+35440>>>                
+35440>>>                Procedure OnRowClick String sRowID
+35443>>>                //    Send NavigatePath
+35443>>>                End_Procedure
+35444>>>                
+35444>>>                Procedure OnGetNavigateForwardData tWebNavigateData  ByRef NavigateData Handle hoToView
+35447>>>                    Move True to NavigateData.bReadOnly
+35448>>>                End_Procedure
+35449>>>            End_Object
+35450>>>
+35450>>>        End_Object
+35451>>>
+35451>>>        Object oDynamicshop is a cWebGroup
+35453>>>            Set psCaption to "Ricerca articoli"
+35454>>>            Set piColumnCount to 12   
+35455>>>            
+35455>>>//            
+35455>>>//        Object oWebComboCategoria is a cWebCombo
+35455>>>//            Set pbAddEmptyItem to True
+35455>>>//            Set piColumnSpan to 4
+35455>>>//             WebSetResponsive piColumnSpan rmMobile to 2
+35455>>>//             Set pbShowLabel to False
+35455>>>//             
+35455>>>//            Set psEmptyItemDescription to (TranslateString("Tutte le categorie"))
+35455>>>//
+35455>>>//             Procedure OnFill
+35455>>>//                  String slanguage
+35455>>>//                  Forward Send OnFill
+35455>>>//                  WebGet pslanguage of oWebApp to slanguage
+35455>>>//                  Send AddComboItem -1  (TranslateString("Tutte le categorie"))
+35455>>>//                  For_All categoriemarketPlace by Index.2
+35455>>>//                    Do
+35455>>>//                    If (slanguage="IT") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione
+35455>>>//                     Else If (slanguage="DE") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_de
+35455>>>//                     Else If (slanguage="EN") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_en
+35455>>>//                     Else If (slanguage="ES") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_es
+35455>>>//                    Else If (slanguage="FR") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_fr
+35455>>>//                     Else If (slanguage="RU") Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione_ru
+35455>>>//                     Else Send AddComboItem categoriemarketPlace.recordid categoriemarketPlace.descrizione
+35455>>>//                      
+35455>>>//                  End_For_All
+35455>>>//             End_Procedure
+35455>>>//        End_Object
+35455>>>//        
+35455>>>
+35455>>>
+35455>>>        Object oWebFormRicerca is a cWebForm 
+35457>>>           
+35457>>>            Set pbPromptButton to True
+35458>>>            Set pbShowLabel to False
+35459>>>            Set piColumnIndex to 4
+35460>>>            WebSetResponsive piColumnSpan rmMobile to 4
+35461>>>            WebSetResponsive piColumnIndex rmMobile to 2
+35462>>>            
+35462>>>            Set pbServerOnPrompt to True
+35463>>>            Set piColumnSpan to 12
+35464>>>            Procedure onprompt 
+35467>>>                // ricerca sql
+35467>>>                stFoundProducts[] mystFoundProducts
+35467>>>                stFoundProducts[] mystFoundProducts
+35468>>>                String sSearchstring squery scategoria
+35468>>>                Boolean BFOUND
+35468>>>                WebGet psValue to sSearchstring 
+35471>>>              //  WebGet psValue of oWebComboCategoria to scategoria
+35471>>>                If (scategoria = "") Move "-1" to scategoria
+35474>>>//                SELECT recordid, descrizione, descrizionefull,  MATCH (descrizione, descrizionefull) AGAINST ('prva testa 1 ' IN NATURAL LANGUAGE MODE) as score
+35474>>>//                 from  articolishop WHERE MATCH(descrizione,descrizionefull) AGAINST('prova testa '  IN NATURAL LANGUAGE MODE);
+35474>>>
+35474>>>                         Get SQLEscapedStr of OARTICOLISHOP_DD  sSearchstring to sSearchstring 
 35475>>>
-35475>>>//  With the cWebHttpHandler you handle complete HTTP requests.
-35475>>>Object oGestorehttp is a cWebHttpHandler
-35477>>>    Object oarticoli_DD is a carticoliDataDictionary
-35479>>>    End_Object
-35480>>>
-35480>>>    Object ocoins_DD is a ccoinsDataDictionary
-35482>>>    End_Object
-35483>>>
-35483>>>    Object oCustomer_DD is a cutentiDataDictionary
-35485>>>    End_Object
-35486>>>
-35486>>>    Set Main_DD to oCustomer_DD
-35487>>>    
-35487>>>    //  The psPath property determines the path in the URL for which requests will be handled.
-35487>>>    Set psPath to "Marketplace"
-35488>>>    //  Use psVerbs to filter based on the HTTP Verbs. 
-35488>>>    Set psVerbs to "*"
-35489>>>    
-35489>>>    Procedure OnHttpPost String sPath String sContentType String sAcceptType Integer iSize
-35492>>>        String[] aParts
-35493>>>        Handle hoJson hoResponse
-35493>>>        UChar[] ucData
-35494>>>        Boolean bSuccess
-35494>>>
-35494>>>    Get StrSplitToArray sPath "/" to aParts
-35495>>>    If (SizeOfArray(aParts) < 2) Begin
-35497>>>            Send SetResponseStatus 404 "Invalid resource" 
-35498>>>            Procedure_Return
-35499>>>        End
-35499>>>>
-35499>>>    If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovocliente") Begin
-35501>>>        Send SaveCustomer True ""
-35502>>>        
-35502>>>//        Get RequestDataUChar iSize to ucData
-35502>>>//        Get Create (RefClass(cJsonObject)) to hoJson
-35502>>>//        Get ParseUtf8 of hoJson ucData to bSuccess
-35502>>>//        
-35502>>>//        If (bSuccess) Begin
-35502>>>//           Get SaveCustomer hoJson ucData to hoResponse
-35502>>>//            
-35502>>>//            Get StringifyUtf8 of hoResponse to ucData
-35502>>>//            Send Destroy of hoResponse
-35502>>>//            Send Destroy of hoJson
-35502>>>//            
-35502>>>//            Send AddHttpResponseHeader "Content-Type" "application/json"
-35502>>>//            Send OutputUChar ucData
-35502>>>//        End
-35502>>>//        Else Begin
-35502>>>//            Send SetResponseStatus 500 "Unable to parse JSON" 0
-35502>>>//            Send OutputString (psParseError(hoJson))
-35502>>>//        End
-35502>>>     End
-35502>>>>
-35502>>>   Else  If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovoarticolo") Begin
-35505>>>      Send  SaveNewarticolo True ""
-35506>>>     End
-35506>>>>
-35506>>>     Else Begin
-35507>>>        Send SetResponseStatus 404 "Entity not known" 0
-35508>>>    End
+35475>>>                  Move ( "SELECT codarticolo, descrizionesintetica, descrizionecompleta, categoria, " + ;                         "  MATCH (descrizionesintetica, descrizionecompleta) AGAINST(" + ;                         (SFormat ("'%1 '",sSearchstring))    +;                         "IN NATURAL LANGUAGE MODE) as score "  + ;                         "FROM  articoli WHERE MATCH(descrizionesintetica, descrizionecompleta) AGAINST(" + ;                          (SFormat ("'%1 '",sSearchstring))    + ;                          "IN NATURAL LANGUAGE MODE);" ) to squery 
+35476>>>                    Handle    hoDoc  hostatm
+35476>>>                    String sid sdes srate
+35476>>>                    Get sqlFileConnect of osqlHandlemanager (refTable(articoli)) to hoDoc
+35477>>>                    If (hoDoc <> 0 ) Begin 
+35479>>>                        String[] avalues
+35480>>>                        Integer icountrow iFetchResult
+35480>>>                         Get SQLOpen of hoDoc to hostatm
+35481>>>                         Send SqlExecDirect of hostatm squery
+35482>>>                         Get SQLFetchRowValues of hostatm to avalues
+35483>>>                        
+35483>>>                         While ( piFetchResult(hostatm) =1)
+35487>>>                               Move (SizeOfArray(avalues)) to iFetchResult
+35488>>>                              If iFetchResult Begin
+35490>>>                               
+35490>>>                                If ( scategoria <> "-1" ) Move  (  avalues[3] = scategoria)  to bfound
+35493>>>                                Else Move True to bfound
+35495>>>                                If (pos("@",sSearchstring)) Begin 
+35497>>>                                    Integer itagstartpos itagEndPos
+35497>>>                                    String sSourceLine scity
+35497>>>                                      Move (pos("@",sSearchstring)) to itagstartpos
+35498>>>                                       Move (replace("@",sSearchstring,"|")) to sSourceLine
+35499>>>                                       Move (pos("@",sSourceLine)) to itagEndPos
+35500>>>                                       Move (mid(sSourceLine,(itagendPos-iTagStartpos-1),(itagStartPos+1)) ) to scity
+35501>>>                                       // 
+35501>>>                                End
+35501>>>>
+35501>>>                                If (bfound) Begin 
+35503>>>                                    
+35503>>>                                    Move avalues[0] to mystFoundProducts[icountrow].sid
+35504>>>                                    Move avalues[1] to mystFoundProducts[icountrow].sdes
+35505>>>                                    Move avalues[3] to mystFoundProducts[icountrow].icategoriaid
+35506>>>                                    
+35506>>>                                    Move (replace(".",avalues[4],",")) to mystFoundProducts[icountrow].nrate
+35507>>>                                       Increment icountrow
+35508>>>                                End
 35508>>>>
-35508>>>End_Procedure
-35509>>>
-35509>>> Procedure OnHttpGet String sPath String sAcceptType
-35512>>>        String sName
-35512>>>        
-35512>>>        Get UrlParameter "name" to sName
-35513>>>        
-35513>>>        Send AddHttpResponseHeader "Content-Type" "text/html"
-35514>>>                
-35514>>>        Send OutputString '<html>'
-35515>>>        Send OutputString '<head><title>Hello world!</title></head>'
-35516>>>        Send OutputString (SFormat('<body><h1>Hi %1!</h1></body>', sName))
-35517>>>        Send OutputString '</html>'
-35518>>> End_Procedure
-35519>>>
-35519>>>  //  Helper function that generates a response based on a JSON object.
-35519>>>    Procedure OutputJson Handle hoJson
-35522>>>        UChar[] ucData
-35523>>>        
-35523>>>        Send AddHttpResponseHeader "Content-Type" "application/json"
-35524>>>        Get StringifyUtf8 of hoJson to ucData
-35525>>>        Send OutputUChar ucData
-35526>>>    End_Procedure
-35527>>>    
-35527>>>    
-35527>>>    //  Helper function that reads an entire request into a JSON object.
-35527>>>    Function RequestDataJson Handle ByRef hoJson Returns Boolean
-35530>>>        UChar[] ucData
-35531>>>        Boolean bSuccess
-35531>>>        String sErr
-35531>>>        
-35531>>>        Get Create (RefClass(cJsonObject)) to hoJson
-35532>>>        
-35532>>>        Get RequestDataUChar -1 to ucData
-35533>>>        Get ParseUtf8 of hoJson ucData to bSuccess
-35534>>>        
-35534>>>        If (not(bSuccess)) Begin
-35536>>>            Get psParseError of hoJson to sErr
-35537>>>            Send SetResponseStatus 400 sErr
-35538>>>        End
-35538>>>>
-35538>>>        
-35538>>>        Function_Return bSuccess
-35539>>>    End_Function
-35540>>>    
-35540>>>   Procedure SaveCustomer Boolean bCreate String sKey
-35543>>>    
-35543>>>        Boolean bSuccess
-35543>>>        String sVal
-35543>>>        Boolean bVal bErr
-35543>>>        Handle hoJson
-35543>>>       
-35543>>>        If (bCreate) Begin
-35545>>>            Send Clear of oCustomer_DD
-35546>>>        End
-35546>>>>
-35546>>>        Else Begin 
-35547>>>            // ricerca uno esistente
-35547>>>        
-35547>>>        //  Find the right record
-35547>>>        
-35547>>>//            Send Clear of oCustomer_DD
-35547>>>//            Move sKey to utenti.username
-35547>>>//            
-35547>>>//            Send Find of oCustomer_DD EQ 1
-35547>>>//            
-35547>>>//            If (not(Found)) Begin
-35547>>>//                Send SetResponseStatus 404 "Resource not found"
-35547>>>//                Procedure_Return
-35547>>>//            End
-35547>>>        End
-35547>>>>
-35547>>>  
-35547>>>        //  Read the request data
-35547>>>        Get RequestDataJson (&hoJson) to bSuccess
-35548>>>        
-35548>>>        If (bSuccess) Begin
-35550>>>            Send ErrorQueueStart
-35551>>>//            
-35551>>>           //  Set the values
-35551>>>            If (HasMember(hoJson, "Auth")) Begin
-35553>>>                // validazione autorizzazione
-35553>>>            End
-35553>>>>
-35553>>>            Else Begin 
-35554>>>                Send SetResponseStatus 404 "Validazione non accettata"
-35555>>>            End
-35555>>>>
-35555>>>              If (HasMember(hoJson, "Comunita")) Begin
-35557>>>              Get MemberValue of hoJson "Comunita" to sVal
-35558>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.comunita)) to sVal
-35559>>>             End
-35559>>>>
-35559>>>//    
-35559>>>            If (HasMember(hoJson, "Username")) Begin
-35561>>>              Get MemberValue of hoJson "Username" to sVal
-35562>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.username)) to sVal
-35563>>>             End        
-35563>>>>
-35563>>>             If (HasMember(hoJson, "Moneta")) Begin
-35565>>>                 Get MemberValue of hoJson "Moneta" to sVal
-35566>>>                 Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.monetanome)) to sVal
-35567>>>             End
-35567>>>>
-35567>>>//            
-35567>>>             If (HasMember(hoJson, "Citta")) Begin
-35569>>>               Get MemberValue of hoJson "Citta" to sVal
-35570>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.citta)) to sVal
-35571>>>             End
-35571>>>>
-35571>>>//            
-35571>>>            If (HasMember(hoJson, "Nazione")) Begin
-35573>>>                Get MemberValue of hoJson "Nazione" to sVal
-35574>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.nazione)) to sVal
-35575>>>            End
-35575>>>>
-35575>>>            
-35575>>>            If (HasMember(hoJson, "Cap")) Begin
-35577>>>                Get MemberValue of hoJson "Cap" to sVal
-35578>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.cap)) to sVal
-35579>>>            End
-35579>>>>
-35579>>>            
-35579>>>            If (HasMember(hoJson, "Regione")) Begin
-35581>>>                Get MemberValue of hoJson "Regione" to sVal
-35582>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.regione)) to sVal
-35583>>>            End
-35583>>>>
-35583>>>            
-35583>>>            If (HasMember(hoJson, "Email")) Begin
-35585>>>                Get MemberValue of hoJson "Email" to sVal
-35586>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.email)) to sVal
-35587>>>            End
-35587>>>>
-35587>>>            
-35587>>>            If (HasMember(hoJson, "Cognome")) Begin
-35589>>>                Get MemberValue of hoJson "Cognome" to sVal
-35590>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.cognome)) to sVal
-35591>>>            End
-35591>>>>
-35591>>>            
-35591>>>            If (HasMember(hoJson, "Nome")) Begin
-35593>>>                Get MemberValue of hoJson "Nome" to sVal
-35594>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.nome)) to sVal
-35595>>>            End
-35595>>>>
-35595>>>            If (HasMember(hoJson, "email")) Begin
-35597>>>                Get MemberValue of hoJson "email" to sVal
-35598>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.nome)) to sVal
-35599>>>            End
+35508>>>                              End
+35508>>>>
+35508>>>                               Get SQLFetchRowValues of hostatm to avalues
+35509>>>                              
+35509>>>                        Loop
+35510>>>>
+35510>>>                         Send SQLClose of hostatm
+35511>>>                    End
+35511>>>>
+35511>>>                     Send SQLDisconnect of hoDoc
+35512>>>                     If (scity>"" ) Begin 
+35514>>>                      // verifica se i prodotti trovati si trovano nella città richiesta
+35514>>>                     // 1) cerca proprietario articolo e in che città si trova
+35514>>>                     //
+35514>>>                     End
+35514>>>>
+35514>>>                     
+35514>>>                   WebSet pMyLocalstFoundProducts of oDashboard to mystFoundProducts
+35515>>>                   Send RenderFoundproducts of oWebDynamicObjectContainer3 mystFoundProducts
+35516>>>               
+35516>>> 
+35516>>> 
+35516>>>            End_Procedure 
+35517>>>        End_Object
+35518>>>
+35518>>>        End_Object
+35519>>>   
+35519>>>        Object oWebDynamicObjectContainer3 is a cWebDynamicObjectContainer
+35521>>>              Set piColumnCount to 12
+35522>>>               Set piColumnSpan to 16
+35523>>>               
+35523>>>
+35523>>>          Set pbRender to False 
+35524>>>          Procedure RenderFoundproducts stFoundProducts[] mystFoundProducts // elenco articoli ricerca full textg
+35527>>>                 WebSet pbRender to True
+35528>>>                //  WebSet pbRender of oWebDynamicObjectContainer1  to False 
+35528>>>                 Send ResetContainer
+35529>>>                 Send ShowFoundProducts mystFoundProducts
+35530>>>          End_Procedure
+35531>>> 
+35531>>>       
+35531>>>            Procedure ShowFoundProducts  stFoundProducts[] mystFoundProducts
+35534>>>//                Integer iCount imarkettype iqta iViewType eMode icategoriaID
+35534>>>//                Boolean bfound  bok
+35534>>>//                Date dtoday
+35534>>>//                Sysdate dtoday
+35534>>>//                String sid
+35534>>>//                WebGet psValue of oWebComboCategoria to icategoriaID
+35534>>>//                 stArticoliamazon asMyArticoliOnline
+35534>>>//               stShowArticoliBoxHtml  syMyShowArticoliBoxHtml
+35534>>>//                Handle hoGroup hoLabel hoAddBtn hoVendorGrp hoProductContainer hoImg hodesart hodesartImg hoqtyBtn
+35534>>>//                //WebGet  piViewMarketType of owebapp to iViewType
+35534>>>//
+35534>>>//                        Get CreateDynamicObject (RefClass(cDwCategorieGrp)) ("found_vcatdyngrp") "" to hoGroup
+35534>>>//                           Send InitDynamicProp of hoGroup  "psCSSClass" "Groupbordergold"
+35534>>>//                           
+35534>>>//                          Send InitDynamicProp of hoGroup "psBackgroundColor"  "white"
+35534>>>//                        Get CreateDynamicObject (RefClass(cDwcategorielbl)) ("found_vcatdynlbl") ("found_vcatdyngrp") to hoLabel
+35534>>>//                        Send InitDynamicProp of hoLabel "psCaption" (translatestring("Prodotti trovati "))
+35534>>>//                        Send InitDynamicProp of hoLabel  "psCSSClass" "labelboldBiggerblack"
+35534>>>//                         Send InitDynamicProp of hoLabel "psBackgroundColor"  "white"
+35534>>>//
+35534>>>//                        Get CreateDynamicObject (RefClass(cDwProductContainer)) ("found_pcartgrp") ("found_vcatdyngrp") to hoProductContainer 
+35534>>>//                         Send InitDynamicProp of hoProductContainer "psBackgroundColor"  "white"
+35534>>>//                          Integer icountfoundproducts i
+35534>>>//                  Move (SizeOfArray(mystFoundProducts)) to icountfoundproducts
+35534>>>//                    
+35534>>>//                  String sStatoArticolo
+35534>>>//                  WebGet piViewMarketType of oDynamicshop to iMarketType
+35534>>>//                  If (iMarketType=0) Move "N" to sStatoArticolo
+35534>>>//                  Else If (iMarketType=1) Move "U" to sStatoArticolo 
+35534>>>//                  
+35534>>>//                 For i from 0 to ( icountfoundproducts-1)
+35534>>>//                   Send Clear of ocategoriemarketPlace_DD
+35534>>>//                   Send Clear of    oarticolishop_DD
+35534>>>//                   Move "S" to articolishop.pubblicato
+35534>>>//                   Move    mystFoundProducts[i].sid   to articolishop.recordid             
+35534>>>//                    Send Find of oarticolishop_DD eq 1
+35534>>>//                     If (Found) Begin
+35534>>>//                        Move (articolishop.pubblicato="S") to bfound
+35534>>>//                        If (bfound) If (icategoriaID<>-1 ) Move ( articolishop.categoriaid =  mystFoundProducts[i].icategoriaid) to bfound
+35534>>>//                            
+35534>>>//                         If ( bfound and articolishop.stato =  sStatoArticolo ) Begin
+35534>>>//                          
+35534>>>//                                       If (articolishop.scadenza>"" and articolishop.prezzoeuro>0) Begin 
+35534>>>//                                         Move (dtoday<=articolishop.scadenza) to bfound   
+35534>>>//                                       End
+35534>>>//                                       Else If (articolishop.prezzoeuro>0) Move True to bfound
+35534>>>//                                       If  (bfound and (iViewType=VIEWTYPEMARKETC2C)) Move  (articolishop.stato="S" or Articolishop.stato="U") to bfound
+35534>>>//                                         
+35534>>>//                         End
+35534>>>//                         //
+35534>>>//                         If bfound Begin 
+35534>>>//                              Move (Replaces(" ", Trim(articolishop.recordid), "_")) to sId
+35534>>>//                        
+35534>>>//                            Get CreateDynamicObject (RefClass(cDwProductGrp)) (sId + "_articologrpfound") ( "found_pcartgrp") "" to hoGroup
+35534>>>//                                     Send InitDynamicProp of hoGroup "psBackgroundColor"  "white"
+35534>>>//                            Send InitDynamicProp of hoGroup "psCaption" (Trim(articolishop.recordid))
+35534>>>//                               WebGet peMode of ghoWebApp to eMode
+35534>>>//                           If ( emode  =  rmDesktop or emode = rmTablet) Send InitDynamicProp of hoGroup "piColumnIndex" (Mod(iCount, 3) * 4)
+35534>>>//                           Else  Send InitDynamicProp of hoGroup "piColumnIndex" 0 // (Mod(iCount, 3) *1)
+35534>>>//                              
+35534>>>//                           Get CreateDynamicObject (RefClass(cwebhtmlboxArticoloImages)) (sId + "_descimagefound") (sId + "_articologrpfound") to hodesartImg
+35534>>>//                             Send InitDynamicProp of hodesartImg "psBackgroundColor"  "white"
+35534>>>//  
+35534>>>//                             Get CreateDynamicObject (RefClass(cWebHtmlarticoloDes)) (sId + "_descfound") (sId + "_articologrpfound") to hodesart
+35534>>>//                              Send InitDynamicProp of hodesart "piarticoloselezionato" sId
+35534>>>//                            Send InitDynamicProp of hodesart "psBackgroundColor"  "white"
+35534>>>//                              Get loadstruct of   hodesartImg   to     asMyArticoliOnline 
+35534>>>//                              Get movestruct    of    hodesart  asMyArticoliOnline    to  syMyShowArticoliBoxHtml
+35534>>>//                              Send myupdatehtml of   hodesart  syMyShowArticoliBoxHtml  
+35534>>>//  
+35534>>>//                              Send myupdatehtml of   hodesartImg  syMyShowArticoliBoxHtml  
+35534>>>//                              
+35534>>>//                              If (articolishop.qtadisponibile > 0 ) Begin
+35534>>>//                                    Get CreateDynamicObject (RefClass(cDwProductQty)) (sId + "_qty") (sId + "_articologrpfound") to hoAddBtn
+35534>>>//                                       Send InitDynamicProp of hoAddBtn "psBackgroundColor"  "white"
+35534>>>//                                    If (articolishop.qtamultipliminimo = "S") Move articolishop.qtaminimaordinabile to iqta
+35534>>>//                                    Else Move 1 to iqta
+35534>>>//                                    Send InitDynamicProp of hoAddBtn "psValue" iqta
+35534>>>//                                   Send InitDynamicProp of hoAddBtn "psItemID" (Trim(articolishop.recordid))
+35534>>>//                                     Send InitDynamicProp of hoAddBtn "psShop" (Trim(articolishop.owner))
+35534>>>//                               
+35534>>>//                               // prezzi
+35534>>>//                                    
+35534>>>//                                    Get CreateDynamicObject (RefClass(cDwProductAdd)) (sId + "_addfound") (sId + "_articologrpfound") to hoAddBtn
+35534>>>//                                        Send InitDynamicProp of hoAddBtn  "psBackgroundColor"  "white"
+35534>>>//                                    Send InitDynamicProp of hoAddBtn "psItemID" (Trim(articolishop.recordid))
+35534>>>//                                    Send InitDynamicProp of hoAddBtn "psItemImg" (Trim(articolishop.immagine1))
+35534>>>//                                    Send InitDynamicProp of hoAddBtn "psItemDes" (Trim(articolishop.descrizione))
+35534>>>//                                      Send InitDynamicProp of hoAddBtn "piContataglie"  articolishop.contataglie
+35534>>>//                               
+35534>>>//                                     If   (articolishop.contataglie>0 ) Begin 
+35534>>>//                                        Send InitDynamicProp of hoAddBtn "psCaption" (translatestring("vai alla scheda"))
+35534>>>//                                        Send InitDynamicProp of hoAddBtn "piContaTaglie"  articolishop.contataglie
+35534>>>//    
+35534>>>//                                     End
+35534>>>//                                 
+35534>>>//                                    If (articolishop.scadenzapromo >=dtoday and articolishop.datainiziopromo<=dtoday  and articolishop.attivapromodcy ="S") Begin 
+35534>>>//                                           If (articolishop.Promodcypercento>0 )  Send InitDynamicProp of hoAddBtn "pnAddValue"  (articolishop.prezzoeuro - (articolishop.prezzoeuro * articolishop.Promodcypercento/100)) 
+35534>>>//                                           Else Send InitDynamicProp of hoAddBtn "pnAddValue" (Trim(articolishop.prezzoeuroduranteofferta))
+35534>>>//                                    End
+35534>>>//                                    Else Send InitDynamicProp of hoAddBtn "pnAddValue" (Trim(articolishop.prezzoeuro))
+35534>>>//                                      Send InitDynamicProp of hoAddBtn "psShop" (Trim(articolishop.owner))
+35534>>>//                                    
+35534>>>//            //                        
+35534>>>//                                   
+35534>>>//                              End
+35534>>>//                               Increment iCount
+35534>>>//                        End
+35534>>>//  
+35534>>>//                     End //WHILE
+35534>>>////                    
+35534>>>//                     
+35534>>>//                    // Send AppendDynamicObject (scatId + "_pcartgrp")
+35534>>>//    
+35534>>>//                 Loop // FOR I
+35534>>>//                          
+35534>>>// 
+35534>>>//   
+35534>>>//                 Send Activate    
+35534>>>                
+35534>>>            End_Procedure
+35535>>>
+35535>>>            End_Object
+35536>>>
+35536>>> 
+35536>>>    End_Object
+35537>>>    
+35537>>>   Procedure OnBeforeShow
+35540>>>        // Each time this view is shown, we will update the appropriate information.
+35540>>>        Send FindFromTop of oLatestActivity_list
+35541>>>        Send FindFromTop of oRecentComunita_list // ultimi negozi
+35542>>>    End_Procedure
+35543>>>
+35543>>>End_Object
+35544>    Use gestorehttp.wo
+Including file: gestorehttp.wo    (D:\dataflex projects\comunitasolidaliengine\AppSrc\gestorehttp.wo)
+35544>>>Use cWebHttpHandler.pkg
+35544>>>Use cutentiDataDictionary.dd
+Including file: cutentiDataDictionary.dd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\cutentiDataDictionary.dd)
+35544>>>>>Use DataDict.pkg
+35544>>>>>
+35544>>>>>Open utenti
+Including file: utenti.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\utenti.fd)
+35546>>>>>
+35546>>>>>Class cutentiDataDictionary is a DataDictionary
+35547>>>>>    
+35547>>>>>    Procedure Construct_Object
+35549>>>>>        Forward Send Construct_Object
+35551>>>>>        Set Main_File to utenti.File_Number
+35552>>>>>
+35552>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+35553>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+35554>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+35555>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+35556>>>>>
+35556>>>>>    End_Procedure
+35557>>>>>
+35557>>>>>End_Class
+35558>>>Use ccoinsDataDictionary.dd
+Including file: ccoinsDataDictionary.dd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\ccoinsDataDictionary.dd)
+35558>>>>>Use DataDict.pkg
+35558>>>>>
+35558>>>>>Open coins
+Including file: coins.fd    (D:\dataflex projects\comunitasolidaliengine\DDSrc\coins.fd)
+35560>>>>>
+35560>>>>>Class ccoinsDataDictionary is a DataDictionary
+35561>>>>>    
+35561>>>>>    Procedure Construct_Object
+35563>>>>>        Forward Send Construct_Object
+35565>>>>>        Set Main_File to coins.File_Number
+35566>>>>>
+35566>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+35567>>>>>        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+35568>>>>>        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+35569>>>>>        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+35570>>>>>
+35570>>>>>    End_Procedure
+35571>>>>>
+35571>>>>>End_Class
+35572>>>Use carticoliDataDictionary.dd
+35572>>>Use cnegoziDataDictionary.dd
+35572>>>
+35572>>>//  With the cWebHttpHandler you handle complete HTTP requests.
+35572>>>Object oGestorehttp is a cWebHttpHandler
+35574>>>    Object onegozi_DD is a cnegoziDataDictionary
+35576>>>    End_Object
+35577>>>
+35577>>>    Object oarticoli_DD is a carticoliDataDictionary
+35579>>>    End_Object
+35580>>>
+35580>>>    Object ocoins_DD is a ccoinsDataDictionary
+35582>>>    End_Object
+35583>>>
+35583>>>    Object oCustomer_DD is a cutentiDataDictionary
+35585>>>    End_Object
+35586>>>
+35586>>>    Set Main_DD to oCustomer_DD
+35587>>>    
+35587>>>    //  The psPath property determines the path in the URL for which requests will be handled.
+35587>>>    Set psPath to "Marketplace"
+35588>>>    //  Use psVerbs to filter based on the HTTP Verbs. 
+35588>>>    Set psVerbs to "*"
+35589>>>    
+35589>>>    Procedure OnHttpPost String sPath String sContentType String sAcceptType Integer iSize
+35592>>>        String[] aParts
+35593>>>        Handle hoJson hoResponse
+35593>>>        UChar[] ucData
+35594>>>        Boolean bSuccess
+35594>>>
+35594>>>    Get StrSplitToArray sPath "/" to aParts
+35595>>>    If (SizeOfArray(aParts) < 2) Begin
+35597>>>            Send SetResponseStatus 404 "Invalid resource" 
+35598>>>            Procedure_Return
+35599>>>        End
 35599>>>>
-35599>>> 
-35599>>> //  Perform the save
-35599>>>            If (ErrorCount(Self) = 0) Begin
-35601>>>                Get Request_Validate of oCustomer_DD to bErr
-35602>>>                If (not(bErr)) Begin
-35604>>>                   Send Request_Save of oCustomer_DD     
-35605>>>                   
-35605>>>                   If (not(Err)) Begin
-35607>>>                        Send Customer utenti.username utenti.comunita
-35608>>>                   End
-35608>>>>
-35608>>>                End
-35608>>>>
-35608>>>            End            
-35608>>>>
-35608>>>            
-35608>>>            Send ErrorQueueEnd
-35609>>>            Send ErrorReportJson
-35610>>>        End
+35599>>>    If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovocliente") Begin
+35601>>>        Send SaveCustomer True ""
+35602>>>        
+35602>>>//        Get RequestDataUChar iSize to ucData
+35602>>>//        Get Create (RefClass(cJsonObject)) to hoJson
+35602>>>//        Get ParseUtf8 of hoJson ucData to bSuccess
+35602>>>//        
+35602>>>//        If (bSuccess) Begin
+35602>>>//           Get SaveCustomer hoJson ucData to hoResponse
+35602>>>//            
+35602>>>//            Get StringifyUtf8 of hoResponse to ucData
+35602>>>//            Send Destroy of hoResponse
+35602>>>//            Send Destroy of hoJson
+35602>>>//            
+35602>>>//            Send AddHttpResponseHeader "Content-Type" "application/json"
+35602>>>//            Send OutputUChar ucData
+35602>>>//        End
+35602>>>//        Else Begin
+35602>>>//            Send SetResponseStatus 500 "Unable to parse JSON" 0
+35602>>>//            Send OutputString (psParseError(hoJson))
+35602>>>//        End
+35602>>>     End
+35602>>>>
+35602>>>   Else  If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovoarticolo") Begin
+35605>>>      Send  SaveNewarticolo True ""
+35606>>>   End
+35606>>>>
+35606>>>      Else  If (SizeOfArray(aParts) > 1 and Lowercase(aParts[1]) = "nuovonegozio") Begin
+35609>>>      Send  SaveNewNegozio True ""
+35610>>>     End
 35610>>>>
-35610>>>        If (hoJson > 0) Begin
-35612>>>            Send Destroy of hoJson
-35613>>>        End
-35613>>>>
-35613>>>    End_Procedure
-35614>>>
-35614>>> Procedure Customer String sKey String skeycomune
-35617>>>        Handle hoJson
+35610>>>     Else Begin
+35611>>>        Send SetResponseStatus 404 "Entity not known" 0
+35612>>>    End
+35612>>>>
+35612>>>End_Procedure
+35613>>>
+35613>>> Procedure OnHttpGet String sPath String sAcceptType
+35616>>>        String sName
+35616>>>        
+35616>>>        Get UrlParameter "name" to sName
 35617>>>        
-35617>>>        Send Clear of oCustomer_DD
-35618>>>        Move sKey to utenti.username
-35619>>>        Move skeycomune to utenti.comunita
-35620>>>        Send Find of oCustomer_DD EQ 1
-35621>>>        
-35621>>>        If (Found) Begin
-35623>>>            Get Create (RefClass(cJsonObject)) to hoJson
-35624>>>            Send InitializeJsonType of hoJson jsonTypeObject
-35625>>>            
-35625>>>            Send SetMemberValue of hoJson "Username" jsonTypestring utenti.username
-35626>>>            Send SetMemberValue of hoJson "Nome" jsonTypeString (Trim(utenti.nome))
-35627>>>            Send SetMemberValue of hoJson "Cognome" jsonTypeString (Trim(utenti.cognome))
-35628>>>            Send SetMemberValue of hoJson "Citta" jsonTypeString (Trim(utenti.citta))
-35629>>>            Send SetMemberValue of hoJson "Nazione" jsonTypeString (Trim(utenti.nazione))
-35630>>>            Send SetMemberValue of hoJson "Cap" jsonTypeString (Trim(utenti.cap))
-35631>>>            Send SetMemberValue of hoJson "Comunita" jsonTypeString (Trim(utenti.comunita))
-35632>>>            Send SetMemberValue of hoJson "Email" jsonTypeString (Trim(utenti.email))
-35633>>>            Send SetMemberValue of hoJson "Moneta" jsonTypestring utenti.monetanome
-35634>>> 
-35634>>>            
-35634>>>            
-35634>>>            Send OutputJson hoJson
-35635>>>            Send Destroy of hoJson
-35636>>>        End
-35636>>>>
-35636>>>        Else Begin
-35637>>>            Send SetResponseStatus 404 "Resource not found"
-35638>>>        End
-35638>>>>
-35638>>> End_Procedure
-35639>>> 
-35639>>> Procedure Articolo String sKey String skeycomune
-35642>>>        Handle hoJson
+35617>>>        Send AddHttpResponseHeader "Content-Type" "text/html"
+35618>>>                
+35618>>>        Send OutputString '<html>'
+35619>>>        Send OutputString '<head><title>Hello world!</title></head>'
+35620>>>        Send OutputString (SFormat('<body><h1>Hi %1!</h1></body>', sName))
+35621>>>        Send OutputString '</html>'
+35622>>> End_Procedure
+35623>>>
+35623>>>  //  Helper function that generates a response based on a JSON object.
+35623>>>    Procedure OutputJson Handle hoJson
+35626>>>        UChar[] ucData
+35627>>>        
+35627>>>        Send AddHttpResponseHeader "Content-Type" "application/json"
+35628>>>        Get StringifyUtf8 of hoJson to ucData
+35629>>>        Send OutputUChar ucData
+35630>>>    End_Procedure
+35631>>>    
+35631>>>    
+35631>>>    //  Helper function that reads an entire request into a JSON object.
+35631>>>    Function RequestDataJson Handle ByRef hoJson Returns Boolean
+35634>>>        UChar[] ucData
+35635>>>        Boolean bSuccess
+35635>>>        String sErr
+35635>>>        
+35635>>>        Get Create (RefClass(cJsonObject)) to hoJson
+35636>>>        
+35636>>>        Get RequestDataUChar -1 to ucData
+35637>>>        Get ParseUtf8 of hoJson ucData to bSuccess
+35638>>>        
+35638>>>        If (not(bSuccess)) Begin
+35640>>>            Get psParseError of hoJson to sErr
+35641>>>            Send SetResponseStatus 400 sErr
+35642>>>        End
+35642>>>>
 35642>>>        
-35642>>>        Send Clear of oarticoli_DD
-35643>>>        Move sKey to articoli.codarticolo
-35644>>>        Move skeycomune to articoli.comunita
-35645>>>        Send Find of oarticoli_DD EQ 1
-35646>>>        
-35646>>>        If (Found) Begin
-35648>>>            Get Create (RefClass(cJsonObject)) to hoJson
-35649>>>            Send InitializeJsonType of hoJson jsonTypeObject
-35650>>>            
-35650>>>            Send SetMemberValue of hoJson "codarticolo" jsonTypestring articoli.codarticolo
-35651>>>            Send SetMemberValue of hoJson "descrizionesintetica" jsonTypeString (Trim(articoli.descrizionesintetica))
-35652>>>            Send SetMemberValue of hoJson "moneta" jsonTypeString (Trim(articoli.moneta))
-35653>>>            Send SetMemberValue of hoJson "valoreunitario" jsonTypeString (Trim(articoli.prezzoeuro))
-35654>>>            Send SetMemberValue of hoJson "comunita" jsonTypeString (Trim(articoli.comunita))
-35655>>>              
-35655>>>            
-35655>>>            Send OutputJson hoJson
-35656>>>            Send Destroy of hoJson
-35657>>>        End
+35642>>>        Function_Return bSuccess
+35643>>>    End_Function
+35644>>>    
+35644>>>   Procedure SaveCustomer Boolean bCreate String sKey
+35647>>>    
+35647>>>        Boolean bSuccess
+35647>>>        String sVal
+35647>>>        Boolean bVal bErr
+35647>>>        Handle hoJson
+35647>>>       
+35647>>>        If (bCreate) Begin
+35649>>>            Send Clear of oCustomer_DD
+35650>>>        End
+35650>>>>
+35650>>>        Else Begin 
+35651>>>            // ricerca uno esistente
+35651>>>        
+35651>>>        //  Find the right record
+35651>>>        
+35651>>>//            Send Clear of oCustomer_DD
+35651>>>//            Move sKey to utenti.username
+35651>>>//            
+35651>>>//            Send Find of oCustomer_DD EQ 1
+35651>>>//            
+35651>>>//            If (not(Found)) Begin
+35651>>>//                Send SetResponseStatus 404 "Resource not found"
+35651>>>//                Procedure_Return
+35651>>>//            End
+35651>>>        End
+35651>>>>
+35651>>>  
+35651>>>        //  Read the request data
+35651>>>        Get RequestDataJson (&hoJson) to bSuccess
+35652>>>        
+35652>>>        If (bSuccess) Begin
+35654>>>            Send ErrorQueueStart
+35655>>>//            
+35655>>>           //  Set the values
+35655>>>            If (HasMember(hoJson, "Auth")) Begin
+35657>>>                // validazione autorizzazione
+35657>>>            End
 35657>>>>
-35657>>>        Else Begin
-35658>>>            Send SetResponseStatus 404 "Resource not found"
-35659>>>        End
+35657>>>            Else Begin 
+35658>>>                Send SetResponseStatus 404 "Validazione non accettata"
+35659>>>            End
 35659>>>>
-35659>>>    End_Procedure
-35660>>>
-35660>>>   Procedure SaveNewarticolo Boolean bCreate String sKey
-35663>>>    
-35663>>>        Boolean bSuccess
-35663>>>        String sVal
-35663>>>        Boolean bVal bErr
-35663>>>        Handle hoJson
-35663>>>       
-35663>>>        If (bCreate) Begin
-35665>>>            Send Clear of oarticoli_dd
-35666>>>        End
-35666>>>>
-35666>>>        Else Begin 
-35667>>>            // ricerca uno esistente
-35667>>>        
-35667>>>        //  Find the right record
-35667>>>        
-35667>>>//            Send Clear of oarticoli_dd
-35667>>>//            Move sKey to utenti.username
-35667>>>//            
-35667>>>//            Send Find of oCustomer_DD EQ 1
-35667>>>//            
-35667>>>//            If (not(Found)) Begin
-35667>>>//                Send SetResponseStatus 404 "Resource not found"
-35667>>>//                Procedure_Return
-35667>>>//            End
-35667>>>        End
+35659>>>              If (HasMember(hoJson, "Comunita")) Begin
+35661>>>              Get MemberValue of hoJson "Comunita" to sVal
+35662>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.comunita)) to sVal
+35663>>>             End
+35663>>>>
+35663>>>//    
+35663>>>            If (HasMember(hoJson, "Username")) Begin
+35665>>>              Get MemberValue of hoJson "Username" to sVal
+35666>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.username)) to sVal
+35667>>>             End        
 35667>>>>
-35667>>>  
-35667>>>        //  Read the request data
-35667>>>        Get RequestDataJson (&hoJson) to bSuccess
-35668>>>        
-35668>>>        If (bSuccess) Begin
-35670>>>            Send ErrorQueueStart
+35667>>>             If (HasMember(hoJson, "Moneta")) Begin
+35669>>>                 Get MemberValue of hoJson "Moneta" to sVal
+35670>>>                 Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.monetanome)) to sVal
+35671>>>             End
+35671>>>>
 35671>>>//            
-35671>>>           //  Set the values
-35671>>>            If (HasMember(hoJson, "Auth")) Begin
-35673>>>                // validazione autorizzazione
-35673>>>            End
-35673>>>>
-35673>>>            Else Begin 
-35674>>>                Send SetResponseStatus 404 "Validazione non accettata"
-35675>>>            End
+35671>>>             If (HasMember(hoJson, "Citta")) Begin
+35673>>>               Get MemberValue of hoJson "Citta" to sVal
+35674>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.citta)) to sVal
+35675>>>             End
 35675>>>>
-35675>>>              If (HasMember(hoJson, "Comunita")) Begin
-35677>>>              Get MemberValue of hoJson "Comunita" to sVal
-35678>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.comunita)) to sVal
-35679>>>             End
+35675>>>//            
+35675>>>            If (HasMember(hoJson, "Nazione")) Begin
+35677>>>                Get MemberValue of hoJson "Nazione" to sVal
+35678>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.nazione)) to sVal
+35679>>>            End
 35679>>>>
-35679>>>//    
-35679>>>            If (HasMember(hoJson, "Codarticolo")) Begin
-35681>>>              Get MemberValue of hoJson "Codarticolo" to sVal
-35682>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.codarticolo)) to sVal
-35683>>>             End        
+35679>>>            
+35679>>>            If (HasMember(hoJson, "Cap")) Begin
+35681>>>                Get MemberValue of hoJson "Cap" to sVal
+35682>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.cap)) to sVal
+35683>>>            End
 35683>>>>
-35683>>>             If (HasMember(hoJson, "Moneta")) Begin
-35685>>>                 Get MemberValue of hoJson "Moneta" to sVal
-35686>>>                 Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.moneta)) to sVal
-35687>>>             End
+35683>>>            
+35683>>>            If (HasMember(hoJson, "Regione")) Begin
+35685>>>                Get MemberValue of hoJson "Regione" to sVal
+35686>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.regione)) to sVal
+35687>>>            End
 35687>>>>
-35687>>>//            
-35687>>>             If (HasMember(hoJson, "Descrizionesintetica")) Begin
-35689>>>               Get MemberValue of hoJson "Descrizionesintetica" to sVal
-35690>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.descrizionesintetica)) to sVal
-35691>>>             End
+35687>>>            
+35687>>>            If (HasMember(hoJson, "Email")) Begin
+35689>>>                Get MemberValue of hoJson "Email" to sVal
+35690>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.email)) to sVal
+35691>>>            End
 35691>>>>
-35691>>>//            
-35691>>>            If (HasMember(hoJson, "Descrizionecompleta")) Begin
-35693>>>                Get MemberValue of hoJson "Descrizionecompleta" to sVal
-35694>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.descrizionecompleta)) to sVal
+35691>>>            
+35691>>>            If (HasMember(hoJson, "Cognome")) Begin
+35693>>>                Get MemberValue of hoJson "Cognome" to sVal
+35694>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.cognome)) to sVal
 35695>>>            End
 35695>>>>
 35695>>>            
-35695>>>            If (HasMember(hoJson, "Immaginelink")) Begin
-35697>>>                Get MemberValue of hoJson "Immaginelink" to sVal
-35698>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.immaginelink)) to sVal
+35695>>>            If (HasMember(hoJson, "Nome")) Begin
+35697>>>                Get MemberValue of hoJson "Nome" to sVal
+35698>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.nome)) to sVal
 35699>>>            End
 35699>>>>
-35699>>>            
-35699>>>            If (HasMember(hoJson, "Prezzoeuro")) Begin
-35701>>>                Get MemberValue of hoJson "Prezzoeuro" to sVal
-35702>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.prezzoeuro)) to sVal
+35699>>>            If (HasMember(hoJson, "email")) Begin
+35701>>>                Get MemberValue of hoJson "email" to sVal
+35702>>>                Set Field_Changed_Value of oCustomer_DD (RefTable(utenti.nome)) to sVal
 35703>>>            End
 35703>>>>
-35703>>>            
-35703>>>            If (HasMember(hoJson, "Prezzovaluta")) Begin
-35705>>>                Get MemberValue of hoJson "Prezzovaluta" to sVal
-35706>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.prezzovaluta )) to sVal
-35707>>>            End
-35707>>>>
-35707>>>             If (HasMember(hoJson, "Linkarticolonegozio")) Begin
-35709>>>                Get MemberValue of hoJson "Linkarticolonegozio" to sVal
-35710>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.prezzovaluta )) to sVal
-35711>>>            End
-35711>>>>
-35711>>>            
-35711>>> 
-35711>>> //  Perform the save
-35711>>>            If (ErrorCount(Self) = 0) Begin
-35713>>>                Get Request_Validate of oarticoli_dd to bErr
-35714>>>                If (not(bErr)) Begin
-35716>>>                   Send Request_Save of oarticoli_dd     
-35717>>>                   
-35717>>>                   If (not(Err)) Begin
-35719>>>                        Send Articolo articoli.codarticolo articoli.comunita
-35720>>>                   End
-35720>>>>
-35720>>>                End
-35720>>>>
-35720>>>            End            
-35720>>>>
-35720>>>            
-35720>>>            Send ErrorQueueEnd
-35721>>>            Send ErrorReportJson
-35722>>>        End
-35722>>>>
-35722>>>        If (hoJson > 0) Begin
-35724>>>            Send Destroy of hoJson
-35725>>>        End
-35725>>>>
-35725>>>    End_Procedure
-35726>>>
-35726>>> Procedure Customer String sKey String skeycomune
-35729>>>        Handle hoJson
-35729>>>        
-35729>>>        Send Clear of oCustomer_DD
-35730>>>        Move sKey to utenti.username
-35731>>>        Move skeycomune to utenti.comunita
-35732>>>        Send Find of oCustomer_DD EQ 1
-35733>>>        
-35733>>>        If (Found) Begin
-35735>>>            Get Create (RefClass(cJsonObject)) to hoJson
-35736>>>            Send InitializeJsonType of hoJson jsonTypeObject
-35737>>>            
-35737>>>            Send SetMemberValue of hoJson "Username" jsonTypestring utenti.username
-35738>>>            Send SetMemberValue of hoJson "Nome" jsonTypeString (Trim(utenti.nome))
-35739>>>            Send SetMemberValue of hoJson "Cognome" jsonTypeString (Trim(utenti.cognome))
-35740>>>            Send SetMemberValue of hoJson "Citta" jsonTypeString (Trim(utenti.citta))
-35741>>>            Send SetMemberValue of hoJson "Nazione" jsonTypeString (Trim(utenti.nazione))
-35742>>>            Send SetMemberValue of hoJson "Cap" jsonTypeString (Trim(utenti.cap))
-35743>>>            Send SetMemberValue of hoJson "Comunita" jsonTypeString (Trim(utenti.comunita))
-35744>>>            Send SetMemberValue of hoJson "Email" jsonTypeString (Trim(utenti.email))
-35745>>>            Send SetMemberValue of hoJson "Moneta" jsonTypestring utenti.monetanome
-35746>>> 
-35746>>>            
-35746>>>            
-35746>>>            Send OutputJson hoJson
-35747>>>            Send Destroy of hoJson
-35748>>>        End
-35748>>>>
-35748>>>        Else Begin
-35749>>>            Send SetResponseStatus 404 "Resource not found"
-35750>>>        End
-35750>>>>
-35750>>>    End_Procedure
-35751>>>    
-35751>>>    
-35751>>>     //  Helper function that reports all errors on the error queue in JSON format.
-35751>>>    Procedure ErrorReportJson
-35754>>>        Integer iErr iErrC
-35754>>>        Handle hoJson hoErrors   
-35754>>>        String sMessage
-35754>>>        
-35754>>>        Get ErrorCount to iErrC
-35755>>>        If (iErrC > 0) Begin
-35757>>>            Send SetResponseStatus 400 "Errors occurred"
-35758>>>            
-35758>>>            Get Create (RefClass(cJsonObject)) to hoJson
-35759>>>            Send InitializeJsonType of hoJson jsonTypeObject
-35760>>>            
-35760>>>            Get Create (RefClass(cJsonObject)) to hoErrors
-35761>>>            Send InitializeJsonType of hoErrors jsonTypeArray
-35762>>>            
-35762>>>            For iErr from 0 to (iErrC - 1)
-35768>>>>
-35768>>>                Get ErrorMessage iErr to sMessage
-35769>>>                Send AddMemberValue of hoErrors jsonTypeString  sMessage
-35770>>>            Loop
-35771>>>>
-35771>>>            
-35771>>>            Send SetMember of hoJson "aErrors" hoErrors
-35772>>>            
-35772>>>            Send OutputJson hoJson
-35773>>>            
-35773>>>            Send Destroy of hoErrors
-35774>>>            Send Destroy of hoJson
-35775>>>        End
-35775>>>>
-35775>>>    End_Procedure
-35776>>>
-35776>>>End_Object
-35777>    Set phoDefaultView to oDashboard
-35778>
-35778>End_Object
-35779>
-35779>Send StartWebApp of oWebApp
-35780>
+35703>>> 
+35703>>> //  Perform the save
+35703>>>            If (ErrorCount(Self) = 0) Begin
+35705>>>                Get Request_Validate of oCustomer_DD to bErr
+35706>>>                If (not(bErr)) Begin
+35708>>>                   Send Request_Save of oCustomer_DD     
+35709>>>                   
+35709>>>                   If (not(Err)) Begin
+35711>>>                        Send Customer utenti.username utenti.comunita
+35712>>>                   End
+35712>>>>
+35712>>>                End
+35712>>>>
+35712>>>            End            
+35712>>>>
+35712>>>            
+35712>>>            Send ErrorQueueEnd
+35713>>>            Send ErrorReportJson
+35714>>>        End
+35714>>>>
+35714>>>        If (hoJson > 0) Begin
+35716>>>            Send Destroy of hoJson
+35717>>>        End
+35717>>>>
+35717>>>    End_Procedure
+35718>>>
+35718>>> Procedure Customer String sKey String skeycomune
+35721>>>        Handle hoJson
+35721>>>        
+35721>>>        Send Clear of oCustomer_DD
+35722>>>        Move sKey to utenti.username
+35723>>>        Move skeycomune to utenti.comunita
+35724>>>        Send Find of oCustomer_DD EQ 1
+35725>>>        
+35725>>>        If (Found) Begin
+35727>>>            Get Create (RefClass(cJsonObject)) to hoJson
+35728>>>            Send InitializeJsonType of hoJson jsonTypeObject
+35729>>>            
+35729>>>            Send SetMemberValue of hoJson "Username" jsonTypestring utenti.username
+35730>>>            Send SetMemberValue of hoJson "Nome" jsonTypeString (Trim(utenti.nome))
+35731>>>            Send SetMemberValue of hoJson "Cognome" jsonTypeString (Trim(utenti.cognome))
+35732>>>            Send SetMemberValue of hoJson "Citta" jsonTypeString (Trim(utenti.citta))
+35733>>>            Send SetMemberValue of hoJson "Nazione" jsonTypeString (Trim(utenti.nazione))
+35734>>>            Send SetMemberValue of hoJson "Cap" jsonTypeString (Trim(utenti.cap))
+35735>>>            Send SetMemberValue of hoJson "Comunita" jsonTypeString (Trim(utenti.comunita))
+35736>>>            Send SetMemberValue of hoJson "Email" jsonTypeString (Trim(utenti.email))
+35737>>>            Send SetMemberValue of hoJson "Moneta" jsonTypestring utenti.monetanome
+35738>>> 
+35738>>>            
+35738>>>            
+35738>>>            Send OutputJson hoJson
+35739>>>            Send Destroy of hoJson
+35740>>>        End
+35740>>>>
+35740>>>        Else Begin
+35741>>>            Send SetResponseStatus 404 "Resource not found"
+35742>>>        End
+35742>>>>
+35742>>> End_Procedure
+35743>>> 
+35743>>> Procedure Articolo String sKey String skeycomune
+35746>>>        Handle hoJson
+35746>>>        
+35746>>>        Send Clear of oarticoli_DD
+35747>>>        Move sKey to articoli.codarticolo
+35748>>>        Move skeycomune to articoli.comunita
+35749>>>        Send Find of oarticoli_DD EQ 1
+35750>>>        
+35750>>>        If (Found) Begin
+35752>>>            Get Create (RefClass(cJsonObject)) to hoJson
+35753>>>            Send InitializeJsonType of hoJson jsonTypeObject
+35754>>>            
+35754>>>            Send SetMemberValue of hoJson "codarticolo" jsonTypestring articoli.codarticolo
+35755>>>            Send SetMemberValue of hoJson "descrizionesintetica" jsonTypeString (Trim(articoli.descrizionesintetica))
+35756>>>            Send SetMemberValue of hoJson "moneta" jsonTypeString (Trim(articoli.moneta))
+35757>>>            Send SetMemberValue of hoJson "valoreunitario" jsonTypeString (Trim(articoli.prezzoeuro))
+35758>>>            Send SetMemberValue of hoJson "comunita" jsonTypeString (Trim(articoli.comunita))
+35759>>>              
+35759>>>            
+35759>>>            Send OutputJson hoJson
+35760>>>            Send Destroy of hoJson
+35761>>>        End
+35761>>>>
+35761>>>        Else Begin
+35762>>>            Send SetResponseStatus 404 "Resource not found"
+35763>>>        End
+35763>>>>
+35763>>>    End_Procedure
+35764>>>
+35764>>> 
+35764>>> Procedure Negozio String sKey String skeycomune
+35767>>>        Handle hoJson
+35767>>>        
+35767>>>        Send Clear of onegozi_dd
+35768>>>        Move sKey to negozi.recordid
+35769>>>      //Move skeycomune to negozi.comunita
+35769>>>        Send Find of onegozi_dd EQ 1
+35770>>>        
+35770>>>        If (Found) Begin
+35772>>>            Get Create (RefClass(cJsonObject)) to hoJson
+35773>>>            Send InitializeJsonType of hoJson jsonTypeObject
+35774>>>            
+35774>>>            Send SetMemberValue of hoJson "recorid" jsonTypestring negozi.recordid
+35775>>>            Send SetMemberValue of hoJson "nomenegozio" jsonTypeString (Trim(negozi.nomenegozio))
+35776>>>            Send SetMemberValue of hoJson "moneta" jsonTypeString (Trim(negozi.moneta))
+35777>>>            Send SetMemberValue of hoJson "categoria" jsonTypeString (Trim(negozi.categoria))
+35778>>>            Send SetMemberValue of hoJson "comunita" jsonTypeString (Trim(negozi.comunita))
+35779>>>            Send SetMemberValue of hoJson "datareg" jsonTypeString (Trim(negozi.datareg))
+35780>>>         
+35780>>> 
+35780>>>              
+35780>>>            
+35780>>>            Send OutputJson hoJson
+35781>>>            Send Destroy of hoJson
+35782>>>        End
+35782>>>>
+35782>>>        Else Begin
+35783>>>            Send SetResponseStatus 404 "Resource not found"
+35784>>>        End
+35784>>>>
+35784>>> End_Procedure
+35785>>> 
+35785>>>   Procedure SaveNewarticolo Boolean bCreate String sKey
+35788>>>    
+35788>>>        Boolean bSuccess
+35788>>>        String sVal
+35788>>>        Boolean bVal bErr
+35788>>>        Handle hoJson
+35788>>>       
+35788>>>        If (bCreate) Begin
+35790>>>            Send Clear of oarticoli_dd
+35791>>>        End
+35791>>>>
+35791>>>        Else Begin 
+35792>>>            // ricerca uno esistente
+35792>>>        
+35792>>>        //  Find the right record
+35792>>>        
+35792>>>//            Send Clear of oarticoli_dd
+35792>>>//            Move sKey to utenti.username
+35792>>>//            
+35792>>>//            Send Find of oCustomer_DD EQ 1
+35792>>>//            
+35792>>>//            If (not(Found)) Begin
+35792>>>//                Send SetResponseStatus 404 "Resource not found"
+35792>>>//                Procedure_Return
+35792>>>//            End
+35792>>>        End
+35792>>>>
+35792>>>  
+35792>>>        //  Read the request data
+35792>>>        Get RequestDataJson (&hoJson) to bSuccess
+35793>>>        
+35793>>>        If (bSuccess) Begin
+35795>>>            Send ErrorQueueStart
+35796>>>//            
+35796>>>           //  Set the values
+35796>>>            If (HasMember(hoJson, "Auth")) Begin
+35798>>>                // validazione autorizzazione
+35798>>>            End
+35798>>>>
+35798>>>            Else Begin 
+35799>>>                Send SetResponseStatus 404 "Validazione non accettata"
+35800>>>            End
+35800>>>>
+35800>>>              If (HasMember(hoJson, "Comunita")) Begin
+35802>>>              Get MemberValue of hoJson "Comunita" to sVal
+35803>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.comunita)) to sVal
+35804>>>             End
+35804>>>>
+35804>>>//    
+35804>>>            If (HasMember(hoJson, "Codarticolo")) Begin
+35806>>>              Get MemberValue of hoJson "Codarticolo" to sVal
+35807>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.codarticolo)) to sVal
+35808>>>             End        
+35808>>>>
+35808>>>             If (HasMember(hoJson, "Moneta")) Begin
+35810>>>                 Get MemberValue of hoJson "Moneta" to sVal
+35811>>>                 Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.moneta)) to sVal
+35812>>>             End
+35812>>>>
+35812>>>//            
+35812>>>             If (HasMember(hoJson, "Descrizionesintetica")) Begin
+35814>>>               Get MemberValue of hoJson "Descrizionesintetica" to sVal
+35815>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.descrizionesintetica)) to sVal
+35816>>>             End
+35816>>>>
+35816>>>//            
+35816>>>            If (HasMember(hoJson, "Descrizionecompleta")) Begin
+35818>>>                Get MemberValue of hoJson "Descrizionecompleta" to sVal
+35819>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.descrizionecompleta)) to sVal
+35820>>>            End
+35820>>>>
+35820>>>            
+35820>>>            If (HasMember(hoJson, "Immaginelink")) Begin
+35822>>>                Get MemberValue of hoJson "Immaginelink" to sVal
+35823>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.immaginelink)) to sVal
+35824>>>            End
+35824>>>>
+35824>>>            
+35824>>>            If (HasMember(hoJson, "Prezzoeuro")) Begin
+35826>>>                Get MemberValue of hoJson "Prezzoeuro" to sVal
+35827>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.prezzoeuro)) to sVal
+35828>>>            End
+35828>>>>
+35828>>>            
+35828>>>            If (HasMember(hoJson, "Prezzovaluta")) Begin
+35830>>>                Get MemberValue of hoJson "Prezzovaluta" to sVal
+35831>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.prezzovaluta )) to sVal
+35832>>>            End
+35832>>>>
+35832>>>             If (HasMember(hoJson, "Linkarticolonegozio")) Begin
+35834>>>                Get MemberValue of hoJson "Linkarticolonegozio" to sVal
+35835>>>                Set Field_Changed_Value of oarticoli_dd (RefTable(articoli.prezzovaluta )) to sVal
+35836>>>            End
+35836>>>>
+35836>>>            
+35836>>> 
+35836>>> //  Perform the save
+35836>>>            If (ErrorCount(Self) = 0) Begin
+35838>>>                Get Request_Validate of oarticoli_dd to bErr
+35839>>>                If (not(bErr)) Begin
+35841>>>                   Send Request_Save of oarticoli_dd     
+35842>>>                   
+35842>>>                   If (not(Err)) Begin
+35844>>>                        Send Articolo articoli.codarticolo articoli.comunita
+35845>>>                   End
+35845>>>>
+35845>>>                End
+35845>>>>
+35845>>>            End            
+35845>>>>
+35845>>>            
+35845>>>            Send ErrorQueueEnd
+35846>>>            Send ErrorReportJson
+35847>>>        End
+35847>>>>
+35847>>>        If (hoJson > 0) Begin
+35849>>>            Send Destroy of hoJson
+35850>>>        End
+35850>>>>
+35850>>>    End_Procedure
+35851>>>
+35851>>>
+35851>>>  Procedure SaveNewNegozio Boolean bCreate String sKey
+35854>>>    
+35854>>>        Boolean bSuccess
+35854>>>        String sVal
+35854>>>        Boolean bVal bErr
+35854>>>        Handle hoJson
+35854>>>       
+35854>>>        If (bCreate) Begin
+35856>>>            Send Clear of onegozi_DD
+35857>>>        End
+35857>>>>
+35857>>>        Else Begin 
+35858>>>            // ricerca uno esistente
+35858>>>        
+35858>>>        //  Find the right record
+35858>>>        
+35858>>>//            Send Clear of oarticoli_dd
+35858>>>//            Move sKey to utenti.username
+35858>>>//            
+35858>>>//            Send Find of oCustomer_DD EQ 1
+35858>>>//            
+35858>>>//            If (not(Found)) Begin
+35858>>>//                Send SetResponseStatus 404 "Resource not found"
+35858>>>//                Procedure_Return
+35858>>>//            End
+35858>>>        End
+35858>>>>
+35858>>>  
+35858>>>        //  Read the request data
+35858>>>        Get RequestDataJson (&hoJson) to bSuccess
+35859>>>        
+35859>>>        If (bSuccess) Begin
+35861>>>            Send ErrorQueueStart
+35862>>>//            
+35862>>>           //  Set the values
+35862>>>            If (HasMember(hoJson, "Auth")) Begin
+35864>>>                // validazione autorizzazione
+35864>>>            End
+35864>>>>
+35864>>>            Else Begin 
+35865>>>                Send SetResponseStatus 404 "Validazione non accettata"
+35866>>>            End
+35866>>>>
+35866>>>              If (HasMember(hoJson, "Comunita")) Begin
+35868>>>              Get MemberValue of hoJson "Comunita" to sVal
+35869>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.comunita)) to sVal
+35870>>>             End
+35870>>>>
+35870>>>//    
+35870>>>            If (HasMember(hoJson, "Negozio")) Begin
+35872>>>              Get MemberValue of hoJson "Negozio" to sVal
+35873>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.nomenegozio)) to sVal
+35874>>>             End        
+35874>>>>
+35874>>>             If (HasMember(hoJson, "Moneta")) Begin
+35876>>>                 Get MemberValue of hoJson "Moneta" to sVal
+35877>>>                 Set Field_Changed_Value of onegozi_DD (RefTable(negozi.moneta)) to sVal
+35878>>>             End
+35878>>>>
+35878>>>//            
+35878>>>             If (HasMember(hoJson, "Latitudine")) Begin
+35880>>>               Get MemberValue of hoJson "Latitudine" to sVal
+35881>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.latitudine)) to sVal
+35882>>>             End
+35882>>>>
+35882>>>//            
+35882>>>            If (HasMember(hoJson, "Longitudine")) Begin
+35884>>>                Get MemberValue of hoJson "Longitudine" to sVal
+35885>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.longitudine)) to sVal
+35886>>>            End
+35886>>>>
+35886>>>            
+35886>>>            If (HasMember(hoJson, "Categoria")) Begin
+35888>>>                Get MemberValue of hoJson "Categoria" to sVal
+35889>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.categoria)) to sVal
+35890>>>            End
+35890>>>>
+35890>>>            
+35890>>>            If (HasMember(hoJson, "Tag")) Begin
+35892>>>                Get MemberValue of hoJson "Tag" to sVal
+35893>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.tag)) to sVal
+35894>>>            End
+35894>>>>
+35894>>>            
+35894>>>            If (HasMember(hoJson, "Nazione")) Begin
+35896>>>                Get MemberValue of hoJson "Nazione" to sVal
+35897>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.nazione )) to sVal
+35898>>>            End
+35898>>>>
+35898>>>             If (HasMember(hoJson, "Citta")) Begin
+35900>>>                Get MemberValue of hoJson "Citta" to sVal
+35901>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.citta )) to sVal
+35902>>>            End
+35902>>>>
+35902>>>         If (HasMember(hoJson, "Sitoweb")) Begin
+35904>>>                Get MemberValue of hoJson "Sitoweb" to sVal
+35905>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.sitoweb )) to sVal
+35906>>>         End            
+35906>>>>
+35906>>>         If (HasMember(hoJson, "Linkvetrina")) Begin
+35908>>>                Get MemberValue of hoJson "Linkvetrina" to sVal
+35909>>>                Set Field_Changed_Value of onegozi_DD (RefTable(negozi.linkvetrina )) to sVal
+35910>>>            End
+35910>>>>
+35910>>>            
+35910>>> 
+35910>>> //  Perform the save
+35910>>>            If (ErrorCount(Self) = 0) Begin
+35912>>>                Get Request_Validate of onegozi_dd to bErr
+35913>>>                If (not(bErr)) Begin
+35915>>>                   Send Request_Save of onegozi_dd     
+35916>>>                   
+35916>>>                   If (not(Err)) Begin
+35918>>>                        Send negozio negozi.recordid negozi.comunita
+35919>>>                   End
+35919>>>>
+35919>>>                End
+35919>>>>
+35919>>>            End            
+35919>>>>
+35919>>>            
+35919>>>            Send ErrorQueueEnd
+35920>>>            Send ErrorReportJson
+35921>>>        End
+35921>>>>
+35921>>>        If (hoJson > 0) Begin
+35923>>>            Send Destroy of hoJson
+35924>>>        End
+35924>>>>
+35924>>>    End_Procedure
+35925>>>
+35925>>>
+35925>>> Procedure Customer String sKey String skeycomune
+35928>>>        Handle hoJson
+35928>>>        
+35928>>>        Send Clear of oCustomer_DD
+35929>>>        Move sKey to utenti.username
+35930>>>        Move skeycomune to utenti.comunita
+35931>>>        Send Find of oCustomer_DD EQ 1
+35932>>>        
+35932>>>        If (Found) Begin
+35934>>>            Get Create (RefClass(cJsonObject)) to hoJson
+35935>>>            Send InitializeJsonType of hoJson jsonTypeObject
+35936>>>            
+35936>>>            Send SetMemberValue of hoJson "Username" jsonTypestring utenti.username
+35937>>>            Send SetMemberValue of hoJson "Nome" jsonTypeString (Trim(utenti.nome))
+35938>>>            Send SetMemberValue of hoJson "Cognome" jsonTypeString (Trim(utenti.cognome))
+35939>>>            Send SetMemberValue of hoJson "Citta" jsonTypeString (Trim(utenti.citta))
+35940>>>            Send SetMemberValue of hoJson "Nazione" jsonTypeString (Trim(utenti.nazione))
+35941>>>            Send SetMemberValue of hoJson "Cap" jsonTypeString (Trim(utenti.cap))
+35942>>>            Send SetMemberValue of hoJson "Comunita" jsonTypeString (Trim(utenti.comunita))
+35943>>>            Send SetMemberValue of hoJson "Email" jsonTypeString (Trim(utenti.email))
+35944>>>            Send SetMemberValue of hoJson "Moneta" jsonTypestring utenti.monetanome
+35945>>> 
+35945>>>            
+35945>>>            
+35945>>>            Send OutputJson hoJson
+35946>>>            Send Destroy of hoJson
+35947>>>        End
+35947>>>>
+35947>>>        Else Begin
+35948>>>            Send SetResponseStatus 404 "Resource not found"
+35949>>>        End
+35949>>>>
+35949>>>    End_Procedure
+35950>>>    
+35950>>>    
+35950>>>     //  Helper function that reports all errors on the error queue in JSON format.
+35950>>>    Procedure ErrorReportJson
+35953>>>        Integer iErr iErrC
+35953>>>        Handle hoJson hoErrors   
+35953>>>        String sMessage
+35953>>>        
+35953>>>        Get ErrorCount to iErrC
+35954>>>        If (iErrC > 0) Begin
+35956>>>            Send SetResponseStatus 400 "Errors occurred"
+35957>>>            
+35957>>>            Get Create (RefClass(cJsonObject)) to hoJson
+35958>>>            Send InitializeJsonType of hoJson jsonTypeObject
+35959>>>            
+35959>>>            Get Create (RefClass(cJsonObject)) to hoErrors
+35960>>>            Send InitializeJsonType of hoErrors jsonTypeArray
+35961>>>            
+35961>>>            For iErr from 0 to (iErrC - 1)
+35967>>>>
+35967>>>                Get ErrorMessage iErr to sMessage
+35968>>>                Send AddMemberValue of hoErrors jsonTypeString  sMessage
+35969>>>            Loop
+35970>>>>
+35970>>>            
+35970>>>            Send SetMember of hoJson "aErrors" hoErrors
+35971>>>            
+35971>>>            Send OutputJson hoJson
+35972>>>            
+35972>>>            Send Destroy of hoErrors
+35973>>>            Send Destroy of hoJson
+35974>>>        End
+35974>>>>
+35974>>>    End_Procedure
+35975>>>
+35975>>>End_Object
+35976>    Set phoDefaultView to oDashboard
+35977>
+35977>End_Object
+35978>
+35978>Send StartWebApp of oWebApp
+35979>
 Summary
-Memory Available: 45361401856
+Memory Available: 46454665216
 Total Warnings : 0
 Total Errors   : 0
-Total Symbols  : 23600
+Total Symbols  : 23702
 Total Resources: 0
-Total Commands : 35779
+Total Commands : 35978
 Total Windows  : 0
 Total Pages    : 0
-Static Data    : 461317
-Message area   : 247367
-Total Blocks   : 16160
+Static Data    : 464033
+Message area   : 249334
+Total Blocks   : 16242

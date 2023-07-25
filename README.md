@@ -7,13 +7,13 @@ e come iscriversi alla comunità/market place  in cui opera il negoziante che ve
 
 API HTTP ( ? dominio non disponibile in fase di sviluppo solo per uso interno)
 
-le prime api disponibile sono:
-https://?//comunitasolidaliengine/Marketplace/NuovoArticolo
+le prime api disponibili (dominio temporaneo durante la fase di sviluppo):
+POST https://development.dinastycoin.club//comunitasolidaliengine/Marketplace/NuovoArticolo
 Header:
 Content-type text/plain
 accept */*
 Connection keep-alive
-nel body va passato una stringa formattata json (esempio):
+nel body va passato una stringa formattata json (esempio) (Codice Autorizzazione non ancora implementato):
 { "Auth":"????" , "Comunita": "proitaly" , "Codarticolo" : "ABCD123", "Moneta" : "val" ,   
    "Descrizionesintetica": "articolo test" , "Descrizionecompleta": "" , "Immaginelink":"https://m.media-amazon.com/images/I/81HPNejWmDL.__AC_SX300_SY300_QL70_ML2_.jpg", 
    "Prezzoeuro" : 10, "Prezzovaluta" : 10, "Linkarticolonegozio" : "" , "Linkiscrizionecomunita": "", "Linkinfomoneta":"", "categoria": "fai da te", "disponibilita": 2 }
@@ -26,7 +26,7 @@ Body:
 {"codarticolo":"ABCD123","descrizionesintetica":"articolo test"","moneta":"val","valoreunitario":"10","qtadisp":"2"}
 altrimenti codice di errore
 
-https://?//comunitasolidaliengine/Marketplace/Nuovoutente
+POST https://development.dinastycoin.club//comunitasolidaliengine/Marketplace/Nuovoutente
 Header:
 Content-type text/plain
 accept */*
@@ -52,6 +52,21 @@ nel body:
     "Moneta": "val"
 }
 
-API in Elaborazione:
-POST: NuovoNegozio
+ 
+POST: http://development.dinastycoin.club/comunitasolidaliengine/Marketplace/NuovoNegozio
+body: { "Auth":"????" , "Comunita": "proitaly" , "Negozio" : "Panificio san carlo", "Moneta" : "val" ,   "Latitudine": "45,42051000" , "Longitudine": "10,99002000" , "Categoria":"alimentari", "Tag" : "pane, vino", "Nazione" : "italy", "Citta" : "Verona" , "Sitoweb": "https://panificiosancarlo.it", "Linkvetrina":"xxxxxxxx" }
 
+in risposta si ottiene
+status 200 OK
+header:
+Content-Type; application/json
+
+nel body:
+{
+    "recorid": "4",
+    "nomenegozio": "Panificio san carlo",
+    "moneta": "val",
+    "categoria": "alimentari",
+    "comunita": "proitaly",
+    "datareg": "25/07/2023"
+}
